@@ -17,6 +17,8 @@ Oltre alla lista completa delle componenti, nella sezione [telaio][coderbot-make
 
 Nelle pagine [software][coderbot-make-sw] invece sono descritte le componenti software con relative istruzioni per l'installazione.
 
+Un ringraziamento a [Giulia][giuliav] per il logo e la grafica!
+
 Nei prossimi giorni il sito sarà arricchito con documentazione di maggior dettaglio e guide all'installazione e configurazione. 
 
 Inoltre nella sezione [Gioca e impara][projects] saranno pubblicati progetti e attività didattiche adatti al robot.
@@ -25,3 +27,4 @@ Inoltre nella sezione [Gioca e impara][projects] saranno pubblicati progetti e a
 [coderbot-make-hw]: {{site.baseurl}}/it/how_to_build_hw.html
 [coderbot-make-sw]: {{site.baseurl}}/it/how_to_build_sw.html
 [projects]: {{site.baseurl}}/it/projects.html
+[giuliav] http://www.giuliaolivares.it/
