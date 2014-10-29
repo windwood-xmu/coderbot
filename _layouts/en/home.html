@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+    <!-- Page Content -->
+    <!-- Header Carousel -->
+    <header id="myCarousel" class="carousel slide" style="height:100%;">
+        <!-- Wrapper for slides -->
+            <div class="item active">
+                <div class="fill" style="background-image:url('../img/home_2.jpg');"></div>
+                <!--div class="carousel-caption">
+                    <h2>CoderBot<br>A Bot, for coders</h2>
+                </div-->
+            </div>
+     </header>
+    <div class="container">
+    {% include en/header.html %}
+        {{ content }}
+    {% include en/footer.html %}
+    </div>
+    <!-- /.container -->
+  </body>
+</html>

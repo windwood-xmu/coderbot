@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CoderBot is an open source, raspberry pi robot specialized in teaching kids the basic of robotics and coding.
+">
+    <meta name="author" content="">
+
+    <title>CoderBot - An open, programmable robot</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/coderbot.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/js/jquery-1.11.0.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="canonical" href="http://coderbot.org/">
+</head>
+
+  <body>
+    <!-- Page Content -->
+    <div class="container">
+
+            <script type="text/javascript">
+  $.ajax({ 
+    url: "http://ajaxhttpheaders.appspot.com", 
+    dataType: 'jsonp', 
+    success: function(headers) {
+        language = headers['Accept-Language'];
+        redirectSite(language);
+    }
+  });
+
+function redirectSite(lang) {
+	if(lang.indexOf('it')>=0) {
+		window.location.href="it/index.html";
+	} else {
+		window.location.href="en/index.html";
+	}
+}
+    </script>
+
+<div class="row">
+<div class="col-md-12">
+<h2><center>Please wait...</center><h2>
+</div>
+<hr>
+<div class="col-md-12">
+<p><center>...or select your language: <a href="./en/index.html" class="btn btn-primary">English</a> <a href="./it/index.html" class="btn btn-primary">Italiano</a></center><p>
+</div>
+</div>
+
+
+    </div>
+  </body>
+
+</html>

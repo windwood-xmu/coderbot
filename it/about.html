@@ -1,0 +1,102 @@
+---
+layout: it/default
+---
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Cosa è CoderBot
+                    <small>Com'è fatto, cosa può fare</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a>
+                    </li>
+                    <li class="active">Cosa è</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+       <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+ 
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="img-responsive" src="../img/about.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Perché CoderBot</h2><a name="why"></a>
+                <p>CoderBot è un robot orientato alla didattica.</p>
+                <p class="lead">L'obiettivo principale del progetto è realizzare un robot in grado di essere programmato da bambini dai 6 anni in avanti, e che rimanga interessante e offra spunti per l'apprendimento a ragazzi fino ai 14 anni (e oltre).</p>
+				<img src="../img/home_2.jpg" width="700">
+				<h3>Come è fatto</h3><a name="how"></a>
+                <p>E' un veicolo con due ruote motrici anteriori indipendenti e un terzo punto di appoggio posteriore costituito da una sfera libera.</p>
+				<p>E' basato su <a href="http://www.raspberrypi.org" target="new">Raspberry PI</a>, un computer completo (CPU, GPU, audio, memoria RAM e flash).</p>
+				<p>Alla scheda principale è collegata una videocamera, una scheda di controllo per i due motori (DC oppure servo) e un adattatore wifi. L'audio è amplificato tramite un altoparlante autoalimentato.</p>
+				<p>Il sistema operativo è Raspbian, una versione di Linux debian specifica per Raspberry, su cui si appoggiano alcune componenti per gestire rete, videocamera, motori e interfaccia utente, quest'ultima realizzata come una web application html5, a sua volta erogata da un web server che gira all'interno di Raspberry.</p>
+				<p>Il robot è controllabile da qualsiasi dispositivo che sia in grado di connettersi a una rete wifi e dotato di un browser compatibile con html5.</p>
+                <h3>Cosa può fare</h3><a name="what"></a>
+                <p>Il robot è in grado di muoversi su superfici piane: avanti, indietro e ruotare sul posto o curvare con raggi variabili, agendo sulla velocità dei due motori.</p>
+                <img src="../img/easy.jpg" width="400">
+                <a name="wifi"></a>
+                <p>E' controllabile via web tramite un pc, un tablet o uno smartphone che sia in grado di connettersi via wifi al robot.</p>
+                <img src="../img/mars_700x300.jpg" width="400">
+                <a name="gui"></a>
+                <p>CoderBot può essere utilizzato come un "rover" teleguidato, grazie alla telecamera integrata trasmette le immagini dell'ambiente che gli si trova davanti.</p>
+                <img src="../img/remote.jpg">
+                <a name="audio"></a>
+                <p>E' in grado di emettere suoni: audio wav o mp3 oppure pronunciare frasi definite dall'utente, grazie alla sintesi volcale.</p>
+				<iframe width="640" height="390" src="//www.youtube.com/embed/GAbvqngotLY" frameborder="0" allowfullscreen></iframe>
+                <a name="programming"></a>
+                <p>CoderBot è inoltre programmabile tramite un linguaggio a blocchi (blockly) specifico per bambini dai 6 anni in avanti.</p>
+                <img src="../img/coding.png" width="400">
+                <p>L'editor è configurabile in vari livelli di complessità e completezza delle istruzioni, in modo da poter facilitare l'apprendimento per gradi.</p>
+                <img src="../img/gui_programming_basic.png">
+                <p>Modo "semplificato"</p>
+                <img src="../img/gui_programming_adv.png" width="400">
+                <p>Modo Normale / Avanzato</p>
+        		<p>L'interfaccia utente, disponibile sia in Inglese che in Italiano, è inoltre configurabile in modo da poter nascondere alcune sue parti, sempre per rendere più immediato possibile l'interazione con gli utenti ed evitare distrazioni con funzioni non pertinenti all'attività. Per esempio è possibile nascondere l'interfaccia di "controllo remoto" e lasciare solo la parte di programmazione, oppure al contrario si può lasciare solo la parte di controllo remoto.</p>
+        		<p>La maggior parte delle impostazioni di CoderBot sono accessibili e modificabili nella pagina "Preferenze".</p>
+                <img src="../img/gui_preferences.png" width="400">
+                <p>Per i più avanzati, CoderBot è inoltre programmabile direttamente in python, utilizzando delle librerie molto semplici ed intuitive.</p>
+{% highlight python %}
+import coderbot
+
+bot = coderbot.CoderBot.get_instance()
+
+bot.forward(speed=100, elapse=2.5)
+bot.left(speed=60, elapse=1)
+
+{% endhighlight %}
+				<a name="comp_vision"></a>
+				<p>Grazie alla Camera è in grado di riprendere immagini e trasmetterle al dispositivo usato per pilotarlo (computer, tablet o smartphone).</p>
+				<a name="obj_rec"></a>
+				<p>Inoltre può utilizzare le immagini per evitare ostacoli:</p>
+				<p>[Coming soon: video di riconoscimento ostacolo]</p>
+				<a name="line_follower"></a>
+				<p>Per riconoscere e seguire linee:</p>
+				<p>[Coming soon: video di line follower]</p>
+				<a name="color_rec"></a>				
+				<p>Per riconoscere oggetti in base al loro colore:</p>
+				<p>[Coming soon: video di color catcher]</p>
+				<a name="face_rec"></a>				
+				<p>E' inoltre in grado di riconoscere visi di persone e simboli predefiniti.</p>
+				<p>[Coming soon: video di face finder]</p>
+				<p>[Coming soon: video di signal finder]</p>
+            </div>
+
+        </div>
+        <!-- /.row -->

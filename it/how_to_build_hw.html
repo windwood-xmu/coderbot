@@ -1,0 +1,105 @@
+---
+layout: it/default
+---
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Hardware
+                    <small>Raspberry Pi, controllo motori, batteria</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a></li>
+                    <li><a href="how_to_build_it.html">Come costruirlo</a></li>
+                    <li class="active">Hardware</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="img-responsive" src="../img/build_hw.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+            	<p>Questa sezione descrive tutte le componenti Hardware necessarie per realizzare CoderBot.</p>
+                <h3>Raspberry PI</h3>
+                <p>CoderBot utilizza Raspberry Pi come controller principale, sono adatti il Model B e il recente B+, quest'ultimo preferibile per i ridotti consumi.</p>
+                <p>Il Model A può essere utilizzato per realizzare un robot "cieco", infatti per gestire la Camera, e soprattutto il riconoscimento degli oggetti, sono necessari circa 384MB (il Model B ne ha 512, il Model A si ferma a 256MB).</p>
+                <h3>Camera module</h3>
+                <p>Esistono due tipi di camera: una normale e una modificata per essere sensibile all'infrarosso per visione notturna. Salvo applicazioni particolari, si utilizza la Camera normale.</p>
+                <h3>Scheda di controllo motori</h3>
+                <p>Ne esistono di due tipi: una adatta al controllo di motori in corrente continua e una specifica e semplificata per controllare servomotori in modalità PWM, da scegliere in base alle caratteristiche dei motori.</p>
+				<p>Di seguito il PCB della versione per motori DC:</p>
+				<iframe width="725" height="448" src="http://123d.circuits.io/circuits/372065-coderbot-motor-shield/embed#pcb" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                <h3>Batteria</h3>
+				<p>La batteria deve avere due uscite indipendenti, una per alimentare Raspberry e una per alimentare i mototi tramite la scheda di controllo. 
+				E' possibile in alternativa utilizzare due batterie più piccole indipendenti a condizione  che la corrente in uscita sia di almeno 1A su 5V</p>
+                <h3>Cavi USB</h3>
+                <p>Due cavi USB-A - USB-Micro (maschio-maschio) per collegare l'output della batteria a Raspberry e alla Scheda di controllo motori</p>
+            	<h2>Elenco delle componenti</h2>
+                <table class="table">
+                <thead>
+                <tr>
+                <th>Componente</th>
+                <th>Quantità</th>
+                <th>link</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td>Raspberry PI - Model B oppure Model B+</td>
+                <td>1</td>
+                <td><a href="http://www.element14.com/community/community/raspberry-pi" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>Raspberry PI Camera module</td>
+                <td>1</td>
+                <td><a href="http://www.element14.com/community/community/raspberry-pi/raspberry-pi-accessories/raspberry-pi-camera-board?ICID=rpiaccsy-topban-links" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>Wi-Fi</td>
+                <td>1</td>
+                <td><a href="http://www.amazon.it/Portable-Wireless-Network-Ethernet-Converter/dp/B008BZAZ1U/ref=pd_rhf_se_p_img_8" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>SD card 8GB</td>
+                <td>1</td>
+                <td><a href="http://www.amazon.it/Kingston-Digital-memoria-Confezione-originale/dp/B000OF2F36/ref=sr_1_1?s=electronics&ie=UTF8&qid=1414444366&sr=1-1&keywords=sd+card+8GB" target="new">link</td>
+				</tr>
+                <tr>
+                <td>Scheda controllo motori DC oppure servo</td>
+                <td>1</td>
+                <td>Coming soon...</td>
+				</tr>
+                <tr>
+                <td>Batteria</td>
+                <td>1</td>
+                <td><a href="http://www.amazon.it/RAVPower-Universale-RP-PB07-Smartphone-Velocemente/dp/B00CMIWLSM/ref=sr_1_1?s=electronics&ie=UTF8&qid=1414444473&sr=1-1&keywords=battery+power+bank" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>Cavo USB-A - USB micro</td>
+                <td>2</td>
+                <td><a href="http://www.amazon.it/Nokia-Cavo-Micro-USB--CA-101D-Mini/dp/B0031SXXNO/ref=sr_1_1?s=electronics&ie=UTF8&qid=1414447211&sr=1-1&keywords=cavo+usb+corto+micro" target="new">link</a></td>
+				</tr>
+				</tbody>
+				</table>            	
+            </div>
+
+        </div>
+        <!-- /.row -->

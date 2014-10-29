@@ -1,0 +1,84 @@
+---
+layout: en/default
+---
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Software
+                    <small>Operative system, Software</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a></li>
+                    <li><a href="how_to_build_it.html">Make</a></li>
+                    <li class="active">Software</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="img-responsive" src="../img/build_sw.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+				<hr>
+				<p>This section describes the software components required to run CoderBot.</p>
+                <h3>Raspbian</h3>
+                <p>CoderBot is based on the <a href="www.raspbian.org">Raspbian</a> Linux distribution, it is required to update the firmware and the OS to the latest version to avoid incompatibilities, as all other modules will be kept up to date.</p>
+				<h4>Installation</h4>
+				<p>Download the '<a href="http://www.raspberrypi.org/downloads/">Raspbian image</a> and upload in the SD card with one of the following tools, according to the OS of the PC/Mac you are using: : <a href="">linux</a>, <a href="">osx</a>, <a href="">windows</a>.</p>
+                <h3>UV4L and SimpleCV</h3>
+                <p>UV4L is a user-mode driver for the Raspberry Camera module, it is required unless you plan to build a "blind" bot.</p>
+                <p>SimpleCV is a Computer Vision framework which includes several libraries, most notably OpenCV, it allows image processing and object detection.</p>
+                <p>As of this writing, in order to make it work properly, the OpenCV library must be recompiled on the Raspberry, this process requires about 10-11 hours.</p>                                                
+				<h4>Installation</h4>
+				<p>Follow the instructions at this <a href="https://github.com/previ/coderbot/wiki/Camera-module">link</a>.</p>
+                <h3>hostAPd, DNSMasq</h3>
+                <p>WiFi in Access Point mode.</p>
+                <p>This tools allows CoderBot to instantiate its own wifi LAN, so you can control the bot even in places where an open and stable wifi connection is not available.</p>
+                <p>Network has 10.0.0.x address, CoderBot itself is always 10.0.0.1</p>
+				<h4>Installation</h4>
+				<p>Follow the instructions at <a href="https://github.com/previ/coderbot/wiki/Wi-Fi">this link</a>.</p>
+                <h3>PIGPIO</h3>
+                <p>Libreria per la gestione dei GPIO.</p>
+                <p>Raspberry PI dispone di alcuni I/O "general purpose", ovvero configurabili da software come input oppure output. Tramite questa libreria è possibile configurare, leggere e scrivere gli I/O direttamente da Python.</p>
+				<h4>Installation</h4>
+				<p>Follow the instructions at <a href="https://github.com/previ/coderbot/wiki/PIGPIO-(GPIO-daemon)">this link</a>.</p>
+                <h3>ESpeak</h3>
+                <p>Audio and Speech synthesis.</p>
+                <p>CoderBot uses the Raspberry PI audio port to output sounds and synthetised speech to provide feedback to humans.</p>
+				<h4>Installation</h4>
+				<p>Follow the instructions at <a href="https://github.com/previ/coderbot/wiki/Audio-and-speech">this link</a>.</p>
+                <h3>Flask</h3>
+                <p>The integrated webserver (python), used to serve the html5 web application.</p>
+				<h4>Installation</h4>
+				<p>Follow the instructions at <a href="https://github.com/previ/coderbot/wiki/Flask">this link</a>.</p>
+                <h3>CoderBot runtime</h3>
+                <p>This is the custom CoderBot software.</p>
+                <p>It is, in turn, composed of several components and libraries:</p>
+                <ul>
+                  <li>Low level interface to motors and videocamera (Python lib)</li>
+                  <li>HTML5 application (python, html, javascript)</li>
+                  <li>Programming environment based on <a href="https://developers.google.com/blockly/">blockly</a> (python, html, javascript)</li>
+                </ul>
+				<h4>Installation</h4>
+				<p>Follow the instructions at <a href="https://github.com/previ/coderbot/wiki/CoderBot-core">this link</a>.</p>
+            </div>
+        </div>
+        <!-- /.row -->

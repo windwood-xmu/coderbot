@@ -1,0 +1,40 @@
+---
+layout: en/default
+---
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Gioca con CoderBot
+                    <small>Usare CoderBot per giocare, da soli o con gli amici</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a>
+                    </li>
+                    <li class="active">Gioca</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+   		{% for post in site.posts %}
+   		{% if post.language == 'it' and post.category == 'project' and post.tags contains 'play' %}
+
+        <div class="row">
+            <div class="col-md-7">
+                <a href="{{ post.url | prepend: site.baseurl }}">
+                    <img class="img-responsive img-hover" src="{{ site.baseurl }}/img/{{post.splash}}" alt="">
+                </a>
+            </div>
+            <div class="col-md-5">
+                <a class="" href="{{ post.url | prepend: site.baseurl }}"><h3>{{post.title}}</h3></a>
+                <h4>{{post.subtitle}}</h4>
+                <p>{{post.excerpt}}</p>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+ 		{% endif %}
+		{% endfor %}

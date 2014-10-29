@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CoderBot is an open source, raspberry pi robot specialized in teaching kids the basic of robotics and coding.
+">
+    <meta name="author" content="">
+
+    <title>CoderBot - An open, programmable robot</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/coderbot.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/js/jquery-1.11.0.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="canonical" href="http://coderbot.org/it/how_to_build_sw.html">
+</head>
+
+
+  <body>
+    <!-- Page Content -->
+    <div class="container">
+
+    <header class="site-header">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Navigazione</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/it/index.html"><img src="/img/coderbot_logo_79.png">CoderBot</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/it/about.html">Cosa è</a>
+                    </li>
+                    <li>
+                        <a href="/it/how_to_build_it.html">Come costruirlo</a>
+                    </li>
+                    <li>
+                        <a href="/it/projects.html">Gioca e Impara</a>
+                    </li>
+                    <li>
+                        <a href="/it/contact.html">Contatti</a>
+                    </li>
+                    <li>
+                        <a href="https://groups.google.com/forum/#!forum/coderbot-users" target="new">Forum</a>
+                    </li>
+                    <li>
+                        <a href="/it/news.html">Novità</a>
+                    </li>
+                    <li>
+                        <a href="/en/index.html">English</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+</header>
+
+
+                <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Software
+                    <small>Sistema operativo, componenti, programma.</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a></li>
+                    <li><a href="how_to_build_it.html">Come costruirlo</a></li>
+                    <li class="active">Software</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="img-responsive" src="../img/build_sw.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+				<hr>
+				<p>Questa sezione descrive le componenti Software necessarie a far girare CoderBot</p>
+                <h3>Raspbian</h3>
+                <p>CoderBot si basa sulla distribuzione Linux <a href="www.raspbian.org">Raspbian</a>, è opportuno aggiornare sia il firmware che il sistema operativo all'ultima versione disponibile.</p>
+				<h4>Installazione</h4>
+				<p>Scaricare il l'<a href="http://www.raspberrypi.org/downloads/">immagine di Raspbian</a> e caricarla sulla scheda SD con uno dei seguenti metodi, in base al sistema operativo di cui si dispone: <a href="">linux</a>, <a href="">osx</a>, <a href="">windows</a>.</p>
+                <h3>UV4L e SimpleCV</h3>
+                <p>UV4L è uno user-mode driver per Raspberry Camera module, necessario se si usa la Camera.</p>
+                <p>SimpleCV è un framework che comprende diverse librerie come OpenCV e permette di elaborare le immagini e ricavarne informazioni.</p>
+                <p>Allo stato attuale la libreria OpenCV non è disponibile in versione binaria specifica per Raspberry PI e Camera module, è necessario ricompilarne una versione specifica. L'operazione richiede circa 10-11 ore.</p>                                                
+				<h4>Installazione</h4>
+				<p>Seguire le istruzioni a questo <a href="https://github.com/CoderBotOrg/coderbot/wiki/Camera-module">link</a>.</p>
+                <h3>hostAPd, DNSMasq</h3>
+                <p>Gestione wifi in modalità Access Point.</p>
+                <p>Questo tool permette a CoderBot di gestire una sua rete wifi (nome "coderbot") in questo modo è possibile utilizzarlo in ambienti che non dispongono di una rete wifi aperta e affidabile.</p>
+                <p>La rete ha indirizzamento 10.0.0.x, con CoderBot che risponde sempre come 10.0.0.1</p>
+				<h4>Installazione</h4>
+				<p>Seguire le istruzioni a <a href="https://github.com/CoderBotOrg/coderbot/coderbot/wiki/Wi-Fi">questo link</a>.</p>
+                <h3>PIGPIO</h3>
+                <p>Libreria per la gestione dei GPIO.</p>
+                <p>Raspberry PI dispone di alcuni I/O "general purpose", ovvero configurabili da software come input oppure output. Tramite questa libreria è possibile configurare, leggere e scrivere gli I/O direttamente da Python.</p>
+				<h4>Installazione</h4>
+				<p>Seguire le istruzioni a <a href="https://github.com/CoderBotOrg/coderbot/wiki/PIGPIO-(GPIO-daemon)">questo link</a>.</p>
+                <h3>ESpeak</h3>
+                <p>Sintesi vocale.</p>
+                <p>Raspberry dispone di una uscita audio analogica che è possibile utilizzare per emettere suoni oppure, tramite questo programma, sintetizzare la voce in diverse lingue e timbri.</p>
+				<h4>Installazione</h4>
+				<p>Seguire le istruzioni a <a href="https://github.com/CoderBotOrg/coderbot/wiki/Audio-and-speech">questo link</a>.</p>
+                <h3>Flask</h3>
+                <p>Il webserver (python) che eroga la webapp.</p>
+				<h4>Installazione</h4>
+				<p>Seguire le istruzioni a <a href="https://github.com/CoderBotOrg/coderbot/wiki/Flask">questo link</a>.</p>
+                <h3>CoderBot runtime</h3>
+                <p>Il software di CoderBot vero e proprio.</p>
+                <p>E' a sua volta composto da alcuni componenti:</p>
+                <ul>
+                  <li>Interfaccia (python) alle risorse del bot (motori e videocamera)</li>
+                  <li>Applicazione HTML5 (python, html, javascript)</li>
+                  <li>Ambiente di programmazione basato su <a href="https://developers.google.com/blockly/">blockly</a> (python, html, javascript)</li>
+                </ul>
+				<h4>Installazione</h4>
+				<p>Seguire le istruzioni a <a href="https://github.com/CoderBotOrg/coderbot/wiki/CoderBot-core">questo link</a>.</p>
+            </div>
+        </div>
+        <!-- /.row -->
+
+
+    <hr>
+<footer class="site-footer">
+            <div class="row">
+                <div class="col-lg-12">
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Licenza Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />Quest'opera di <a xmlns:cc="http://creativecommons.org/ns#" href="http://coderbot.org" property="cc:attributionName" rel="cc:attributionURL">CoderBot.org</a> è distribuita con Licenza <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribuzione - Condividi allo stesso modo 4.0 Internazionale</a>.
+                </div>
+            </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52649755-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+    </div>
+    <!-- /.container -->
+  </body>
+</html>

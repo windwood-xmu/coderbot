@@ -1,0 +1,33 @@
+---
+layout: en/project
+title:  "Explorer"
+subtitle: "The world is different when seen through the eye of a robot."
+excerpt: "This challenge is about explore a mysterious world, draw a map of it, with only the images that CoderBot sends us."
+splash: mars_700x300.jpg
+date:   2014-10-01 12:00:00
+category: project
+tags:   play, single, group, class 
+author: CoderBot
+language: en
+---
+### Description
+The world is different when observed by a robot. Especially if the robot has only one eye, looking forward towards the ground.
+In this game, the robot will be our "explorer" in an unknown space. We, as the rover pilot, will try to draw a map of the space relying only on the images that the rover sends us. 
+
+![Mars]({{ site.baseurl }}/img/mars_1140x300.jpg)
+
+### Requisites
+A space isolated from the rover pilot (two adjacent rooms, such as two classes or one class and a corridor)
+Paper and pencil
+
+### Preparation
+Participants are split in two groups, the first one "builders" prepare the "unknown space", the second one drive the rover and explore the space.
+The two groups agree on a set of special, known objects with special value defined as "treasures". These objects will be placed in the unknown space and the finding and correct placement in the map will count as points for the "exploring" team.
+All "treasures" must be placed such that they are reachable by the robot, it is not allowed to create "traps" (places where the robot can enter but not leave).
+The "explorers" group will stay on place with no direct view on the "unknown space".
+
+### The game
+The "builders" place the robot in the "unknown space", when ready the game starts. 
+The "explorers" drive the robots through the space, trying to draw a map and to find all the "treasures". The team will have a limited amount of time to explore the area.
+The game end when all treasures have been found and the team is satisfied with the accuracy of the map, or when the time finish.
+The explorers gets more points for each treasure found in the correct position on the map.

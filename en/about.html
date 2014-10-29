@@ -1,0 +1,101 @@
+---
+layout: en/default
+---
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">About CoderBot
+                    <small>What is it, what can it do</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a>
+                    </li>
+                    <li class="active">About</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+       <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+ 
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="img-responsive" src="../img/about.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Why CoderBot</h2><a name="why"></a>
+                <p>CoderBot is a robot with didactical purpose.</p>
+                <p class="lead">The main goal of the project is to realize a simple robot which can be programmed by kids from 6 and up.</p>
+				<img src="../img/home_2.jpg" width="700">
+				<h3>How it is made</h3><a name="how"></a>
+                <p>CoderBot is a vehicle with two front, independently powered wheels and a rear ball caster.</p>
+                <p>The logic is based on <a href="http://www.raspberrypi.org" target="new">Raspberry PI</a>, a complete computer (CPU, GPU, audio, RAM e flash) small but powerful enough to run the logic and provide live image streaming via wifi.
+				<p>The main board is linked to a dedicated videocamera, a motor control board and a wifi adapter. Audio is amplified through an external speaker.</p>
+				<p>The Operative System is Raspbian, a customised Linux Debian distribution specific for Raspberry. On top of that, several modules run: networking, camera, motor driver, user interface. The UI is actually an html5 application, provided by an embedded webserver. 
+                <h3>What can it do</h3><a name="what"></a>
+                <p>The robot can move on plain surfaces, moving in any directions and performing turn of variable width, according on the programmed motor speed.</p>
+                <img src="../img/easy.jpg" width="400">
+                <a name="wifi"></a>
+                <p>The robot is controllable by any device capable of running an html5 compatible browser and connect via wifi</p>
+                <img src="../img/mars_700x300.jpg" width="400">
+                <a name="gui"></a>
+                <p>CoderBot can be used as a remote control "rover" and send live (albeit slow) video streaming of the videocamera.</p>
+                <img src="../img/remote.jpg">
+                <a name="audio"></a>
+                <p>The robot can emit sounds: both canned wav or mp3 or synthesized speech.</p>
+				<iframe width="640" height="390" src="//www.youtube.com/embed/GAbvqngotLY" frameborder="0" allowfullscreen></iframe>
+                <a name="programming"></a>
+                <p>Most important, CoderBot is also programmable with a simple, function blocks-based (<a href="https://developers.google.com/blockly/" target="new">blockly</a>), specifically designed for kids.</p>
+                <img src="../img/coding.png" width="400">
+                <p>The programming editor can be configured in order to provide a gradually complex and complete environment.</p>
+                <img src="../img/gui_programming_basic.png">
+                <p>Easy mode</p>
+                <img src="../img/gui_programming_adv.png" width="400">
+                <p>Normal / Advanced mode</p>
+        		<p>The GUI, localised both in English and in Italian, is configurable to hide some of its parts, in order to streamline the user interaction. For example it is possible to hide the "remote control" part and leave the programming editor only, or do the opposite and leave just the remote control page.</p>
+        		<p>Most CoderBot parameters and settings are easily configurable in the "Preferences" page.</p>
+                <img src="../img/gui_preferences.png" width="400">
+                <p>For the advanced programmers, CoderBot is also programmable in python.</p>
+{% highlight python %}
+import coderbot
+
+bot = coderbot.CoderBot.get_instance()
+
+bot.forward(speed=100, elapse=2.5)
+bot.left(speed=60, elapse=1)
+
+{% endhighlight %}
+				<a name="comp_vision"></a>
+				<p>The videocamera can live stream what is in front of the bot and can take snapshots.</p>
+				<a name="obj_rec"></a>
+				<p>The computer vision functions enable object detection and avoidance:</p>
+				<p>[Coming soon: video of object detection]</p>
+				<a name="line_follower"></a>
+				<p>Line following:</p>
+				<p>[Coming soon: video of line follower]</p>
+				<a name="color_rec"></a>				
+				<p>Color detection:</p>
+				<p>[Coming soon: video of color catcher]</p>
+				<a name="face_rec"></a>				
+				<p>And can also detect faces and predefined symbols.</p>
+				<p>[Coming soon: video of face finder]</p>
+				<p>[Coming soon: video of signal finder]</p>
+            </div>
+
+        </div>
+        <!-- /.row -->

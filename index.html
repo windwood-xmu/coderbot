@@ -1,99 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+---
+layout: default
+---
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <script type="text/javascript">
+  $.ajax({ 
+    url: "http://ajaxhttpheaders.appspot.com", 
+    dataType: 'jsonp', 
+    success: function(headers) {
+        language = headers['Accept-Language'];
+        redirectSite(language);
+    }
+  });
 
-    <title>CoderBot by previ</title>
-  </head>
+function redirectSite(lang) {
+	if(lang.indexOf('it')>=0) {
+		window.location.href="it/index.html";
+	} else {
+		window.location.href="en/index.html";
+	}
+}
+    </script>
 
-  <body>
-    <header>
-      <div class="inner">
-        <h1>CoderBot</h1>
-        <h2>RaspberryPI-based bot controller</h2>
-        <a href="https://github.com/previ/coderbot" class="button"><small>View project on</small>GitHub</a>
-        <a href="https://plus.google.com/100258377718556176811" rel="publisher">Google+</a>
-      </div>
-    </header>
-
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-          <a name="coderbot" class="anchor" href="#coderbot"><span class="octicon octicon-link"></span></a>
-          CoderBot</h1>
-          <h2>Description</h2>
-          <p>CoderBot is a Linux-based, Raspberry PI-powered educational robot.</p>
-          <p>The robot is a simple three wheel vehicle (two wheels drive plus a free caster on the back) and uses the integrated Raspberry camera module as a sensor.</p>
-          <p>The bot can be controlled by any computer or tablet via a web-based application exposed by the bot via the wi-fi dongle adapter.</p>
-          <p>CoderBot can be used in two different ways:</p>
-          <ul>
-            <li>as a remotely operated "drone": it is possible to pilot it remotely, while the camera stream is (slowly) sent to the controlling browser.</li>
-            <li>as a programmable "robot": it is possible to write programs using a scratch-like language (blockly, extended with custom blocks)</li>
-          </ul>
-<!-- Begin MailChimp Signup Form -->
-<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-	#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
-	/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-	   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-</style>
-<div id="mc_embed_signup">
-<form action="//coderbot.us5.list-manage.com/subscribe/post?u=cd67d0404c1f812709dc2a8c8&amp;id=bd16dab715" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-	<label for="mce-EMAIL">Get updates on CoderBot project</label>
-	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_cd67d0404c1f812709dc2a8c8_bd16dab715" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
+<div class="row">
+<div class="col-md-12">
+<h2><center>Please wait...</center><h2>
 </div>
-
-<!--End mc_embed_signup-->
-<p>The bot:</p>
-          <img src="https://googledrive.com/host/0B0WH-R3RUJc9Tjd0M1Vfb3FPNWM/chassis_plexi_1"></img>
-          <p>The UI: Remote control</p>
-          <img src="https://googledrive.com/host/0B0WH-R3RUJc9Tjd0M1Vfb3FPNWM/photo1.jpg"></img>
-          <p>Programming</p>
-          <img src="https://googledrive.com/host/0B0WH-R3RUJc9Tjd0M1Vfb3FPNWM/photo2.jpg"></img>
-
-
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/previ/coderbot/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/previ/coderbot/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/previ/coderbot"></a> is maintained by <a href="https://github.com/previ">previ</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-52649755-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-  </body>
-</html>
+<hr>
+<div class="col-md-12">
+<p><center>...or select your language: <a href="./en/index.html" class="btn btn-primary">English</a> <a href="./it/index.html" class="btn btn-primary">Italiano</a></center><p>
+</div>
+</div>

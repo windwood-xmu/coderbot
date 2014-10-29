@@ -1,0 +1,71 @@
+---
+layout: en/default
+---
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Play and learn with CoderBot
+                    <small>A collection of educational games</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a>
+                    </li>
+                    <li class="active">Play & Learn</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+   		{% for post in site.posts %}
+   		{% if post.language == 'en' and post.category == 'project' %}
+
+        <div class="row">
+            <div class="col-md-7">
+                <a href="{{ post.url | prepend: site.baseurl }}">
+                    <img class="img-responsive img-hover" src="{{ site.baseurl }}/img/{{post.splash}}" alt="">
+                </a>
+            </div>
+            <div class="col-md-5">
+                <a class="" href="{{ post.url | prepend: site.baseurl }}"><h3>{{post.title}}</h3></a>
+                <h4>{{post.subtitle}}</h4>
+                <p>{{post.excerpt}}</p>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+ 		{% endif %}
+		{% endfor %}
+
+
+        <!-- Pagination -->
+        <!--div class="row text-center">
+            <div class="col-lg-12">
+                <ul class="pagination">
+                    <li>
+                        <a href="#">&laquo;</a>
+                    </li>
+                    <li class="active">
+                        <a href="#">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">4</a>
+                    </li>
+                    <li>
+                        <a href="#">5</a>
+                    </li>
+                    <li>
+                        <a href="#">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div-->
+        <!-- /.row -->

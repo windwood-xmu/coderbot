@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CoderBot is an open source, raspberry pi robot specialized in teaching kids the basic of robotics and coding.
+">
+    <meta name="author" content="">
+
+    <title>CoderBot - An open, programmable robot</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/coderbot.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/js/jquery-1.11.0.js"></script>
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="canonical" href="http://coderbot.org/it/how_to_build_hw.html">
+</head>
+
+
+  <body>
+    <!-- Page Content -->
+    <div class="container">
+
+    <header class="site-header">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Navigazione</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/it/index.html"><img src="/img/coderbot_logo_79.png">CoderBot</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/it/about.html">Cosa è</a>
+                    </li>
+                    <li>
+                        <a href="/it/how_to_build_it.html">Come costruirlo</a>
+                    </li>
+                    <li>
+                        <a href="/it/projects.html">Gioca e Impara</a>
+                    </li>
+                    <li>
+                        <a href="/it/contact.html">Contatti</a>
+                    </li>
+                    <li>
+                        <a href="https://groups.google.com/forum/#!forum/coderbot-users" target="new">Forum</a>
+                    </li>
+                    <li>
+                        <a href="/it/news.html">Novità</a>
+                    </li>
+                    <li>
+                        <a href="/en/index.html">English</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+</header>
+
+
+                <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Hardware
+                    <small>Raspberry Pi, controllo motori, batteria</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">CoderBot</a></li>
+                    <li><a href="how_to_build_it.html">Come costruirlo</a></li>
+                    <li class="active">Hardware</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Portfolio Item Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="img-responsive" src="../img/build_hw.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <div class="row">
+
+            <div class="col-md-12">
+            	<p>Questa sezione descrive tutte le componenti Hardware necessarie per realizzare CoderBot.</p>
+                <h3>Raspberry PI</h3>
+                <p>CoderBot utilizza Raspberry Pi come controller principale, sono adatti il Model B e il recente B+, quest'ultimo preferibile per i ridotti consumi.</p>
+                <p>Il Model A può essere utilizzato per realizzare un robot "cieco", infatti per gestire la Camera, e soprattutto il riconoscimento degli oggetti, sono necessari circa 384MB (il Model B ne ha 512, il Model A si ferma a 256MB).</p>
+                <h3>Camera module</h3>
+                <p>Esistono due tipi di camera: una normale e una modificata per essere sensibile all'infrarosso per visione notturna. Salvo applicazioni particolari, si utilizza la Camera normale.</p>
+                <h3>Scheda di controllo motori</h3>
+                <p>Ne esistono di due tipi: una adatta al controllo di motori in corrente continua e una specifica e semplificata per controllare servomotori in modalità PWM, da scegliere in base alle caratteristiche dei motori.</p>
+				<p>Di seguito il PCB della versione per motori DC:</p>
+				<iframe width="725" height="448" src="http://123d.circuits.io/circuits/372065-coderbot-motor-shield/embed#pcb" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                <h3>Batteria</h3>
+				<p>La batteria deve avere due uscite indipendenti, una per alimentare Raspberry e una per alimentare i mototi tramite la scheda di controllo. 
+				E' possibile in alternativa utilizzare due batterie più piccole indipendenti a condizione  che la corrente in uscita sia di almeno 1A su 5V</p>
+                <h3>Cavi USB</h3>
+                <p>Due cavi USB-A - USB-Micro (maschio-maschio) per collegare l'output della batteria a Raspberry e alla Scheda di controllo motori</p>
+            	<h2>Elenco delle componenti</h2>
+                <table class="table">
+                <thead>
+                <tr>
+                <th>Componente</th>
+                <th>Quantità</th>
+                <th>link</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td>Raspberry PI - Model B oppure Model B+</td>
+                <td>1</td>
+                <td><a href="http://www.element14.com/community/community/raspberry-pi" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>Raspberry PI Camera module</td>
+                <td>1</td>
+                <td><a href="http://www.element14.com/community/community/raspberry-pi/raspberry-pi-accessories/raspberry-pi-camera-board?ICID=rpiaccsy-topban-links" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>Wi-Fi</td>
+                <td>1</td>
+                <td><a href="http://www.amazon.it/Portable-Wireless-Network-Ethernet-Converter/dp/B008BZAZ1U/ref=pd_rhf_se_p_img_8" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>SD card 8GB</td>
+                <td>1</td>
+                <td><a href="http://www.amazon.it/Kingston-Digital-memoria-Confezione-originale/dp/B000OF2F36/ref=sr_1_1?s=electronics&ie=UTF8&qid=1414444366&sr=1-1&keywords=sd+card+8GB" target="new">link</td>
+				</tr>
+                <tr>
+                <td>Scheda controllo motori DC oppure servo</td>
+                <td>1</td>
+                <td>Coming soon...</td>
+				</tr>
+                <tr>
+                <td>Batteria</td>
+                <td>1</td>
+                <td><a href="http://www.amazon.it/RAVPower-Universale-RP-PB07-Smartphone-Velocemente/dp/B00CMIWLSM/ref=sr_1_1?s=electronics&ie=UTF8&qid=1414444473&sr=1-1&keywords=battery+power+bank" target="new">link</a></td>
+				</tr>
+                <tr>
+                <td>Cavo USB-A - USB micro</td>
+                <td>2</td>
+                <td><a href="http://www.amazon.it/Nokia-Cavo-Micro-USB--CA-101D-Mini/dp/B0031SXXNO/ref=sr_1_1?s=electronics&ie=UTF8&qid=1414447211&sr=1-1&keywords=cavo+usb+corto+micro" target="new">link</a></td>
+				</tr>
+				</tbody>
+				</table>            	
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+
+    <hr>
+<footer class="site-footer">
+            <div class="row">
+                <div class="col-lg-12">
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Licenza Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />Quest'opera di <a xmlns:cc="http://creativecommons.org/ns#" href="http://coderbot.org" property="cc:attributionName" rel="cc:attributionURL">CoderBot.org</a> è distribuita con Licenza <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribuzione - Condividi allo stesso modo 4.0 Internazionale</a>.
+                </div>
+            </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52649755-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+    </div>
+    <!-- /.container -->
+  </body>
+</html>
