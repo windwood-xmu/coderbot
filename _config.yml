@@ -3,7 +3,7 @@ title: CoderBot - An open, programmable robot
 email: info@coderbot.org
 description: > # this means to ignore newlines until "baseurl:"
   CoderBot is an open source, raspberry pi robot specialized in teaching kids the basic of robotics and coding.
-baseurl: "/helloworld" # the subpath of your site, e.g. /blog/
+baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://coderbot.org" # the base hostname & protocol for your site
 twitter_username: coderbotorg
 facebook_page: coderbot
