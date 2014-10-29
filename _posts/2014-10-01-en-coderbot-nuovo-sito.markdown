@@ -25,4 +25,4 @@ In the following days, the [Play and learn][projects] section will be enriched w
 [coderbot-make-hw]: {{site.baseurl}}/en/how_to_build_hw.html
 [coderbot-make-sw]: {{site.baseurl}}/en/how_to_build_sw.html
 [projects]: {{site.baseurl}}/en/projects.html
-[giuliav] http://www.giuliaolivares.it/
+[giuliav]: http://www.giuliaolivares.it/

@@ -27,4 +27,4 @@ Inoltre nella sezione [Gioca e impara][projects] saranno pubblicati progetti e a
 [coderbot-make-hw]: {{site.baseurl}}/it/how_to_build_hw.html
 [coderbot-make-sw]: {{site.baseurl}}/it/how_to_build_sw.html
 [projects]: {{site.baseurl}}/it/projects.html
-[giuliav] http://www.giuliaolivares.it/
+[giuliav]: http://www.giuliaolivares.it/
