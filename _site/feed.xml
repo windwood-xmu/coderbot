@@ -6,8 +6,8 @@
 </description>
     <link>http://coderbot.org/</link>
     <atom:link href="http://coderbot.org/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 29 Oct 2014 21:21:44 +0100</pubDate>
-    <lastBuildDate>Wed, 29 Oct 2014 21:21:44 +0100</lastBuildDate>
+    <pubDate>Thu, 30 Oct 2014 09:03:52 +0100</pubDate>
+    <lastBuildDate>Thu, 30 Oct 2014 09:03:52 +0100</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -104,9 +104,15 @@ Si attribuisce un punteggio in base al tempo impiegato per uscire dal labirinto,
 
 &lt;p&gt;Nelle pagine &lt;a href=&quot;/it/how_to_build_sw.html&quot;&gt;software&lt;/a&gt; invece sono descritte le componenti software con relative istruzioni per l’installazione.&lt;/p&gt;
 
+&lt;p&gt;Un ringraziamento a &lt;a href=&quot;http://www.giuliaolivares.it/&quot;&gt;Giulia&lt;/a&gt; per il logo e la grafica!&lt;/p&gt;
+
 &lt;p&gt;Nei prossimi giorni il sito sarà arricchito con documentazione di maggior dettaglio e guide all’installazione e configurazione. &lt;/p&gt;
 
 &lt;p&gt;Inoltre nella sezione &lt;a href=&quot;/it/projects.html&quot;&gt;Gioca e impara&lt;/a&gt; saranno pubblicati progetti e attività didattiche adatti al robot.&lt;/p&gt;
+
+&lt;p&gt;Ci auguriamo che questo sito possa stimolare lo sviluppo del progetto CoderBot, e che lo stesso possa eveolversi e diventare uno strumento sempre più utile e divertente.
+Per raccogliere domande e suggerimenti è presente un &lt;a href=&quot;https://groups.google.com/forum/#!forum/coderbot-users&quot;&gt;forum dedicato&lt;/a&gt;, non mancate di farci avere i vostri commenti, osservazioni e suggerimenti.
+Per rimanere aggiornati sul progetto, non dimenticate di iscrivervi alla &lt;a href=&quot;/it/contact.html&quot;&gt;mailing list&lt;/a&gt; e di seguire il progetto sui vari &lt;a href=&quot;/it/contact.html&quot;&gt;social media&lt;/a&gt;.&lt;/p&gt;
 
 </description>
         <pubDate>Wed, 01 Oct 2014 14:00:00 +0200</pubDate>
@@ -209,10 +215,17 @@ The “programmers” team gets a point if the robot was able to escape the maze
 
 &lt;p&gt;&lt;img src=&quot;/img/build_hw.jpg&quot; alt=&quot;make&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Check out the CoderBot &lt;a href=&quot;/en/how_to_build_mh.html&quot;&gt;Mechanics&lt;/a&gt; and &lt;a href=&quot;/en/how_to_build_hw.html&quot;&gt;Hardware&lt;/a&gt; documentation for mechanical and electronics assembly instructions.
-Check out the CoderBot &lt;a href=&quot;/en/how_to_build_sw.html&quot;&gt;Software&lt;/a&gt; documentation for instructions on installing and configuring the software components.&lt;/p&gt;
+&lt;p&gt;Check out the CoderBot &lt;a href=&quot;/en/how_to_build_mh.html&quot;&gt;Mechanics&lt;/a&gt; and &lt;a href=&quot;/en/how_to_build_hw.html&quot;&gt;Hardware&lt;/a&gt; documentation for mechanical and electronics assembly instructions.&lt;/p&gt;
+
+&lt;p&gt;Check out the CoderBot &lt;a href=&quot;/en/how_to_build_sw.html&quot;&gt;Software&lt;/a&gt; documentation for instructions on installing and configuring the software components.&lt;/p&gt;
+
+&lt;p&gt;Many thanks to &lt;a href=&quot;http://www.giuliaolivares.it/&quot;&gt;Giulia&lt;/a&gt; for the logo and graphics!&lt;/p&gt;
 
 &lt;p&gt;In the following days, the &lt;a href=&quot;/en/projects.html&quot;&gt;Play and learn&lt;/a&gt; section will be enriched with detailed instructions and guides, as well as games and projects tailored for the robot.&lt;/p&gt;
+
+&lt;p&gt;We hope this website will foster CoderBot project development and improvement, and that the project itself will become a useful and fun tool for learning.
+In order to collect questions, issues and suggestions a &lt;a href=&quot;https://groups.google.com/forum/#!forum/coderbot-users&quot;&gt;forum dedicato&lt;/a&gt; is now open, please use it as to communicate about the project.
+To get updates on the project, subscribe to the &lt;a href=&quot;/en/contact.html&quot;&gt;mailing list&lt;/a&gt; and follow it on the &lt;a href=&quot;/en/contact.html&quot;&gt;social media&lt;/a&gt;.&lt;/p&gt;
 
 </description>
         <pubDate>Wed, 01 Oct 2014 14:00:00 +0200</pubDate>

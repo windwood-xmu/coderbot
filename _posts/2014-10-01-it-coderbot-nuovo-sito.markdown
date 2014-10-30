@@ -23,8 +23,15 @@ Nei prossimi giorni il sito sarà arricchito con documentazione di maggior detta
 
 Inoltre nella sezione [Gioca e impara][projects] saranno pubblicati progetti e attività didattiche adatti al robot.
 
+Ci auguriamo che questo sito possa stimolare lo sviluppo del progetto CoderBot, e che lo stesso possa eveolversi e diventare uno strumento sempre più utile e divertente.
+Per raccogliere domande e suggerimenti è presente un [forum dedicato][forum], non mancate di farci avere i vostri commenti, osservazioni e suggerimenti.
+Per rimanere aggiornati sul progetto, non dimenticate di iscrivervi alla [mailing list][contact] e di seguire il progetto sui vari [social media][contact].
+
+
 [coderbot-make-mh]: {{site.baseurl}}/it/how_to_build_mh.html
 [coderbot-make-hw]: {{site.baseurl}}/it/how_to_build_hw.html
 [coderbot-make-sw]: {{site.baseurl}}/it/how_to_build_sw.html
 [projects]: {{site.baseurl}}/it/projects.html
 [giuliav]: http://www.giuliaolivares.it/
+[forum]: https://groups.google.com/forum/#!forum/coderbot-users
+[contact]: {{site.baseurl}}/it/contact.html
