@@ -110,6 +110,14 @@ ul.list-social-icon-size {
 	ul.list-social-icon-size {
 		font-size: 48px;
 	}
+	.navbar-brand {
+		padding-top:14px; 	
+		font-size: 10pt;
+		padding-right:2px
+	}
+	.navbar-logo {
+		width: 32px;
+	}
 }
 
 @media(max-width:767px) {
@@ -122,5 +130,13 @@ ul.list-social-icon-size {
     }
 	ul.list-social-icon-size {
 		font-size: 32px;
-	}    
+	} 
+	.navbar-brand {
+		padding-top:0px; 	
+		font-size: 32pt;
+		padding-right:2px
+	}
+	.navbar-logo {
+		width: 79px;
+	}	   
 }
