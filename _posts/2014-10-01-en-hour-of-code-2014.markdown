@@ -1,0 +1,37 @@
+---
+layout: en/post
+title:  "Hour of Code 2014 - Build and code your own robot!"
+subtitle: "A robot-based coding session for 2014 Hour of Code"
+splash: "blog/coderbot_hoc_2014_12_13_0.jpg"
+date:   2014-12-14 12:00:00
+category: blog
+tags:   doc
+author: CoderBot
+language: en
+---
+Learning to code in order to be active and creative players in the digital revolution, this is the “motto” of the “Hour Of Code” initiative that let, for the second year, millions of kids experience computer programming in order to be a creative “producer”, rather than just a passive “consumer” in the digital revolution.
+In Milano, Italy, thanks to the support of CoderDojo Milano, which organised a very special “digital creativity” workshop with several activities, a session dedicated to robots took place.
+
+![intro]({{site.baseurl}}/img/blog/coderbot_hoc_2014_12_13_1.jpg)
+
+The session, named “Build - and code - your own robot” was about assembling and programming a CoderBot and was attended by eight children (age 8-13).
+Once assembled, the robot was programmed by kids to move and explore the place.
+
+![desc]({{site.baseurl}}/img/blog/coderbot_hoc_2014_12_13_2.jpg)
+
+The workshop was divided in three parts:
+short introduction to robotics: what is a robot and how it is used
+assembling the robot
+programming the robot
+
+![middle]({{site.baseurl}}/img/blog/coderbot_hoc_2014_12_13_3.jpg)
+
+After the first part, which was held by mentors with a classical, “frontal lesson” approach, the kids, in couples, have assembled their own robot using the provided parts and using a pre-assembled robot as “model”.
+Once assembled, the robots have been tested and a short description of the programming interface have been given to children, then they started to autonomously experiment the robot and develop programs.
+
+![conclusion]({{site.baseurl}}/img/blog/coderbot_hoc_2014_12_13_4.jpg)
+
+Conclusions
+Kids showed great interest in the initiative. Apart from the very positive feedback, it is worth noting that almost all of the attendants continued to work all the available time and did not even enjoy the usual mid session “cookie-break”
+
+[![video](http://img.youtube.com/vi/9rWKXD2UzS8/0.jpg)](http://www.youtube.com/watch?v=9rWKXD2UzS8)
