@@ -1,0 +1,25 @@
+---
+layout: it/post
+title:  "Pronta la nuova scheda di controllo motori"
+subtitle: "La nuova scheda corregge alcuni piccoli bug e permette di gestire motori DC e Servo"
+splash: "blog/coderbot_board_2_0_splash.jpg"
+date:   2015-05-07 12:00:00
+category: blog
+tags:   news
+author: CoderBot
+language: it
+---
+Finalmente è arrivata la nuova versione della scheda di controllo motori.
+
+La scheda attuale, che è compatibile con Raspberry PI Model A, B, B+ e il nuovissimo B 2 (onestamente su quest'ultimo non è ancora stata testata, ma non vediamo l'ora!), permette di controllare una coppia di motori DC, tramite il circuito L293D, oppure due motori Servo.
+
+Oltre ai due motori dedicati al movimento del robot, la scheda permette anche il controllo di due motori Servo aggiuntivi, che potranno essere usati come attuatori di una pinza, oppure per brandeggiare la telecamera o altre idee ancora da definire che diventeranno parte della prossima versione di CoderBot, la 2.0, attualmente in fase di sviluppo.
+
+![intro]({{site.baseurl}}/img/blog/coderbot_board_2_0_1.jpg)
+
+Come sempre, potete scaricare lo schema in formato gerber [qui][pcb].
+
+Se desiderate riceverne una copia, scrivete alla [mail di contatto][contact] del sito per maggiori informazioni.
+
+[pcb]: {{site.baseurl}}http://123d.circuits.io/circuits/412909-coderbot-motor-shield-servo-dc-combo#pcb
+[contact]: mailto:info@coderbot.org

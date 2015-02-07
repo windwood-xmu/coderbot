@@ -6,9 +6,59 @@
 </description>
     <link>http://coderbot.org/</link>
     <atom:link href="http://coderbot.org/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 14 Dec 2014 20:55:18 +0100</pubDate>
-    <lastBuildDate>Sun, 14 Dec 2014 20:55:18 +0100</lastBuildDate>
+    <pubDate>Sat, 07 Feb 2015 15:30:31 +0100</pubDate>
+    <lastBuildDate>Sat, 07 Feb 2015 15:30:31 +0100</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>Pronta la nuova scheda di controllo motori</title>
+        <description>&lt;p&gt;Finalmente è arrivata la nuova versione della scheda di controllo motori.&lt;/p&gt;
+
+&lt;p&gt;La scheda attuale, che è compatibile con Raspberry PI Model A, B, B+ e il nuovissimo B 2 (onestamente su quest’ultimo non è ancora stata testata, ma non vediamo l’ora!), permette di controllare una coppia di motori DC, tramite il circuito L293D, oppure due motori Servo.&lt;/p&gt;
+
+&lt;p&gt;Oltre ai due motori dedicati al movimento del robot, la scheda permette anche il controllo di due motori Servo aggiuntivi, che potranno essere usati come attuatori di una pinza, oppure per brandeggiare la telecamera o altre idee ancora da definire che diventeranno parte della prossima versione di CoderBot, la 2.0, attualmente in fase di sviluppo.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_board_2_0_1.jpg&quot; alt=&quot;intro&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Come sempre, potete scaricare lo schema in formato gerber &lt;a href=&quot;http://123d.circuits.io/circuits/412909-coderbot-motor-shield-servo-dc-combo#pcb&quot;&gt;qui&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Se desiderate riceverne una copia, scrivete alla &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#105;&amp;#110;&amp;#102;&amp;#111;&amp;#064;&amp;#099;&amp;#111;&amp;#100;&amp;#101;&amp;#114;&amp;#098;&amp;#111;&amp;#116;&amp;#046;&amp;#111;&amp;#114;&amp;#103;&quot;&gt;mail di contatto&lt;/a&gt; del sito per maggiori informazioni.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 07 May 2015 14:00:00 +0200</pubDate>
+        <link>http://coderbot.org/blog/2015/05/07/it-board-2-0.html</link>
+        <guid isPermaLink="true">http://coderbot.org/blog/2015/05/07/it-board-2-0.html</guid>
+        
+        <category>news</category>
+        
+        
+        <category>blog</category>
+        
+      </item>
+    
+      <item>
+        <title>Motor control board updated</title>
+        <description>&lt;p&gt;The new motor control board (or “hat”, in Raspberry PI terms) is finally here.&lt;/p&gt;
+
+&lt;p&gt;The board enable the PI to control two motors, either DC via L293D or Servo, and two additional Servos which can be used for different purposes: a robotic crane, to rotate ant tilt the camera or new, yet to be conceived ideas that will be part of the next version of CoderBot, 2.0, currently under development.&lt;/p&gt;
+
+&lt;p&gt;The board is compatible with Raspberry PI model A, B, B+ and the very new model B 2 (honestly, it was not yet tested on that one, but we look forward to play with it!).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_board_2_0_1.jpg&quot; alt=&quot;intro&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The design is available &lt;a href=&quot;http://123d.circuits.io/circuits/412909-coderbot-motor-shield-servo-dc-combo#pcb&quot;&gt;here&lt;/a&gt; as a gerber file. If you are interested in getting one copy, please &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#105;&amp;#110;&amp;#102;&amp;#111;&amp;#064;&amp;#099;&amp;#111;&amp;#100;&amp;#101;&amp;#114;&amp;#098;&amp;#111;&amp;#116;&amp;#046;&amp;#111;&amp;#114;&amp;#103;&quot;&gt;contact us&lt;/a&gt; for more info.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 07 May 2015 14:00:00 +0200</pubDate>
+        <link>http://coderbot.org/blog/2015/05/07/en-board-2-0.html</link>
+        <guid isPermaLink="true">http://coderbot.org/blog/2015/05/07/en-board-2-0.html</guid>
+        
+        <category>news</category>
+        
+        
+        <category>blog</category>
+        
+      </item>
     
       <item>
         <title>Hour of Code 2014 - Costruisci e programma il tuo robot!</title>

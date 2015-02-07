@@ -1,0 +1,23 @@
+---
+layout: en/post
+title:  "Motor control board updated"
+subtitle: "The new board fixes some glitches, adds extra Servo control"
+splash: "blog/coderbot_board_2_0_splash.jpg"
+date:   2015-05-07 12:00:00
+category: blog
+tags:   news
+author: CoderBot
+language: it
+---
+The new motor control board (or "hat", in Raspberry PI terms) is finally here.
+
+The board enable the PI to control two motors, either DC via L293D or Servo, and two additional Servos which can be used for different purposes: a robotic crane, to rotate ant tilt the camera or new, yet to be conceived ideas that will be part of the next version of CoderBot, 2.0, currently under development.
+
+The board is compatible with Raspberry PI model A, B, B+ and the very new model B 2 (honestly, it was not yet tested on that one, but we look forward to play with it!).
+
+![intro]({{site.baseurl}}/img/blog/coderbot_board_2_0_1.jpg)
+
+The design is available [here][pcb] as a gerber file. If you are interested in getting one copy, please [contact us][contact] for more info.
+
+[pcb]: {{site.baseurl}}http://123d.circuits.io/circuits/412909-coderbot-motor-shield-servo-dc-combo#pcb
+[contact]: mailto:info@coderbot.org
