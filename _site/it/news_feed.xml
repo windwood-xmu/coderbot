@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
     <title>CoderBot - An open, programmable robot</title>
     <description>CoderBot is an open source, raspberry pi robot specialized in teaching kids the basics of robotics and coding.
 </description>
     <link>http://coderbot.org/</link>
-    <atom:link href="http://coderbot.org/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 09 Apr 2015 00:08:00 +0200</pubDate>
-    <lastBuildDate>Thu, 09 Apr 2015 00:08:00 +0200</lastBuildDate>
+    <link href="http://coderbot.org/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Thu, 09 Apr 2015 00:31:12 +0200</pubDate>
+    <lastBuildDate>Thu, 09 Apr 2015 00:31:12 +0200</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       
@@ -26,6 +26,7 @@
 &lt;p&gt;Se desiderate riceverne una copia, scrivete alla &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#105;&amp;#110;&amp;#102;&amp;#111;&amp;#064;&amp;#099;&amp;#111;&amp;#100;&amp;#101;&amp;#114;&amp;#098;&amp;#111;&amp;#116;&amp;#046;&amp;#111;&amp;#114;&amp;#103;&quot;&gt;mail di contatto&lt;/a&gt; del sito per maggiori informazioni.&lt;/p&gt;
 
 </description>
+        <media:content url="http://coderbot.org/blog/coderbot_board_2_0_splash.jpg" type="image/jpeg"/>
         <pubDate>Thu, 07 May 2015 14:00:00 +0200</pubDate>
         <link>http://coderbot.org/blog/2015/05/07/it-board-2-0.html</link>
         <guid isPermaLink="true">http://coderbot.org/blog/2015/05/07/it-board-2-0.html</guid>
@@ -70,6 +71,7 @@ I ragazzi hanno mostrato grande interesse per questa iniziativa, i feedback racc
 
 &lt;p&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=9rWKXD2UzS8&quot;&gt;&lt;img src=&quot;http://img.youtube.com/vi/9rWKXD2UzS8/0.jpg&quot; alt=&quot;video&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
+        <media:content url="http://coderbot.org/blog/coderbot_hoc_2014_12_13_0.jpg" type="image/jpeg"/>
         <pubDate>Sun, 14 Dec 2014 13:00:00 +0100</pubDate>
         <link>http://coderbot.org/blog/2014/12/14/it-hour-of-code-2014.html</link>
         <guid isPermaLink="true">http://coderbot.org/blog/2014/12/14/it-hour-of-code-2014.html</guid>
@@ -110,6 +112,7 @@ Per raccogliere domande e suggerimenti è presente un &lt;a href=&quot;https://g
 Per rimanere aggiornati sul progetto, non dimenticate di iscrivervi alla &lt;a href=&quot;/it/contact.html&quot;&gt;mailing list&lt;/a&gt; e di seguire il progetto sui vari &lt;a href=&quot;/it/contact.html&quot;&gt;social media&lt;/a&gt;.&lt;/p&gt;
 
 </description>
+        <media:content url="http://coderbot.org/about.jpg" type="image/jpeg"/>
         <pubDate>Wed, 01 Oct 2014 14:00:00 +0200</pubDate>
         <link>http://coderbot.org/blog/2014/10/01/it-coderbot-nuovo-sito.html</link>
         <guid isPermaLink="true">http://coderbot.org/blog/2014/10/01/it-coderbot-nuovo-sito.html</guid>
