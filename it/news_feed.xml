@@ -16,7 +16,7 @@ layout: null
       <item>
         <title>{{ post.title | xml_escape }}</title>
         <description>{{ post.content | xml_escape }}</description>
-        <media:content url="{{ site.url }}{{ site.baseurl }}/{{ post.splash }}" type="image/jpeg"/>
+        <media:content url="{{ site.url }}/{{ post.splash }}" type="image/jpeg"/>
         <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
         <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
         <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
