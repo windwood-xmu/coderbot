@@ -7,7 +7,7 @@ date:   2015-05-07 12:00:00
 category: blog
 tags:   news
 author: CoderBot
-language: it
+language: en
 ---
 The new motor control board (or "hat", in Raspberry PI terms) is finally here.
 
