@@ -11,7 +11,7 @@ language: en
 ---
 CoderBot renews its participation at MeetMeTonight, also knowns as "The night of the scientific research" 
 in Milano, Italy at Giardini Montanelli on September 25th e 26th: it will be used at the stand ["Play and
-think with educational robotics (Italian)"](http://www.meetmetonight.it/giocare-a-pensare-con-la-robotica-educativa/)
+think with educational robotics"](http://www.meetmetonight.it/giocare-a-pensare-con-la-robotica-educativa/)
 
 ![intro]({{site.baseurl}}/img/blog/mmt15.png)
 
