@@ -2,7 +2,7 @@
 layout: it/post
 title:  "CoderBot a MeetMeTonight 2015"
 subtitle: "Sarà presente alla manifestazione di divulgazione scientifica a Milano"
-splash: "blog/mmt15_splash.png"
+splash: "blog/coderbot_mmt15_splash.png"
 date:   2015-09-15 12:00:00
 category: blog
 tags:   news
@@ -13,12 +13,16 @@ CoderBot replica la presenza a MeetMeTonight, manifestazione nota come"La notte 
 ai Giardini Montanelli il 25 e 26 settembre: sarà presente presso il laboratorio ["Giocare e
 pensare con la robotica educativa"](http://www.meetmetonight.it/giocare-a-pensare-con-la-robotica-educativa/)
 
-![intro]({{site.baseurl}}/img/blog/mmt15.png)
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt15.png)
 
 Con l’Università Bicocca Coderbot sarà al fianco dei ricercatori con nuove attività da provare 
 ma anche con il racconto delle esperienze vissute nell’ultimo anno: Cody - come lo chiamano 
 i suoi giovani amici - ha affiancato gli alunni della scuola primaria Bacone di Milano nella 
 scoperta del mondo del coding e della robotica con “Missione su Marte” e “Cody sottomarino pirata”
 
+![intro]({{site.baseurl}}/img/blog/coderbot_amicorobot.png)
+![intro]({{site.baseurl}}/img/blog/coderbot_mars.png)
+
 Lo scorso anno CoderBot era presente come "concept" di un rover "marziano", presso lo stand di MIB Solar, per illustrare le caratteristiche dei pannelli solari organici.
 
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt14_solar.png)
