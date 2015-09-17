@@ -15,8 +15,7 @@ layout: default
 
 $(document).ready(function() {
     var userLang = navigator.language || navigator.userLanguage;
-    alert(language);
-    redirectSite(language);
+    redirectSite(userLang);
 });
 
 function redirectSite(lang) {
