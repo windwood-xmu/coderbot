@@ -13,15 +13,15 @@ CoderBot renews its participation at MeetMeTonight, also knowns as "The night of
 in Milano, Italy at Giardini Montanelli on September 25th e 26th: it will be used at the stand ["Play and
 think with educational robotics"](http://www.meetmetonight.it/giocare-a-pensare-con-la-robotica-educativa/)
 
-![intro]({{site.baseurl}}/img/blog/coderbot_mmt15.png)
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt15_splash.png)
 
 Thanks University Milano-Bicocca, the robot will be used by researchers to showcase live educational games
 and experiences gathered in educational projects held in schools: Cody - as called by its young friends - has helped four "fifth year" classes of the "Bacone" Primary school in Milano class ha 
 to discover the basic principles of coding and robotics with the educational projects "Mission to Mars" and "Cody pirate submarine".
 
-![intro]({{site.baseurl}}/img/blog/coderbot_amicorobot.png)
-![intro]({{site.baseurl}}/img/blog/coderbot_mars.png)
+![intro]({{site.baseurl}}/img/blog/coderbot_amicorobot.jpg)
+![intro]({{site.baseurl}}/img/blog/coderbot_mars.jpg)
 
 Last year, CoderBot was at MeetMeTonight 2014 edition as a "concept" of a mars exploration rover at the MIB Solar stand, showcasing  a special kind of organic solar panels.
 
-![intro]({{site.baseurl}}/img/blog/coderbot_mmt14_solar.png)
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt14_solar.jpg)
