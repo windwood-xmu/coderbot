@@ -3,7 +3,7 @@ layout: en/post
 title:  "CoderBot at MeetMeTonight 2015"
 subtitle: "CoderBot will be used at the 'Play and think with educational robotics'"
 splash: "blog/coderbot_mmt15_splash.png"
-date:   2015-05-07 12:00:00
+date:   2015-09-15 12:00:00
 category: blog
 tags:   news
 author: CoderBot
