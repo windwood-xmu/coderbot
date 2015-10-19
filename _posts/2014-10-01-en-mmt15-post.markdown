@@ -46,7 +46,7 @@ The game ha been proposed both to teams and to single players and has been great
 
 The game is versatile and easy to adapt to the player skill: longer words imply longer and more complex routes, and thus, non-trivial programs.
 
-[![video](http://img.youtube.com/vi/ZgcMTk3ZA1o/0.jpg)](http://www.youtube.com/watch?v=ZgcMTk3ZA1o)
+[![video](https://img.youtube.com/vi/ZgcMTk3ZA1o/0.jpg)](https://www.youtube.com/watch?v=ZgcMTk3ZA1o)
 
 ### The OcaBot (or Snake and Ladders) game
 The classical gioco dell'oca, in a robotic version, is aimed at the age group 11-14 or more.
