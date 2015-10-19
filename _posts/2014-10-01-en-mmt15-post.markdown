@@ -9,10 +9,11 @@ tags:   news
 author: CoderBot
 language: en
 ---
-![intro]({{site.baseurl}}/img/blog/coderbot_mmt15_intro_1.jpg)
 “Can you play Ruzzle? Yes, really? **But are you able to program a robot? Come here, let's try!** You see, one step after the other, you did it!”
 
 The CoderBot experience at the “MeetMeTonight 2015” starts in this way, with a group of students of 3rd class of an elementary school based in Milan, Italy, learning to code a robot to play the "Ruzzle game". 
+
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt15_intro.jpg)
 
 In the following, and intense, two days many children, boys, girls, as well as adults, will challenge themself with the didactical games, based on logical thinking and coding, always enjoying the experience.
 
@@ -26,7 +27,7 @@ In the many booths, prepared by research departments of major Universities of Mi
 ### CoderBot role
 CoderBot was hosted at the “Giocare a pensare con la robotica Educativa” booth, operated by by "Dipartimento di Scienze Umane per la Formazione 'R. Massa'", Università degli Studi di Milano-Bicocca, with two separate and permanent experience workshops, as well as the presentation of a didactical game developed by the alumni of a 5th class of the "Bacone" Elementary School in Milano, Italy, using the robot as the main character.
 
-![ruzzle_1]({{site.baseurl}}/img/blog/coderbot_mmt15_ruzzle_1.jpg)
+![ruzzle_1]({{site.baseurl}}/img/blog/coderbot_mmt15_ruzzle.jpg)
 
 **The workshops were set up as "games" where the player need to learn a specific skill in order to gain points and win.** The game was aimed at children from 4 to 14 years old; they were invited to solve a "problem" using logical thinking and the basics of robot programming (coding).
 
@@ -54,7 +55,7 @@ The game dynamic is the same to the classic board game: the player moves on a tr
 
 The placeholder moves according to the random number from the classical dice but, and here comes the robotic part, the player must be able to program the robot to move in the maze from the old to the new position.
 
-![oca]({{site.baseurl}}/img/blog/coderbot_mmt15_oca_1.jpg)
+![oca]({{site.baseurl}}/img/blog/coderbot_mmt15_oca.jpg)
 
 If the robot does not reach the correct target cell, then the player's placeholder stays on previous position, losing a turn.
 
