@@ -6,9 +6,143 @@
 </description>
     <link>http://coderbot.org/</link>
     <link href="http://coderbot.org/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 09 Apr 2015 00:31:12 +0200</pubDate>
-    <lastBuildDate>Thu, 09 Apr 2015 00:31:12 +0200</lastBuildDate>
-    <generator>Jekyll v2.4.0</generator>
+    <pubDate>Mon, 19 Oct 2015 09:43:20 +0200</pubDate>
+    <lastBuildDate>Mon, 19 Oct 2015 09:43:20 +0200</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      
+      <item>
+        <title>L&#39;avventura di CoderBot al MeetMeTonight 2015</title>
+        <description>&lt;p&gt;&lt;strong&gt;“Sapete giocare a Ruzzle? Si, davvero? E sapete anche programmare un robot? Dai proviamo! Coraggio, un passo dopo l’altro, siete bravissimi!”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Comincia così, con gli alunni di una classe 3^ di una scuola Primaria milanese, l’esperienza di CoderBot alla manifestazione “MeetMeTonight 2015”.&lt;/p&gt;
+
+&lt;p&gt;Nei due giorni che seguiranno, moltissimi bambini, ragazzi, e anche adulti, si cimenteranno nei giochi didattici di programmazione del robot, sempre con grande divertimento.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_intro.jpg&quot; alt=&quot;intro&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;il-meetmetonight-2015&quot;&gt;Il MeetMeTonight 2015&lt;/h3&gt;
+&lt;p&gt;Quest’anno CoderBot è stato protagonista al MeetMeTonight - La notte dei ricercatori, manifestazione organizzata dalle università italiane con l’obiettivo di divulgare la conoscenza e coinvolgere le persone, i non addetti ai lavori, nell’operato dei ricercatori.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_stand.jpg&quot; alt=&quot;stand&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nei numerosi stand, curati dai reparti di ricerca delle principali università di Milano e Lombardia, era possibile partecipare ad attività didattiche e divulgative nell’ambito della ricerca scientifica.&lt;/p&gt;
+
+&lt;h3 id=&quot;il-ruolo-di-coderbot&quot;&gt;Il ruolo di CoderBot&lt;/h3&gt;
+&lt;p&gt;CoderBot era presente presso lo stand “Giocare a pensare con la robotica Educativa” organizzato dal Dipartimento di Scienze Umane per la Formazione “R. Massa”, Università degli Studi di Milano-Bicocca, con ben due laboratori permanenti e un laboratorio progettato e realizzato direttamente da una classe 5^ della Scuola Primaria, sempre utilizzando il robot come attore principale.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_ruzzle.jpg&quot; alt=&quot;ruzzle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I laboratori erano realizzati come “giochi” con finalità didattica: i giocatori, bambini e ragazzi di età compresa tra i 4 e i 14 anni, erano invitati a cimentarsi con un “problema” risolvibile utilizzando il pensiero logico e le basi della programmazione del robot (coding).&lt;/p&gt;
+
+&lt;p&gt;I giocatori partecipavano come piccoli gruppi, squadre, o come singoli a seconda del tipo di gioco e del numero di partecipanti presenti.&lt;/p&gt;
+
+&lt;h3 id=&quot;il-gioco-del-ruzzlebot&quot;&gt;Il gioco del RuzzleBot&lt;/h3&gt;
+&lt;p&gt;RuzzleBot è un gioco basato sulla dinamica di gioco del popolare gioco per smartphone “Ruzzle” (di MAG interactive) (ma che era ben conosciuto come “Paroliere” prima dell’avvento degli smartphone).&lt;/p&gt;
+
+&lt;p&gt;Il giocatore, o la squadra, ha a disposizione un tabellone composto da 4x4 lettere e un robot in grado di muoversi sul tabellone stesso.&lt;/p&gt;
+
+&lt;p&gt;Il giocatore cerca di identificare la parola composta dal numero di lettere più alto possibile, purché sia una parola plausibile nel vocabolario italiano, e sia composta da lettere adiacenti (anche in diagonale) poste nel tabellone di gioco.&lt;/p&gt;
+
+&lt;p&gt;Una volta identificata la parola, il giocatore deve identificare il percorso che il robot dovrà seguire per toccare tutte e sole le lettere che compongono la parola scelta, e scrivere quindi una sequenza di comandi (il programma) da impartire al robot per spostarsi sul percorso stesso.&lt;/p&gt;
+
+&lt;p&gt;Il gioco è stato proposto sia a squadre che a giocatori singoli ed ha riscontrato un ottimo successo, sia da parte di bambini che di adulti.&lt;/p&gt;
+
+&lt;p&gt;La versatilità del gioco (scegliedo parole più o meno lunghe si complica anche il percorso e quindi il programma) ha permesso anche a bambini della scuola Materna di cimentarsi e apprezzare il gioco, i più grandi, affrontando parole lunghe che implicavano percorsi complessi, non lo hanno trovato affatto scontato.&lt;/p&gt;
+
+&lt;p&gt;Per i bambini più piccoli inoltre si è potuto rilevare come &lt;strong&gt;la presenza di un oggetto “fisico” sia fondamentale nel ruolo di mediazione tra mondo digitale e mondo reale&lt;/strong&gt;: il bambino impartisce comandi al robot via strumenti digitali, ma ne vede gli effetti immediati nel mondo materiale.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=ZgcMTk3ZA1o&quot;&gt;&lt;img src=&quot;http://img.youtube.com/vi/ZgcMTk3ZA1o/0.jpg&quot; alt=&quot;video&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;gioco-dellocabot&quot;&gt;Gioco dell’OcaBot&lt;/h3&gt;
+&lt;p&gt;Il classico gioco dell’oca, in versione “robotica” è invece pensato per i ragazzi più grandi.&lt;/p&gt;
+
+&lt;p&gt;La dinamica del gioco è la stessa del classico gioco di società, con un percorso formato da caselle, ognuna delle quali ha una caratteristica particolare che comporta delle conseguenze per il giocatore che ci capita sopra con il proprio segnaposto, che si sposta in base al numero sorteggiato con il classico dado.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_oca.jpg&quot; alt=&quot;oca&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nel caso dell’OcaBot, il segnaposto del giocatore è il robot stesso, che deve essere fatto avanzare dal giocatore grazie a un programma che muova il robot in modo da raggiungere la corretta casella di destinazione.&lt;/p&gt;
+
+&lt;p&gt;In caso di errore nel posizionamento, il giocatore rimette il robot-segnaposto al posto precedente, perdendo quindi un turno.&lt;/p&gt;
+
+&lt;p&gt;Il gioco, essendo per sua natura competitivo, è stato proposto principalmente a giocatori divisi in due o più squadre e ha avuto un discreto successo con i ragazzi più grandi.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;La necessità di scrivere un programma corretto per poter avanzare verso la vittoria ha favorito dinamiche collaborative all’interno delle squadre e una giusta tensione al risultato&lt;/strong&gt;, anche in un pubblico come quello dei ragazzi/e di 12-16 anni, solitamente più difficile da coinvolgere.&lt;/p&gt;
+
+&lt;h3 id=&quot;cody-sottomarino-pirata&quot;&gt;Cody sottomarino pirata&lt;/h3&gt;
+&lt;p&gt;Una caratteristica fondamentale dei robot didattici, CoderBot in particolare, è di essere degli strumenti polivalenti, che stimolano la creatività e permettono la realizzazione di esperienze e giochi inizialmente non previsti.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_cody_1.jpg&quot; alt=&quot;cody_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Nel caso di “Cody sottomarino pirata” sono stati direttamente gli allievi della classe 5^ della scuola primaria Bacone di Milano a reinterpretare, inventando praticamente da zero, una nuova esperienza basata sulla programmazione del robot.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;CoderBot, per l’occasione ribattezzato Cody e idealmente trasformato in sottomarino, è alla ricerca di un tesoro sul fondo dell’oceano, popolato da ostacoli e creature terrificanti.&lt;/p&gt;
+
+&lt;p&gt;Il robot-sottomarino si muove su una scacchiera dove ogni settore ha delle caratterisitiche peculiari che determinano le prossime mosse a disposizione del robot, la presenza o meno di ostacoli, mostri e naturalmente del tesoro finale.&lt;/p&gt;
+
+&lt;p&gt;Il giocatore deve pilotare il robot dal punto di partenza (fisso) fino al tesoro (anch’esso fisso e noto) tramite un programma formato da un numero limitato di mosse.&lt;/p&gt;
+
+&lt;p&gt;L’eventuale errore nel percorso del robot (ad esempio la collisione con ostacoli, o il non rispetto delle mosse possibili) comporta il riposizionamento del robot alla partenza, o il termine della partita.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_cody_2.jpg&quot; alt=&quot;cody_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Una caratteristica del gioco è la possibilità di creare nuovi campi da gioco utilizzando lo stesso materiale, semplicemente riposizionando le tessere della scacchiera.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Ma la peculiarità vera di “Cody sottomarino pirata” è certamente l’essere stato inventato e sviluppato dalla classe stessa.&lt;/strong&gt; I ragazzi che hanno onosciuto CoderBot in “Missione spazio” si sono trasformati da giocatori a creatori di giochi didattici, così - giustamente - entusiasti della loro creazione da proporlo agli altri visitatori della manifestazione con travolgente entusiasmo, tanto da decretarne un grande successo di critica e pubblico.&lt;/p&gt;
+
+&lt;h3 id=&quot;conclusioni&quot;&gt;Conclusioni&lt;/h3&gt;
+&lt;p&gt;Dopo due intensi giorni di attività con CoderBot, in azione praticamente a ciclo continuo, abbiamo raccolto moltissimi suggerimenti su possibili impieghi didattici del robot, così come consigli e idee per migliorarlo, che contiamo di mettere in pratica e condividere su questo spazio.&lt;/p&gt;
+</description>
+        <media:content url="http://coderbot.org/img/blog/coderbot_mmt15_post_splash.jpg" type="image/jpeg"/>
+        <pubDate>Thu, 15 Oct 2015 14:00:00 +0200</pubDate>
+        <link>http://coderbot.org/blog/2015/10/15/it-mmt15-post.html</link>
+        <guid isPermaLink="true">http://coderbot.org/blog/2015/10/15/it-mmt15-post.html</guid>
+        
+        <category>news</category>
+        
+        
+        <category>blog</category>
+        
+      </item>
+      
+    
+      
+    
+      
+      <item>
+        <title>CoderBot a MeetMeTonight 2015</title>
+        <description>&lt;p&gt;CoderBot replica la presenza a MeetMeTonight, manifestazione nota come”La notte dei ricercatori” 
+ai Giardini Montanelli il 25 e 26 settembre: sarà presente presso il laboratorio &lt;a href=&quot;http://www.meetmetonight.it/giocare-a-pensare-con-la-robotica-educativa/&quot;&gt;“Giocare e
+pensare con la robotica educativa”&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt15_splash.png&quot; alt=&quot;intro&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Con l’Università Bicocca Coderbot sarà al fianco dei ricercatori con nuove attività da provare 
+ma anche con il racconto delle esperienze vissute nell’ultimo anno: Cody - come lo chiamano 
+i suoi giovani amici - ha affiancato gli alunni della scuola primaria Bacone di Milano nella 
+scoperta del mondo del coding e della robotica con “Missione su Marte” e “Cody sottomarino pirata”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_amicorobot.jpg&quot; alt=&quot;intro&quot; /&gt;
+&lt;img src=&quot;/img/blog/coderbot_mars.jpg&quot; alt=&quot;intro&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lo scorso anno CoderBot era presente come “concept” di un rover “marziano”, presso lo stand di MIB Solar, per illustrare le caratteristiche dei pannelli solari organici.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/blog/coderbot_mmt14_solar.jpg&quot; alt=&quot;intro&quot; /&gt;&lt;/p&gt;
+</description>
+        <media:content url="http://coderbot.org/img/blog/coderbot_mmt15_splash.png" type="image/jpeg"/>
+        <pubDate>Tue, 15 Sep 2015 14:00:00 +0200</pubDate>
+        <link>http://coderbot.org/blog/2015/09/15/it-mmt15.html</link>
+        <guid isPermaLink="true">http://coderbot.org/blog/2015/09/15/it-mmt15.html</guid>
+        
+        <category>news</category>
+        
+        
+        <category>blog</category>
+        
+      </item>
+      
+    
+      
     
       
       <item>
@@ -26,7 +160,7 @@
 &lt;p&gt;Se desiderate riceverne una copia, scrivete alla &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#105;&amp;#110;&amp;#102;&amp;#111;&amp;#064;&amp;#099;&amp;#111;&amp;#100;&amp;#101;&amp;#114;&amp;#098;&amp;#111;&amp;#116;&amp;#046;&amp;#111;&amp;#114;&amp;#103;&quot;&gt;mail di contatto&lt;/a&gt; del sito per maggiori informazioni.&lt;/p&gt;
 
 </description>
-        <media:content url="http://coderbot.org/blog/coderbot_board_2_0_splash.jpg" type="image/jpeg"/>
+        <media:content url="http://coderbot.org/img/blog/coderbot_board_2_0_splash.jpg" type="image/jpeg"/>
         <pubDate>Thu, 07 May 2015 14:00:00 +0200</pubDate>
         <link>http://coderbot.org/blog/2015/05/07/it-board-2-0.html</link>
         <guid isPermaLink="true">http://coderbot.org/blog/2015/05/07/it-board-2-0.html</guid>
@@ -71,55 +205,12 @@ I ragazzi hanno mostrato grande interesse per questa iniziativa, i feedback racc
 
 &lt;p&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=9rWKXD2UzS8&quot;&gt;&lt;img src=&quot;http://img.youtube.com/vi/9rWKXD2UzS8/0.jpg&quot; alt=&quot;video&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
-        <media:content url="http://coderbot.org/blog/coderbot_hoc_2014_12_13_0.jpg" type="image/jpeg"/>
+        <media:content url="http://coderbot.org/img/blog/coderbot_hoc_2014_12_13_0.jpg" type="image/jpeg"/>
         <pubDate>Sun, 14 Dec 2014 13:00:00 +0100</pubDate>
         <link>http://coderbot.org/blog/2014/12/14/it-hour-of-code-2014.html</link>
         <guid isPermaLink="true">http://coderbot.org/blog/2014/12/14/it-hour-of-code-2014.html</guid>
         
         <category>doc</category>
-        
-        
-        <category>blog</category>
-        
-      </item>
-      
-    
-      
-    
-      
-    
-      
-    
-      
-      <item>
-        <title>Benvenuti nel nuovo sito di CoderBot</title>
-        <description>&lt;p&gt;CoderBot finalmente ha un sito che raccoglie tutte le informazioni necessarie a costruirne un esemplare partendo da materiali facilmente reperibili.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/build_hw.jpg&quot; alt=&quot;make&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Oltre alla lista completa delle componenti, nella sezione &lt;a href=&quot;/it/how_to_build_mh.html&quot;&gt;telaio&lt;/a&gt; sono disponibili i disegni del telai, pronti per essere tagliati tramite lasercutter, mentre nella sezione &lt;a href=&quot;/it/how_to_build_hw.html&quot;&gt;hardware&lt;/a&gt; sono disponibili gli schemi dei circuiti che possono essere realizzati su una breadborad oppure con schede millefori per prototipazioni.&lt;/p&gt;
-
-&lt;p&gt;Nelle pagine &lt;a href=&quot;/it/how_to_build_sw.html&quot;&gt;software&lt;/a&gt; invece sono descritte le componenti software con relative istruzioni per l’installazione.&lt;/p&gt;
-
-&lt;p&gt;Un ringraziamento a &lt;a href=&quot;http://www.giuliaolivares.it/&quot;&gt;Giulia&lt;/a&gt; per il logo e la grafica!&lt;/p&gt;
-
-&lt;p&gt;Nei prossimi giorni il sito sarà arricchito con documentazione di maggior dettaglio e guide all’installazione e configurazione. &lt;/p&gt;
-
-&lt;p&gt;Inoltre nella sezione &lt;a href=&quot;/it/projects.html&quot;&gt;Gioca e impara&lt;/a&gt; saranno pubblicati progetti e attività didattiche adatti al robot.&lt;/p&gt;
-
-&lt;p&gt;Ci auguriamo che questo sito possa stimolare lo sviluppo del progetto CoderBot, e che lo stesso possa eveolversi e diventare uno strumento sempre più utile e divertente.
-Per raccogliere domande e suggerimenti è presente un &lt;a href=&quot;https://groups.google.com/forum/#!forum/coderbot-users&quot;&gt;forum dedicato&lt;/a&gt;, non mancate di farci avere i vostri commenti, osservazioni e suggerimenti.
-Per rimanere aggiornati sul progetto, non dimenticate di iscrivervi alla &lt;a href=&quot;/it/contact.html&quot;&gt;mailing list&lt;/a&gt; e di seguire il progetto sui vari &lt;a href=&quot;/it/contact.html&quot;&gt;social media&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <media:content url="http://coderbot.org/about.jpg" type="image/jpeg"/>
-        <pubDate>Wed, 01 Oct 2014 14:00:00 +0200</pubDate>
-        <link>http://coderbot.org/blog/2014/10/01/it-coderbot-nuovo-sito.html</link>
-        <guid isPermaLink="true">http://coderbot.org/blog/2014/10/01/it-coderbot-nuovo-sito.html</guid>
-        
-        <category>doc</category>
-        
-        <category>announce</category>
         
         
         <category>blog</category>

@@ -1,0 +1,90 @@
+---
+layout: it/post
+title:  "L'avventura di CoderBot al MeetMeTonight 2015"
+subtitle: "Due giorni di laboratori di robotica educativa, ovvero tanto divertimento."
+splash: "blog/coderbot_mmt15_post_splash.jpg"
+date:   2015-10-15 12:00:00
+category: blog
+tags:   news
+author: CoderBot
+language: it
+---
+**“Sapete giocare a Ruzzle? Si, davvero? E sapete anche programmare un robot? Dai proviamo! Coraggio, un passo dopo l’altro, siete bravissimi!”**
+
+Comincia così, con gli alunni di una classe 3^ di una scuola Primaria milanese, l’esperienza di CoderBot alla manifestazione “MeetMeTonight 2015”. 
+
+Nei due giorni che seguiranno, moltissimi bambini, ragazzi, e anche adulti, si cimenteranno nei giochi didattici di programmazione del robot, sempre con grande divertimento.
+
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt15_intro.jpg)
+
+### Il MeetMeTonight 2015
+Quest’anno CoderBot è stato protagonista al MeetMeTonight - La notte dei ricercatori, manifestazione organizzata dalle università italiane con l’obiettivo di divulgare la conoscenza e coinvolgere le persone, i non addetti ai lavori, nell’operato dei ricercatori.
+
+![stand]({{site.baseurl}}/img/blog/coderbot_mmt15_stand.jpg)
+
+Nei numerosi stand, curati dai reparti di ricerca delle principali università di Milano e Lombardia, era possibile partecipare ad attività didattiche e divulgative nell’ambito della ricerca scientifica. 
+
+### Il ruolo di CoderBot
+CoderBot era presente presso lo stand “Giocare a pensare con la robotica Educativa” organizzato dal Dipartimento di Scienze Umane per la Formazione “R. Massa”, Università degli Studi di Milano-Bicocca, con ben due laboratori permanenti e un laboratorio progettato e realizzato direttamente da una classe 5^ della Scuola Primaria, sempre utilizzando il robot come attore principale.
+
+![ruzzle]({{site.baseurl}}/img/blog/coderbot_mmt15_ruzzle.jpg)
+
+I laboratori erano realizzati come “giochi” con finalità didattica: i giocatori, bambini e ragazzi di età compresa tra i 4 e i 14 anni, erano invitati a cimentarsi con un “problema” risolvibile utilizzando il pensiero logico e le basi della programmazione del robot (coding).
+
+I giocatori partecipavano come piccoli gruppi, squadre, o come singoli a seconda del tipo di gioco e del numero di partecipanti presenti.
+ 
+### Il gioco del RuzzleBot
+RuzzleBot è un gioco basato sulla dinamica di gioco del popolare gioco per smartphone “Ruzzle” (di MAG interactive) (ma che era ben conosciuto come “Paroliere” prima dell’avvento degli smartphone).
+
+Il giocatore, o la squadra, ha a disposizione un tabellone composto da 4x4 lettere e un robot in grado di muoversi sul tabellone stesso.
+
+Il giocatore cerca di identificare la parola composta dal numero di lettere più alto possibile, purché sia una parola plausibile nel vocabolario italiano, e sia composta da lettere adiacenti (anche in diagonale) poste nel tabellone di gioco.
+
+Una volta identificata la parola, il giocatore deve identificare il percorso che il robot dovrà seguire per toccare tutte e sole le lettere che compongono la parola scelta, e scrivere quindi una sequenza di comandi (il programma) da impartire al robot per spostarsi sul percorso stesso.
+
+Il gioco è stato proposto sia a squadre che a giocatori singoli ed ha riscontrato un ottimo successo, sia da parte di bambini che di adulti.
+
+La versatilità del gioco (scegliedo parole più o meno lunghe si complica anche il percorso e quindi il programma) ha permesso anche a bambini della scuola Materna di cimentarsi e apprezzare il gioco, i più grandi, affrontando parole lunghe che implicavano percorsi complessi, non lo hanno trovato affatto scontato.
+
+Per i bambini più piccoli inoltre si è potuto rilevare come **la presenza di un oggetto "fisico" sia fondamentale nel ruolo di mediazione tra mondo digitale e mondo reale**: il bambino impartisce comandi al robot via strumenti digitali, ma ne vede gli effetti immediati nel mondo materiale.
+
+[![video](http://img.youtube.com/vi/ZgcMTk3ZA1o/0.jpg)](http://www.youtube.com/watch?v=ZgcMTk3ZA1o)
+
+### Gioco dell’OcaBot
+Il classico gioco dell’oca, in versione “robotica” è invece pensato per i ragazzi più grandi.
+
+La dinamica del gioco è la stessa del classico gioco di società, con un percorso formato da caselle, ognuna delle quali ha una caratteristica particolare che comporta delle conseguenze per il giocatore che ci capita sopra con il proprio segnaposto, che si sposta in base al numero sorteggiato con il classico dado.
+
+![oca]({{site.baseurl}}/img/blog/coderbot_mmt15_oca.jpg)
+
+Nel caso dell’OcaBot, il segnaposto del giocatore è il robot stesso, che deve essere fatto avanzare dal giocatore grazie a un programma che muova il robot in modo da raggiungere la corretta casella di destinazione.
+
+In caso di errore nel posizionamento, il giocatore rimette il robot-segnaposto al posto precedente, perdendo quindi un turno.
+
+Il gioco, essendo per sua natura competitivo, è stato proposto principalmente a giocatori divisi in due o più squadre e ha avuto un discreto successo con i ragazzi più grandi.
+
+**La necessità di scrivere un programma corretto per poter avanzare verso la vittoria ha favorito dinamiche collaborative all’interno delle squadre e una giusta tensione al risultato**, anche in un pubblico come quello dei ragazzi/e di 12-16 anni, solitamente più difficile da coinvolgere.
+
+### Cody sottomarino pirata
+Una caratteristica fondamentale dei robot didattici, CoderBot in particolare, è di essere degli strumenti polivalenti, che stimolano la creatività e permettono la realizzazione di esperienze e giochi inizialmente non previsti.
+
+![cody_1]({{site.baseurl}}/img/blog/coderbot_mmt15_cody_1.jpg)
+
+**Nel caso di “Cody sottomarino pirata” sono stati direttamente gli allievi della classe 5^ della scuola primaria Bacone di Milano a reinterpretare, inventando praticamente da zero, una nuova esperienza basata sulla programmazione del robot.**
+
+CoderBot, per l’occasione ribattezzato Cody e idealmente trasformato in sottomarino, è alla ricerca di un tesoro sul fondo dell’oceano, popolato da ostacoli e creature terrificanti.
+
+Il robot-sottomarino si muove su una scacchiera dove ogni settore ha delle caratterisitiche peculiari che determinano le prossime mosse a disposizione del robot, la presenza o meno di ostacoli, mostri e naturalmente del tesoro finale.
+
+Il giocatore deve pilotare il robot dal punto di partenza (fisso) fino al tesoro (anch’esso fisso e noto) tramite un programma formato da un numero limitato di mosse.
+
+L’eventuale errore nel percorso del robot (ad esempio la collisione con ostacoli, o il non rispetto delle mosse possibili) comporta il riposizionamento del robot alla partenza, o il termine della partita.
+
+![cody_2]({{site.baseurl}}/img/blog/coderbot_mmt15_cody_2.jpg)
+
+Una caratteristica del gioco è la possibilità di creare nuovi campi da gioco utilizzando lo stesso materiale, semplicemente riposizionando le tessere della scacchiera.
+
+**Ma la peculiarità vera di “Cody sottomarino pirata” è certamente l’essere stato inventato e sviluppato dalla classe stessa.** I ragazzi che hanno onosciuto CoderBot in “Missione spazio” si sono trasformati da giocatori a creatori di giochi didattici, così - giustamente - entusiasti della loro creazione da proporlo agli altri visitatori della manifestazione con travolgente entusiasmo, tanto da decretarne un grande successo di critica e pubblico.
+
+### Conclusioni
+Dopo due intensi giorni di attività con CoderBot, in azione praticamente a ciclo continuo, abbiamo raccolto moltissimi suggerimenti su possibili impieghi didattici del robot, così come consigli e idee per migliorarlo, che contiamo di mettere in pratica e condividere su questo spazio.

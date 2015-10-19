@@ -39,15 +39,11 @@
     <!-- Page Content -->
     <div class="container">
 
-            <script type="text/javascript">
-  $.ajax({ 
-    url: "http://ajaxhttpheaders.appspot.com", 
-    dataType: 'jsonp', 
-    success: function(headers) {
-        language = headers['Accept-Language'];
-        redirectSite(language);
-    }
-  });
+        <script type="text/javascript">
+$(document).ready(function() {
+    var userLang = navigator.language || navigator.userLanguage;
+    redirectSite(userLang);
+});
 
 function redirectSite(lang) {
 	if(lang.indexOf('it')>=0) {
@@ -56,7 +52,7 @@ function redirectSite(lang) {
 		window.location.href="en/index.html";
 	}
 }
-    </script>
+</script>
 
 <div class="row">
 <div class="col-md-12">

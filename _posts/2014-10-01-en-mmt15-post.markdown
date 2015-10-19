@@ -1,0 +1,93 @@
+---
+layout: en/post
+title:  "The MeetMeTonight 2015's CoderBot adventure"
+subtitle: "Educational robotics, games, lot of fun for everyone."
+splash: "blog/coderbot_mmt15_post_splash.png"
+date:   2015-10-15 12:00:00
+category: blog
+tags:   news
+author: CoderBot
+language: en
+---
+![intro]({{site.baseurl}}/img/blog/coderbot_mmt15_intro_1.jpg)
+“Can you play Ruzzle? Yes, really? **But are you able to program a robot? Come here, let's try!** You see, one step after the other, you did it!”
+
+The CoderBot experience at the “MeetMeTonight 2015” starts in this way, with a group of students of 3rd class of an elementary school based in Milan, Italy, learning to code a robot to play the "Ruzzle game". 
+
+In the following, and intense, two days many children, boys, girls, as well as adults, will challenge themself with the didactical games, based on logical thinking and coding, always enjoying the experience.
+
+### The MeetMeTonight 2015 faire
+After the debut of 2014 edition as a solar powered rover, this year CoderBot has been a primary player of the "MeetMeTonight - The night of the research", the faire organised and promoted by Italian universities and aimed at sharing scientific knowledge and research to a wider audience than the academic world.
+
+![stand]({{site.baseurl}}/img/blog/coderbot_mmt15_stand.jpg)
+
+In the many booths, prepared by research departments of major Universities of Milano and Lombardia, it was possible to partecipate in didactical experiences and get in touch with researchers working on cutting edge science research and tecnology. 
+
+### CoderBot role
+CoderBot was hosted at the “Giocare a pensare con la robotica Educativa” booth, operated by by "Dipartimento di Scienze Umane per la Formazione 'R. Massa'", Università degli Studi di Milano-Bicocca, with two separate and permanent experience workshops, as well as the presentation of a didactical game developed by the alumni of a 5th class of the "Bacone" Elementary School in Milano, Italy, using the robot as the main character.
+
+![ruzzle_1]({{site.baseurl}}/img/blog/coderbot_mmt15_ruzzle_1.jpg)
+
+**The workshops were set up as "games" where the player need to learn a specific skill in order to gain points and win.** The game was aimed at children from 4 to 14 years old; they were invited to solve a "problem" using logical thinking and the basics of robot programming (coding).
+
+The players were divided in small groups, either as a team or even as single, according to the game rules and the number of participants available at a given time.
+ 
+### The RuzzleBot game
+RuzzleBot is a game inspired to the popular “Ruzzle” (by MAG interactive) for smartphones. (which was widely known as "Boggle" before the smartphone era.
+
+The player, or the team, look at a board composed of mosaic of 4x4 letters and one robot able to move on the board itself.
+
+The player look for words which are composed letters placed next to each other on the board, the longer the word the higher the score for the player if he or che can program the robot to move and touch each letter in the word, in the correct sequence and without touching others.
+
+The game ha been proposed both to teams and to single players and has been greatly appreciated by young children as well as adults. 
+
+**For the younger audience, it has been clear that a physical object is foundamental as a mediator among the digital and the physical world: the child interacts with the robot digitally, but she is able to see the consequences of her commands direclty in the physical world.**
+
+The game is versatile and easy to adapt to the player skill: longer words imply longer and more complex routes, and thus, non trivial programs.
+
+[![video](http://img.youtube.com/vi/ZgcMTk3ZA1o/0.jpg)](http://www.youtube.com/watch?v=ZgcMTk3ZA1o)
+
+### The OcaBot (or Snake and Ladders) game
+The classical gioco dell'oca, in a robotic version, is aimed at the age group 11-14 or more.
+
+The game dynamic is the same to the classic board game: the player moves on a trail composed of cells, each of which has special characteristics that have consequences on the player, if he or she happens to reach it with the placeholder.
+
+The placeholder moves according to the random number from the classical dice but, and here comes the robotic part, the player must be able to program the robot to move in the maze from the old to the new position.
+
+![oca]({{site.baseurl}}/img/blog/coderbot_mmt15_oca_1.jpg)
+
+If the robot does not reach the correct target cell, then the player's placeholder stays on previous position, losing a turn.
+
+The game is inherently competitive, so it has been proposed mainly to confronting players or teams and it has been appreciated by the 12-14 (and older) age group.
+
+The introduction of robot programming in a classical board game based on luck, rather than skills, fovorited collaboration among team mmembers, resulting in a more challenging and interesting game even for an audience in the 12-16 age group, whose attention is not so easy to catch.
+
+### Cody sottomarino pirata
+One key feature of didactical robots is being a multipurpose tool which foster creativity and enable the creation of original games and adventures, either derived from the proposed ones or totally new ones.
+
+![cody_1]({{site.baseurl}}/img/blog/coderbot_mmt15_cody_1.jpg)
+
+With "Cody pirate submarine", the adventure was conceived from the ground up by the alumni of the 5^ class of the Bacone Elementary school in Milano.
+
+Having participated to the "Mission to mars" game, they were so enthusiast that they wanted to continue to use the bot in totally different settings.
+
+So they invented a digital/physical board game which cleverly extends the "Snakes and Ladders" game dynamic.
+
+CoderBot, this time renamed "Cody pirate submarine" is placed on the bottom of the sea, pictured as a 4 x 4 cells on a flat board. 
+
+Each cell contains markers (arrows) which represent the admissible exit paths from the cell, while the presence of a moster octopus states implies that cell is not accessible by the bot, or if it does happen to reach the monster, the game is over.
+
+The one cell with the treasure is the "goal" cell that once reached, gives victory to the player.
+
+![cody_2]({{site.baseurl}}/img/blog/coderbot_mmt15_cody_2.jpg)
+
+**One peculiar feature of the game is that it allows to definire new mazes using the same set of cells** (as long as a path to the treasure is available); this extends the game life and playability, as well as it enables to prepare boards with different difficulty.
+
+But the very special feature of “Cody sottomarino pirata” is, by no means, the fact to be invented and developed by the class itself.
+
+**The game players turned game designers** and being worthy entusiasts of their creation, presented it thrilling the audience, gaining great success.
+
+### Conclusioni
+After two intense days of non-stop activity and demos, we gathered many informations and suggestions on how to use and improve the robot.
+
+We plan to develop upgrades in many areas, which will be publicly available on this site.
