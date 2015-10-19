@@ -2,7 +2,7 @@
 layout: en/post
 title:  "The MeetMeTonight 2015's CoderBot adventure"
 subtitle: "Educational robotics, games, lot of fun for everyone."
-splash: "blog/coderbot_mmt15_post_splash.png"
+splash: "blog/coderbot_mmt15_post_splash.jpg"
 date:   2015-10-15 12:00:00
 category: blog
 tags:   news
@@ -15,14 +15,14 @@ The CoderBot experience at the “MeetMeTonight 2015” starts in this way, with
 
 ![intro]({{site.baseurl}}/img/blog/coderbot_mmt15_intro.jpg)
 
-In the following, and intense, two days many children, boys, girls, as well as adults, will challenge themself with the didactical games, based on logical thinking and coding, always enjoying the experience.
+In the following, and intense, two days many children, boys, girls, as well as adults, will challenge each other with the didactical games, based on logical thinking and coding, always enjoying the experience.
 
 ### The MeetMeTonight 2015 faire
 After the debut of 2014 edition as a solar powered rover, this year CoderBot has been a primary player of the "MeetMeTonight - The night of the research", the faire organised and promoted by Italian universities and aimed at sharing scientific knowledge and research to a wider audience than the academic world.
 
 ![stand]({{site.baseurl}}/img/blog/coderbot_mmt15_stand.jpg)
 
-In the many booths, prepared by research departments of major Universities of Milano and Lombardia, it was possible to partecipate in didactical experiences and get in touch with researchers working on cutting edge science research and tecnology. 
+In the many booths, prepared by research departments of major Universities of Milano and Lombardia, it was possible to partecipate in didactical experiences and get in touch with researchers working on cutting-edge science research and tecnology. 
 
 ### CoderBot role
 CoderBot was hosted at the “Giocare a pensare con la robotica Educativa” booth, operated by by "Dipartimento di Scienze Umane per la Formazione 'R. Massa'", Università degli Studi di Milano-Bicocca, with two separate and permanent experience workshops, as well as the presentation of a didactical game developed by the alumni of a 5th class of the "Bacone" Elementary School in Milano, Italy, using the robot as the main character.
@@ -36,7 +36,7 @@ The players were divided in small groups, either as a team or even as single, ac
 ### The RuzzleBot game
 RuzzleBot is a game inspired to the popular “Ruzzle” (by MAG interactive) for smartphones. (which was widely known as "Boggle" before the smartphone era.
 
-The player, or the team, look at a board composed of mosaic of 4x4 letters and one robot able to move on the board itself.
+The player, or the team, looks at a board composed of mosaic of 4x4 letters and one robot able to move on the board itself.
 
 The player look for words which are composed letters placed next to each other on the board, the longer the word the higher the score for the player if he or che can program the robot to move and touch each letter in the word, in the correct sequence and without touching others.
 
@@ -44,7 +44,7 @@ The game ha been proposed both to teams and to single players and has been great
 
 **For the younger audience, it has been clear that a physical object is foundamental as a mediator among the digital and the physical world: the child interacts with the robot digitally, but she is able to see the consequences of her commands direclty in the physical world.**
 
-The game is versatile and easy to adapt to the player skill: longer words imply longer and more complex routes, and thus, non trivial programs.
+The game is versatile and easy to adapt to the player skill: longer words imply longer and more complex routes, and thus, non-trivial programs.
 
 [![video](http://img.youtube.com/vi/ZgcMTk3ZA1o/0.jpg)](http://www.youtube.com/watch?v=ZgcMTk3ZA1o)
 
@@ -74,19 +74,19 @@ Having participated to the "Mission to mars" game, they were so enthusiast that 
 
 So they invented a digital/physical board game which cleverly extends the "Snakes and Ladders" game dynamic.
 
-CoderBot, this time renamed "Cody pirate submarine" is placed on the bottom of the sea, pictured as a 4 x 4 cells on a flat board. 
+CoderBot, this time renamed "Cody pirate submarine" is placed on the bottom of the sea, pictured as flat board composed of 4 x 4 square cells. 
 
 Each cell contains markers (arrows) which represent the admissible exit paths from the cell, while the presence of a moster octopus states implies that cell is not accessible by the bot, or if it does happen to reach the monster, the game is over.
 
-The one cell with the treasure is the "goal" cell that once reached, gives victory to the player.
+The unique cell with the treasure is the "goal" cell that, once reached, gives victory to the player.
 
 ![cody_2]({{site.baseurl}}/img/blog/coderbot_mmt15_cody_2.jpg)
 
-**One peculiar feature of the game is that it allows to definire new mazes using the same set of cells** (as long as a path to the treasure is available); this extends the game life and playability, as well as it enables to prepare boards with different difficulty.
+**One peculiar feature of the game is that it allows to definire new mazes using the same set of cells** (ensuring that at least one path from the starting point to the treasure is available); this extends the game life and playability, as well as it enables to prepare boards with different difficulty.
 
-But the very special feature of “Cody sottomarino pirata” is, by no means, the fact to be invented and developed by the class itself.
+But the very special feature of “Cody sottomarino pirata”, arguably, the fact to be invented and developed by the class itself.
 
-**The game players turned game designers** and being worthy entusiasts of their creation, presented it thrilling the audience, gaining great success.
+**The game players became game designers** and being very enthusiasts of their creation, they presented it thrilling the audience, gaining great success.
 
 ### Conclusioni
 After two intense days of non-stop activity and demos, we gathered many informations and suggestions on how to use and improve the robot.
