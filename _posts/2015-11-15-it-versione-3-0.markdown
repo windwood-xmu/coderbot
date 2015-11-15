@@ -1,0 +1,82 @@
+---
+layout: it/post
+title:  "CoderBot versione 3.0"
+subtitle: "La nuova versione aggiunge nuovi sensori e diverse funzioni della camera"
+splash: "blog/coderbot_version_3_0_splash.jpg"
+date:   2015-11-15 12:00:00
+category: blog
+tags:   news
+author: CoderBot
+language: it
+---
+
+CoderBot, giunto alla versione 3.0, aggiunge diverse modalità di utilizzo della videocamera, inoltre consente di utilizzare sensori a ultrasuoni per percepire la distanza da ostacoli, e un microfono USB per registrare suoni o percepire rumori.
+CoderBot inoltre ora utilizza il framework OpenCV 3.0 e diverse altre componenti software come Tesseract 3.1, PocketSphinx prealpha5, zbar, pyaudio. Per evitare di dover procedere con l’installazione (piuttosto onerosa) di tutte le componenti, è consigliabile utilizzare l’immagine della SD card già preparata.
+
+Di seguito la lista dettagliata delle nuove funzioni:
+
+### Sensori di prossimità a ultrasuoni
+Il robot può leggere da uno a tre sensori di prossimità (come hc-sr04, molto diffuso in progetti di robot) indipendenti.
+
+![hc-sr04]({{site.baseurl}}/img/blog/ultrasonic_hc_sr04.jpg)
+
+I sensori sono utilizzabili nella programmazione tramite l’uso di un nuovo blocco specifico “distanza” che ritorna la distanza dall’ostacolo davanti all sensore stesso, espressa in centimetri.
+
+### Riconoscimento testo
+Il sensore videocamera ora è in grado di riconoscere testo (i caratteri devono essere alfanumerici e in stampatello).
+Questa funzione è utilizzabile nella programmazione a blocchi tramite uno specifico blocco “trova testo” che ritorna il testo presente nell’immagine ripresa, se presente.
+
+![text-ocr]({{site.baseurl}}/img/blog/camera_ocr_1.jpg)
+
+Per migliorare le prestazioni del riconoscimento, è necessario che il testo sia posto all’interno di una cornice di un colore definibile da programma e diverso dal testo stesso.
+
+### Riconoscimento QR code
+Il sensore videocamera è ora in grado di riconoscere e decodificare tag QR code.
+
+![qrcode]({{site.baseurl}}/img/blog/camera_qrcode_1.jpg)
+
+Questa funzione è utilizzabile nella programmazione a blocchi tramite uno specifico blocco “trova QR code” che ritorna il testo contenuto nel tag se il tag è presente nell’immagine inquadrata.
+
+### Riconoscimento livelli di luminosità e colore
+Il sensore videocamera è ora in grado di ritornare il valore medio di luminosità, oppure il colore “medio” dell’immagine ripresa.
+
+![hue]({{site.baseurl}}/img/blog/camera_light_1.jpg)
+
+Questa funzione è utilizzabile nella programmazione a blocchi tramite lo specifico blocco “leggi colore e luminosità”
+
+### Lettura colore da immagini
+E’ ora possibile ricavare il codice esatto di un punto (pixel) posto in una delle immagini dell’album foto riprese dalla videocamera.
+
+![colourpick]({{site.baseurl}}/img/blog/color_picker_1.jpg)
+
+Questa funzione è particolarmente utile per identificare il colore da trovare nelle funzioni “trova colore” che ora accettano anche un codice colore in formato “#RGB”
+
+### Registrazione suoni
+E’ ora possibile utilizzare un microfono USB per registrare dei suoni che possono essere poi riprodotti dall’altoparlante. 
+
+![mic]({{site.baseurl}}/img/blog/microphone_1.jpg)
+
+Le funzioni di registrazione è riproduzione sono utilizzabili nella programmazione, tramite specifici blocchi “registra” e “riproduci”.
+
+### Riconoscimento suoni e rumori
+Il microfono può essere usato per riconoscere livelli di ruomore oltre una soglia definita.
+La funzione è disponibile in ambiente di programmazione tramite il blocco “senti”.
+
+### Riconoscimento comandi vocali
+Il microfono può essere utilizzato per riconoscere parole all’interno di un vocabolario definibile.
+Questa funzione è disponibile in ambiente di programmazione tramite il blocco “ascolta”.
+Nota: il riconoscimento comandi vocali è attualmente poco affidabile, inoltre il tempo di decondifica di un singolo comando su un raspberry pi model B è piuttosto lungo, intorno ai 4-5 secondi.
+
+### Miglioramenti vari della videocamera
+Le funzioni legate alla videocamera sono ottimizzate e consentono un refresh più rapido e il ritardo è molto basso. Inoltre è possibile modificare la compressione delle immagini trasmesse in modo da ridurre la banda richiesta dalla connessione wi-fi e migliorare la risposta generale del sistema.
+
+### Miglioramenti della connessione wi-fi
+La connessione wi-fi ora è configurabile sia come hotspot (“rete coderbot”) che come client di una rete già esistente (ad esempio una rete domestica). Questo consente l’utilizzo di CoderBot utilizzando la rete wifi esistente, aumentando la portata e aumentanto la durata della batteria.
+
+### Traduzione in Francese
+Grazie al contributo esterno, l’interfaccia utente di CoderBot è ora disponibile anche in linguagrancese.
+
+### Miglioramenti vari
+Vari miglioramenti sia per la parte di programmazione (aggiornato blockly all’ultima versione disponibile), miglioramento delle performace generali e stabilità.
+
+

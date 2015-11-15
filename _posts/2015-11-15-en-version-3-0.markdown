@@ -1,0 +1,84 @@
+---
+layout: en/post
+title:  "CoderBot version 3.0"
+subtitle: "The new version of CoderBot brings new sensors, new camera functions, optimiztions"
+splash: "blog/coderbot_version_3_0_splash.jpg"
+date:   2015-11-15 12:00:00
+category: blog
+tags:   news
+author: CoderBot
+language: en
+---
+
+CoderBot 3.0 is out!
+CoderBot version 3.0 adds several improvements, including the ability to use the camera as a sensor, it can also use sonora proximity sensors to detect the presence of obstacles, and a microphone to record audio and detect speech.
+
+CoderBot now uses the 3.0 version of OpenCV framework as well as several other modules: Tesseract 3.1,  PocketSphinx prealpha5, zbar, pyaudio. 
+In order to avoid a long and complex instllation, it is suggested to use the SD card image which contains all the software required.
+
+Here is the list of new or improved features:
+
+### Ultrasonic sensors
+The robot can now use up to three ultrasonic sensors (the hc-sr04 model) in order to detect the distance from an object.
+
+![hc-sr04]({{site.baseurl}}/img/blog/ultrasonic_hc_sr04.jpg)
+
+Sensors can be queried via special programming blocks which return the current distance from an obstacle, expressed in centimeters.
+
+### Text recongnition (OCR)
+The camera can now detect and decode text (alphanumeric characters, block letters)
+This function is available as a special programming block, which return the decoded text present in the image spot by the camera.
+
+![text-ocr]({{site.baseurl}}/img/blog/camera_ocr_1.jpg)
+
+In order to optimize the tect recognition response time and accuracy, the text must be enclosed in a frame of a user-specified colour.
+
+### QR code recognition
+Camera sensor can now detect and decode QR and bar codes.
+
+![qrcode]({{site.baseurl}}/img/blog/camera_qrcode_1.jpg)
+
+This function is available as a special programming block, which return the code contained in the QR, or the numeric code in the barcode.
+
+### Ambient light and colour
+The camera can be used to detect the average light or colour, this function is available as a special programming block named “get image average [Hue|Color]”.
+
+![hue]({{site.baseurl}}/img/blog/camera_light_1.jpg)
+
+### Detect exact colour from image
+Using functions like “find distance from colour” it is much more effective to be able to specify the actual colour of the object as seen by the robot camera, instead of a colour chosen froma palette.
+
+![colourpick]({{site.baseurl}}/img/blog/color_picker_1.jpg)
+
+It is now possible to read identify the exact colour of a pixel in a photo taken by the robot and use the colour code (in “#RGB” html format) in the program.
+To show the pixel colour, just open the photo album, open a photo detail, click on the desired pixel, a dialog box will show the pixel colour.
+
+### Sound recording
+It is now possibile to record sounds using the USB microphone (if available). The sound can be played using the speker (if available) connected to the Raspberry audio out.
+
+![mic]({{site.baseurl}}/img/blog/microphone_1.jpg)
+
+These features are available through programming blocks “record as file [file] of seconds [seconds]” and “play file [filename]”
+
+### Noise / sound level detection
+The USB microphone, if available, can be used to detect noise or sound average level, this function is available as a special programming block named “hear”.
+
+### Speech recognition
+The robot is able to detect and decode audio speech coming from the USB microphone. This function is available through the program block “listen” which return the recognized text, or an empty string.
+Note: the speech recognition itself is not very reliable at the moment, it is also not very fast: on a raspberry model B or B+ it takes a few seconds to detect a single keyword.
+
+### Camera general improvement
+Camera functions have been optimized: the refresh rate is much faster compared to the 1.0 version, and more efficient in term of wifi badwidth usage.
+It is now possible to specify the refresh rate and the video compression level.
+
+### WiFi connection general improvement
+WiFi connection can now be configured either as “access point” (in case a wifi network is not present) or “client” (such as a school or home network).
+Using the robot in “client” mode, achieves better connectivity as the robot use less energy, it also increase the reach of the client (for example, it is possible to control the robot from a different room / floor).
+
+### French localization
+Thanks to a french contributor, the CoderBot UI is now available in French, too.
+
+### General improvements
+There have been several improvements in stability and performance.
+
+
