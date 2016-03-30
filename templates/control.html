@@ -1,90 +1,138 @@
+{% extends "index.html" %}
+{% block title %}CoderBot v2.0 - Controlling{% endblock %}
+
 <script type="text/javascript">
-  function ScaleContentToDevice(){
-      var h = $(window).height();
-      var contentHeight = h - $(".ui-content-stream").offset().top;
-      $(".ui-content-stream").height(contentHeight);
-  };
+  {% block script %}
+    function ScaleContentToDevice(){
+        var h = $(window).height();
+        var contentHeight = h - $(".ui-content-stream").offset().top;
+        $(".ui-content-stream").height(contentHeight);
+    };
 
-  $(function() {
-    /* Scale content to viewport */
-    ScaleContentToDevice();
-    $(document).on("pagecontainershow", function(){
-        ScaleContentToDevice();
-    });
-    $(window).on("resize orientationchange", function(){
-        ScaleContentToDevice();
+    $(function() {
+      // Scale content to viewport
+      ScaleContentToDevice();
+      $(document).on("pagecontainershow", function(){
+          ScaleContentToDevice();
+      });
+      $(window).on("resize orientationchange", function(){
+          ScaleContentToDevice();
+      });
+
+      // Motors control events
+      $("#page-control button[href*='motors']").bind('vmousedown', function(event) {
+        $.get($(this).attr('href'));
+        return false;
+      });
+      $("#page-control button[href*='motors']").bind('vmouseup', function(event) {
+        $.get('/bot/motors/stop');
+        return false;
+      });
+
+      // Sound and photos events
+      $('#b_say').on("click", function() {
+        var text = window.prompt("{%trans%}Say what:{%endtrans%}");
+        if (text) {
+          $.get('/bot/sound/say', {what: text});
+        };
+      });
+      $("#page-control button[href*='camera']").on('click', function() {
+        $.get($(this).attr('href'));
+        return false;
+      });
+
     });
 
-    /* Motors control events */
-    $("#page-control button[href*='motors']").bind('vmousedown', function(event) {
-      $.get($(this).attr('href'));
-      return false;
-    });
-    $("#page-control button[href*='motors']").bind('vmouseup', function(event) {
-      $.get('/bot/motors/stop');
-      return false;
-    });
+    $(function(){
+      // Opening the panel on click/swap button tab
+      $('#gallery').on('panelopen', function(){
+        $('#gallerycontent').load('gallery.html');
+      });
+      $("a[href='#gallery']").on({
+        swipeleft: function(){
+          $('#gallery').panel("open");
+        },
+        swiperight: function(){
+          $('#gallery').panel("close");
+        },
+      });
 
-    /* Sound and photos events */
-    $('#b_say').on("click", function() {
-      var text = window.prompt("{%trans%}Say what:{%endtrans%}");
-      if (text) {
-        $.get('/bot/sound/say', {what: text});
-      };
+      // Auto resize the popup on open
+      $("#photopopup").on({
+        popupbeforeposition: function() {
+          var maxHeight = $(window).height() - 60 + "px";
+          $("#photopopup [src!='']").css( "max-height", maxHeight );
+        }
+      });
     });
-    $("#page-control button[href*='camera']").on('click', function() {
-      $.get($(this).attr('href'));
-      return false;
-    });
-
-  });
+  {% endblock script %}
 </script>
 <style>
-  #page-control .ui-grid-b > .ui-block-a,
-  #page-control .ui-grid-b > .ui-block-c {
-    width: 50%;
-  }
-  #page-control .ui-grid-b > .ui-block-b {
-    width: 0px;
-  }
-
-  /* 1st breackpoint for page-control responsive grid */
-  @media all and (min-width: 30em) {
+  {% block style %}
     #page-control .ui-grid-b > .ui-block-a,
-    #page-control .ui-grid-b > .ui-block-b,
     #page-control .ui-grid-b > .ui-block-c {
-      width: 33%;
+      width: 50%;
     }
-  }
+    #page-control .ui-grid-b > .ui-block-b {
+      width: 0px;
+    }
+
+    /* 1st breackpoint for page-control responsive grid */
+    @media all and (min-width: 30em) {
+      #page-control .ui-grid-b > .ui-block-a,
+      #page-control .ui-grid-b > .ui-block-b,
+      #page-control .ui-grid-b > .ui-block-c {
+        width: 33%;
+      }
+    }
+  {% endblock style %}
 </style>
-<div id="page-control" role="main" class="ui-content" style="padding: 0px;">
-  <div class="ui-content-stream"></div>
-  <div class="ui-grid-b" style="position:fixed; width:100%;bottom:0px;left:0px;">
-    <div class="ui-block-a" id="ui_control_left">
-      <fieldset class="ui-grid-solo">
-        <div class="ui-block-a ui-center"><button id="b_forward" href="/bot/motors/forward" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-u ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Forward{% endtrans %}</button></div>
-      </fieldset>
-      <fieldset class="ui-grid-a">
-        <div class="ui-block-a ui-center"><button id="b_left" href="/bot/motors/left" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-l ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Left{% endtrans %}</button></div>
-        <div class="ui-block-b ui-center"><button id="b_right" href="/bot/motors/right" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-r ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Right{% endtrans %}</button></div>
-      </fieldset>
-      <fieldset class="ui-grid-solo">
-        <div class="ui-block-a ui-center"><button id="b_backward" href="/bot/motors/backward" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-d ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Backward{% endtrans %}</button></div>
-      </fieldset>
-    </div>
-    <div class="ui-block-b" id="ui_control_center"></div>
-    <div class="ui-block-c" id="ui_control_right">
-      <fieldset class="ui-grid-solo">
-        <div class="ui-block-a ui-center"><button id="b_say" class="ui-btn ui-btn-inline ui-icon-comment ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Say{% endtrans %}</button></div>
-      </fieldset>
-      <fieldset class="ui-grid-a">
-        <div class="ui-block-a ui-center"><button id="b_video_rec" href="/bot/camera/start_recording" class="ui-btn ui-btn-inline ui-icon-video ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Rec{% endtrans %}</button></div>
-        <div class="ui-block-b ui-center"><button id="b_video_stop" href="/bot/camera/stop_recording" class="ui-btn ui-btn-inline ui-icon-cb-stop ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Stop{% endtrans %}</button></div>
-      </fieldset>
-      <fieldset class="ui-grid-solo">
-        <div class="ui-block-a ui-center"><button id="b_camera" href="/bot/camera/capture" class="ui-btn ui-btn-inline ui-icon-camera ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Photo{% endtrans %}</button></div>
-      </fieldset>
+
+{% block page %}
+  <div id="page-control" role="main" class="ui-content" style="padding: 0px;">
+    <div class="ui-content-stream"></div>
+    <div class="ui-grid-b" style="position:fixed; width:100%;bottom:0px;left:0px;">
+      <div class="ui-block-a" id="ui_control_left">
+        <fieldset class="ui-grid-solo">
+          <div class="ui-block-a ui-center"><button id="b_forward" href="/bot/motors/forward" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-u ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Forward{% endtrans %}</button></div>
+        </fieldset>
+        <fieldset class="ui-grid-a">
+          <div class="ui-block-a ui-center"><button id="b_left" href="/bot/motors/left" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-l ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Left{% endtrans %}</button></div>
+          <div class="ui-block-b ui-center"><button id="b_right" href="/bot/motors/right" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-r ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Right{% endtrans %}</button></div>
+        </fieldset>
+        <fieldset class="ui-grid-solo">
+          <div class="ui-block-a ui-center"><button id="b_backward" href="/bot/motors/backward" onclick="void(0)" class="ui-btn ui-btn-inline ui-icon-arrow-d ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Backward{% endtrans %}</button></div>
+        </fieldset>
+      </div>
+      <div class="ui-block-b" id="ui_control_center"></div>
+      <div class="ui-block-c" id="ui_control_right">
+        <fieldset class="ui-grid-solo">
+          <div class="ui-block-a ui-center"><button id="b_say" class="ui-btn ui-btn-inline ui-icon-comment ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Say{% endtrans %}</button></div>
+        </fieldset>
+        <fieldset class="ui-grid-a">
+          <div class="ui-block-a ui-center"><button id="b_video_rec" href="/bot/camera/start_recording" class="ui-btn ui-btn-inline ui-icon-video ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Rec{% endtrans %}</button></div>
+          <div class="ui-block-b ui-center"><button id="b_video_stop" href="/bot/camera/stop_recording" class="ui-btn ui-btn-inline ui-icon-cb-stop ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Stop{% endtrans %}</button></div>
+        </fieldset>
+        <fieldset class="ui-grid-solo">
+          <div class="ui-block-a ui-center"><button id="b_camera" href="/bot/camera/capture" class="ui-btn ui-btn-inline ui-icon-camera ui-btn-icon-top ui-btn-traslucent" type="button">{% trans %}Photo{% endtrans %}</button></div>
+        </fieldset>
+      </div>
     </div>
   </div>
-</div>
+
+  <div data-role="panel" id="gallery" data-position="right" data-display="overlay">
+    <a href="#gallery" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-grid" style="position: absolute; left: -1.75em; top: 6em; height: 4em; border-radius: 1em 0 0 1em; border-right: medium none;">{% trans %}Photos{% endtrans %}</a>
+    <div id="gallerycontent"></div>
+  </div>
+  <div data-role="popup" id="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">{% trans %}Close{% endtrans %}</a>
+    <img src="" style="display: none;">
+    <video src="" alt="Video" autoplay controls style="display: none;">
+      Sorry, your browser does not support embedded videos.
+    </video>
+  </div>
+{% endblock page %}
+
+{% block body %}
+{% endblock body %}
 

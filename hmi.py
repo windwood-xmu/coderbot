@@ -4,8 +4,9 @@ import utils.cv
 from config import Config
 import Image
 import StringIO
+from re import findall
 
-from flask import Flask, render_template, request, send_file, redirect, Response, make_response, jsonify
+from flask import Flask, render_template, request, send_file, redirect, Response, make_response, jsonify, url_for, abort
 from flask.ext.babel import Babel
 
 app = Flask(__name__, static_url_path='')
@@ -13,8 +14,20 @@ app.debug = True
 babel = Babel(app)
 
 RECORD_PATH = 'DCIM'
+PROGRAM_PATH = 'data'
+PROGRAM_EXTENSION = 'bot'
 
 # TODO :
+
+
+# A template filter to get quoted elements in a string
+@app.template_filter('quoted')
+def quoted(s):
+    l = findall('\'([^\']*)\'', str(s))
+    if l:
+        return l
+    return None
+
 
 def run_server(prog=None):
     app.shutdown_requested = False
@@ -49,7 +62,7 @@ def get_locale():
 # Paths for IHM
 @app.route('/')
 def handle_home():
-    return render_template('index.html')
+    return redirect('control.html')
 @app.route('/<filename>.html')
 def handle_template(filename):
     if filename == 'gallery':
@@ -74,7 +87,7 @@ def handle_video():
 
 @app.route('/video/snapshot/<definition>')
 def video_snapshot(definition):
-    if definition not in app.bot.streamers.keys(): abort(404)
+    if definition not in app.bot.streamers.keys(): abort(404) # Not found
     frame = utils.cv.JPEGencode(app.bot.streamers[definition].frame)
     response = make_response(frame)
     response.headers['Content-Type'] = 'image/jpeg'
@@ -83,7 +96,7 @@ def video_snapshot(definition):
 
 @app.route("/video/stream/<definition>")
 def handle_video_stream(definition):
-    if not definition in app.bot.streamers.keys(): abort(404)
+    if not definition in app.bot.streamers.keys(): abort(404) # Not found
     def streamer():
         while not app.shutdown_requested:
             frame = utils.cv.JPEGencode(app.bot.streamers[definition].frame)
@@ -119,27 +132,27 @@ def handle_bot_motors(movement):
         cmd = getattr(app.bot.motors, movement)
         cmd(speed, elapse)
     else:
-        return abort(404)
+        abort(404) # Not found
     return jsonify(result=True)
 
 # Path for Sound API
 @app.route("/bot/sound/<command>", methods=['GET'])
 def handle_bot_sound(command):
-    if not command in ['play', 'say']: return abort(404)
+    if not command in ['play', 'say']: abort(404) # Not found
     if command == 'play': snd = request.args.get('filename')
     else:                 snd = request.args.get('what')
     if snd is not None:
         getattr(app.bot.sound, command)(snd)
         return jsonify(result=True)
-    return jsonify(result=False, error='Invalid argument')
+    abort(400) # Bad Request
 
 # Path for Camera API
 @app.route("/bot/camera/<command>")
 def handle_bot_camera(command):
-    if not command in ['capture', 'start_recording', 'stop_recording']: return abort(404)
+    if not command in ['capture', 'start_recording', 'stop_recording']: abort(404) # Not found
     if command == 'stop_recording':
         app.bot.camera.stop_recording()
-    else:
+    else: # start_recording or capture
         filename = request.args.get('filename')
         # size = request.args.get('size')
         # Or : size = (request.args.get('width|i'), request.args.get('height|i'))
@@ -150,17 +163,13 @@ def handle_bot_camera(command):
 @app.route("/system/<command>", methods=['GET'])
 def handle_system(command):
     from os import system
-    if not command in ['halt', 'reboot', 'restart']: return abort(404)
+    if not command in ['halt', 'reboot', 'restart']: abort(404) # Not found
     if command == 'restart':
         os.system ('sudo service coderbot restart')
     else:
         os.system ("sudo %s" % command)
 
-# TODO : Ecrire les methodes pour toutes les commandes d'acces aux photos
-# (list, view thumbs, view, download, delete)
-@app.route("/camera/DCIM")
-def handle_photos_list():
-    return abort(503)
+# Path for DCIM API control
 @app.route("/camera/DCIM/<filename>")
 def handle_photos(filename):
     from os.path import join
@@ -172,18 +181,86 @@ def handle_photos(filename):
         return Response(io.getvalue(), mimetype='image/jpeg')
     if request.args.get('delete'):
         from os import unlink
-        try:
-            unlink(join(Config().get('record_path', RECORD_PATH), filename))
-            return jsonify(result=True)
-        except:
-            return jsonify(result=False)
+        try: unlink(join(Config().get('record_path', RECORD_PATH), filename))
+        except: abort(500) # Internal error
+        return jsonify(result=True)
     return send_file(join(Config().get('record_path', RECORD_PATH), filename))
 
-# TODO : Ecrire les methodes pour la gestion des programmes
-# (list, load, save, delete, exec, abort, status)
-@app.route("/program")
-def handle_program():
-    return abort(503)
+# Path for program API control
+# TODO : Simplifier le code de cette partie
+# Utiliser une classe pour faire tout cela.
+@app.route("/program", methods=['GET', 'POST'])
+def handle_programs():
+    action = request.form.get ('action', request.args.get('action'))
+    if not action in [None, 'create', 'copy', 'duplicate', 'save as', 'abort', 'status']: abort(400) # Bad request
+    if action == 'create':
+        filename = request.args.get('filename')
+        overwrite = not request.args.get('overwrite').lower() in ['false', '0', '']
+        if not filename: abort(400) # Bad request
+
+        from os.path import exists, join
+        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (request.args.get('filename'), Config().get('program_extension', PROGRAM_EXTENSION)))
+        if exists(path) and not overwrite:
+            return jsonify(result=False, error='File exists', filename=filename)
+        # Create an empty file to filename reservation
+        try: open(path, 'w').close()
+        except: abort(500) # Internal error
+        return jsonify(result=True, filename=filename)
+    if action in ['copy', 'duplicate', 'save as']:
+        from os.path import exists, join
+        import json
+
+        filename = request.form.get('filename')
+        overwrite = not request.form.get('overwrite').lower() in ['false', '0', '']
+        if not filename: abort(400) # Bad request
+        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (request.form.get('filename'), Config().get('program_extension', PROGRAM_EXTENSION)))
+        if exists(path) and not overwrite:
+            return jsonify(result=False, error='File exists', filename=filename)
+        data = {'name': request.form.get('filename'),
+            'dom_code': request.form.get('dom_code'),
+            'py_code': request.form.get('py_code')}
+        try:
+            with open(path, 'w') as f:
+                json.dump(data, f, indent=4, sort_keys=True)
+        except: abort(500) # Internal error
+        return jsonify(result=True, filename=filename)
+    if action is None:
+        from os import listdir
+        from os.path import isfile, join, splitext
+        files = [f for f in listdir(Config().get('program_path', PROGRAM_PATH)) if isfile(join(Config().get('program_path', PROGRAM_PATH), f))]
+        files = [splitext(f)[0] for f in files if splitext(f)[1].lower() == ".%s" % Config().get('program_extension', PROGRAM_EXTENSION)]
+        return jsonify(result=True, files=files)
+    abort(501) # Not implemented
+@app.route("/program/<filename>", methods=['GET', 'POST'])
+def handle_program(filename):
+    from os.path import join
+    import json
+
+    action = request.form.get('action', request.args.get('action'))
+    if action is None and request.method == 'POST': abort(405) # Not allowed
+    if not action in [None, 'load', 'save', 'delete', 'exec']: abort(400) # Bad request
+    if action == 'save':
+        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (filename, Config().get('program_extension', PROGRAM_EXTENSION)))
+        data = {'name': request.form.get('filename'),
+            'dom_code': request.form.get('dom_code'),
+            'py_code': request.form.get('py_code')}
+        try:
+            with open(path, 'w') as f:
+                json.dump(data, f, indent=4, sort_keys=True)
+        except: abort(500) # Internal error
+        return jsonify(result=True)
+    if action in [None, 'load']:
+        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (filename, Config().get('program_extension', PROGRAM_EXTENSION)))
+        try:
+            print path
+            with open(path, 'r') as f:
+                data = json.load(f)
+                print data
+            print data
+            return jsonify(data)
+        except: abort(500) # Internal error
+    abort(501) # Not implemented
+
 
 
 

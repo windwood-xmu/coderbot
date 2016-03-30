@@ -3,14 +3,14 @@
     $(function() {
       /* Handle to remove a photo */
       $(".photobutton a").on("vclick", function(e) {
-          $this = $(this);
-          $.getJSON($this.attr("href"), function(json) {
-              if (json.result) {
-                  $(".photobutton[title='" + $this.attr('title') + "']").remove();
-              }
-          });
-          e.preventDefault();
-          e.stopPropagation();
+        $this = $(this);
+        // Send data to server through the Ajax call
+        $.getJSON($this.attr("href"), function(json){
+          $(".photobutton[title='" + $this.attr('title') + "']").remove();
+        });
+
+        e.preventDefault();
+        e.stopPropagation();
       });
 
       /* Handle taphold to hide/show delete buttons */
@@ -24,46 +24,30 @@
 
       /* Handle click to load image and show it in a popup */
       $(".photobutton").on("vclick", function(e) {
-          var $this = $(this);
-          if (e.type == "vclick" && $this.data("tapholdEvent")) {
-            e.preventDefault();
-            $this.removeData("tapholdEvent");
-            return;
-          };
+        var $this = $(this);
+        if (e.type == "vclick" && $this.data("tapholdEvent")) {
+          e.preventDefault();
+          $this.removeData("tapholdEvent");
+          return;
+        };
 
-          $type = $this.attr("file-type");
-          if ($type == "picture") {
-            $("img", "#photopopup").attr("src", $this.attr("alt")).show();
-            $("video", "#photopopup").attr("src", "").hide();
-          } else {
-            $("img", "#photopopup").attr("src", "").hide();
-            $("video", "#photopopup").attr("src", $this.attr("alt")).show();
-            $("#photopopup").popup("open", {transition: "pop"});
-            return;
-          }
-          $.mobile.loading("show", {
-            text: "{% trans %}Loading{% endtrans %}",
-            textVisible: true,
-            theme: $.mobile.loader.prototype.options.theme,
-            textOnly: false,
-            html: ""
-          });
+        $.mobile.loading("show");
+        $type = $this.attr("file-type");
+        if ($type == "picture") {
+          $("img", "#photopopup").attr("src", $this.attr("alt")).show();
+          $("video", "#photopopup").attr("src", "").hide();
+        } else {
+          $("img", "#photopopup").attr("src", "").hide();
+          $("video", "#photopopup").attr("src", $this.attr("alt")).show();
+          $("#photopopup").popup("open", {transition: "pop"});
+          return;
+        }
 
-          // Fallback in case the browser doesn't fire a load event
-          var fallback = setTimeout(function() {
-            $.mobile.loading("hide");
-            $("#photopopup").popup("open", {transition: "pop"});
-          }, 5000);
-
-          // Wait with opening the popup until the popup image has been loaded in the DOM.
-          // This ensures the popup gets the correct size and position
-          $("#photopopup [src!='']").load(function() {
-            $.mobile.loading("hide");
-            // Open the popup
-            $("#photopopup").popup("open", {transition: "pop"});
-            // Clear the fallback
-            clearTimeout(fallback);
-          });
+        // Send data to server through the Ajax call
+        $("#photopopup [src!='']").load(function(json){
+          $.mobile.loading("hide");
+          $("#photopopup").popup("open", {transition: "pop"});
+        });
       });
     });
   </script>

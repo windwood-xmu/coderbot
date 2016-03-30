@@ -1,12 +1,8 @@
-.photobutton .ui-btn-right {
-  /*right: -1em;*/
-}
-
 .ui-panel-closed {
-  left: unset;
-  overflow: unset;
-  visibility: unset;
-  clip: unset;
+  left: initial;
+  overflow: initial;
+  visibility: initial;
+  clip: initial;
 }
 #gallery.ui-panel {
 	width: 90%;

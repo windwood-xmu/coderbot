@@ -1,50 +1,145 @@
-{% extends "main.html" %}
-{% block title %}CoderBot v2.0{% endblock %}
-{% block body %}
-<script type="text/javascript">
-  $(function(){
-    /* Opening the panel on click/swap button tab */
-    $('#gallery').on('panelopen', function(){
-      $('#gallerycontent').load('gallery.html');
-    });
-    $("a[href='#gallery']").on({
-      swipeleft: function(){
-        $('#gallery').panel("open");
-      },
-      swiperight: function(){
-        $('#gallery').panel("close");
-      },
-    });
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CoderBot{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/images/icons/coderbot_logo_79.png"/>
+    <link rel="stylesheet" href="/css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="/css/coderbot.css">
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    {% block head %}
+    {% endblock head %}
+    <script type="text/javascript">
+      // Helper for notify messages to user
+      function notify(msg, cls="error") {
+        $("<div class='"+cls+"'></div>").html(msg).appendTo("#notification")
+          .fadeIn()
+          .delay(5000)
+          .fadeOut(function() {
+            $(this).remove();
+          });
+      };
 
-    /* Auto resize of the popup on open */
-    $("#photopopup").on({
-      popupbeforeposition: function() {
-        var maxHeight = $(window).height() - 60 + "px";
-        $("#photopopup [src!='']").css( "max-height", maxHeight );
+      // Helper function to validate a form
+      // TODO : Could be in a global .js
+      //  - Utiliser pattern pour specifier des types de donnees a valider.
+      function validate (formElement, invalidMessage) {
+        var isFormValid = true;
+
+        // Required fields
+        $("input.required", formElement).each(function(){
+          if ($.trim($(this).val()).length == 0) {
+            $(this).addClass("highlight");
+            isFormValid = false;
+          } else {
+            $(this).removeClass("highlight");
+          }
+        });
+
+        // Display messages in case of invalid input
+        if (!isFormValid) {
+          if (invalidMessage) { alert(invalidMessage); }
+          else { alert("{% trans %}Please fill all necessary fields{% endtrans %}."); }
+        }
+
+        return isFormValid;
       }
-    }).popup();
-  });
-</script>
-<div data-role="page">
-  <div data-role="panel" id="gallery" data-position="right" data-display="overlay">
-    <a href="#gallery" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-grid" style="position: absolute; left: -1.75em; top: 6em; height: 4em; border-radius: 1em 0 0 1em; border-right: medium none;">{% trans %}Photos{% endtrans %}</a>
-    <div id="gallerycontent">
-      <div class="ui-loading">
-        <div class="ui-loader ui-corner-all ui-body-a ui-loader-verbose">
-          <span class="ui-icon-loading"></span>
-          <h1>{% trans %}Loading{% endtrans %}</h1>
+
+
+      $(function(){
+        // Configure loader widget with defaults
+        $(document).on("mobileinit", function(){
+          $.mobile.loader.prototype.options.text = "{% trans %}Loading{% endtrans %}";
+          $.mobile.loader.prototype.options.textVisible = true;
+          $.mobile.loader.prototype.options.textOnly = false;
+          $.mobile.loader.prototype.options.html = "";
+        });
+
+        // Configure Ajax default callbacks (start, complete, error)
+        $(document).ajaxSend(function(){
+          $.mobile.loading("show");
+        });
+        $(document).ajaxComplete(function(){
+          $.mobile.loading("hide");
+        });
+        $(document).ajaxError(function(event, jqh, request, error){
+          notify(error);
+        });
+
+      });
+
+      $(function(){
+        // Set the bot status check
+        setInterval(function(){
+          $.ajax({
+            dataType: "json",
+            url: "/bot/status",
+            global: false,
+            success: function(json) {
+              if (json.status) {
+                $("#a_bot_status").removeClass('ui-btn-b ui-icon-delete').addClass('ui-icon-check').html('{% trans %}Online{% endtrans %}');
+              } else {
+                $("#a_bot_status").addClass('ui-btn-b ui-icon-delete').removeClass('ui-icon-check').html('{% trans %}Offline{% endtrans %}');
+              };
+            },
+            error: function() {
+              $("#a_bot_status").addClass('ui-btn-b ui-icon-delete').removeClass('ui-icon-check').html('{% trans %}Offline{% endtrans %}');
+            }
+          });
+        }, 5000);
+      });
+
+      {% block script %}
+      {% endblock script %}
+    </script>
+    <style>
+      .ui-notification-bar {
+        position: absolute;
+        top:    1em;
+        left:   1em;
+        /*right:  1em;*/
+        /*text-align: center;*/
+        z-index: 1003;
+      }
+      .ui-notification-bar > * {
+        /*display: inline-block;*/
+        padding: .3125em;
+        -webkit-border-radius: .3125em;
+        border-radius:         .3125em;
+      }
+      .ui-notification-bar > .error {
+        background: rgba(255,0,0,0.3);
+      }
+      .ui-notification-bar > .info {
+        background: rgba(255,255,0,0.3);
+      }
+      .ui-notification-bar > .success {
+        background: rgba(0,255,0,0.3);
+      }
+
+      {% block style %}
+      {% endblock style %}
+    </style>
+  </head>
+  <body>
+    <div data-role="page">
+      <div id="notification" class="ui-notification-bar"></div>
+      <div data-role="header">
+        <h1>CoderBot</h1>
+        <a href="#" id="a_bot_status" data-icon="check" class="s_bot_status ui-btn-right">{% trans %}Online{% endtrans %}</a>
+        <div data-role="navbar" data-iconpos="left">
+          <ul>
+            <li><a href="control.html" {% if self|quoted|first == "control.html" %}class="ui-btn-active ui-state-persist" {% endif %}data-icon="eye" data-ajax="false">{% trans %}Control{% endtrans %}</a></li>
+            <li><a href="program.html" {% if self|quoted|first == "program.html" %}class="ui-btn-active ui-state-persist" {% endif %}data-icon="edit" data-ajax="false">{% trans %}Program{% endtrans %}</a></li>
+            <li><a href="preferences.html" {% if self|quoted|first == "preferences.html" %}class="ui-btn-active ui-state-persist" {% endif %}data-icon="gear" data-ajax="false">{% trans %}Preferences{% endtrans %}</a></li>
+          </ul>
         </div>
       </div>
-    </div>
-  </div>
-  {% include "tabs.html" %}
-  <div data-role="popup" id="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
-    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">{% trans %}Close{% endtrans %}</a>
-    <img src="" style="display: none;">
-    <video src="" alt="Video" autoplay controls style="display: none;">
-      Sorry, your browser does not support embedded videos.
-    </video>
-  </div>
-</div>
-{% endblock %}
+      {% block page %}{% endblock %}
+    </div><!-- data-role="page" -->
+    {% block body %}{% endblock %}
+  </body>
+</html>
 
