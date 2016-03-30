@@ -1,342 +1,267 @@
-############################################################################
-#    CoderBot, a didactical programmable robot.
-#    Copyright (C) 2014, 2015 Roberto Previtera <info@coderbot.org>
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-############################################################################
+import time, sys
+import threading
+import picamera
+import picamera.array
+import cv2
+from utils.POO import SingletonDecorator as Singleton
+from os.path import join as pathJoin
 
-import time
-import copy
-import os
-import sys
-import math
-from PIL import Image as PILImage
-from StringIO import StringIO
-from threading import Thread, Lock
-import logging
+RECORD_PATH = 'DCIM'
 
-from viz import camera, streamer, image, blob
-import config
+# Create a pool of image processors
+class Pool(object):
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._pool = []
+    def put(self, item):
+        with self._lock:
+            self._pool.append(item)
+    def get(self):
+        with self._lock:
+            if len(self._pool) > 1:
+                return self._pool.pop()
+            else:
+                return None
+    def remove(self, item):
+        with self._lock:
+            try: self._pool.remove(item)
+            except ValueError: pass
 
-MAX_IMAGE_AGE = 0.0
-PHOTO_PATH = "./photos"
-PHOTO_PREFIX = "DSC"
-VIDEO_PREFIX = "VID"
-PHOTO_THUMB_SUFFIX = "_thumb"
-PHOTO_THUMB_SIZE = (240,180)
-VIDEO_ELAPSE_MAX = 900
+class IndexedPool(Pool):
+    def get(self, index=None):
+        if index is None: index = 0
+        with self._lock:
+            if len(self._pool) > index:
+                return self._pool[index]
+            else:
+                return None
+    def pop(self):
+        return super(IndexedPool, self).get()
 
-class Camera(Thread):
+    def __len__(self):
+        with self._lock:
+            return len(self._pool)
 
-  _instance = None
-  _img_template = image.Image.load("coderdojo-logo.png")
-  stream_port = 8080
 
-  @classmethod
-  def get_instance(cls):
-    if cls._instance is None:
-      cls._instance = Camera()
-      cls._instance.start()
-    return cls._instance
+# Implement Pool
+class ImageProcessor(threading.Thread):
+    _pool = Pool()
+    #_finished = Pool()
+    def __init__(self):
+        super(ImageProcessor, self).__init__()
+        self._terminated = False
+        self._event = threading.Event()
+        self._frame = None
+        self._analysisHook = None
+        self.start()
 
-  def __init__(self):
-    logging.info("starting camera")
-    cam_props = {"width":640, "height":480, "cv_image_factor":config.Config.get().get("cv_image_factor", 4), "exposure_mode": config.Config.get().get("camera_exposure_mode"), "jpeg_quality": int(config.Config.get().get("camera_jpeg_quality", 20))}
-    self._camera = camera.Camera(props=cam_props)
-    self.recording = False
-    self.video_start_time = time.time() + 8640000
-    self._run = True
-    self._image_time = 0
-    self._cv_image_factor = int(config.Config.get().get("cv_image_factor", 4))
-    self._image_lock = Lock()
-    self._image_refresh_timeout = float(config.Config.get().get("camera_refresh_timeout", 0.1))
-    self._color_object_size_min = int(config.Config.get().get("camera_color_object_size_min", 80)) / (self._cv_image_factor * self._cv_image_factor)
-    self._color_object_size_max = int(config.Config.get().get("camera_color_object_size_max", 32000)) / (self._cv_image_factor * self._cv_image_factor)
-    self._path_object_size_min = int(config.Config.get().get("camera_path_object_size_min", 80)) / (self._cv_image_factor * self._cv_image_factor)
-    self._path_object_size_max = int(config.Config.get().get("camera_path_object_size_max", 32000)) / (self._cv_image_factor * self._cv_image_factor)
-    self._photos = []
-   
-    for dirname, dirnames, filenames,  in os.walk(PHOTO_PATH):
-      for filename in filenames:
-        if (PHOTO_PREFIX in filename or VIDEO_PREFIX in filename) and PHOTO_THUMB_SUFFIX not in filename:
-          self._photos.append(filename)
-   
-    super(Camera, self).__init__()
+    def run(self):
+        self.put(self)
+        while not self._terminated:
+            # Wait for an image to be analysis
+            if self._event.wait(1):
+                try:
+                    #self._frame.seek(0)
+                    if self._analysisHook:
+                        self._analysisHook(self._frame)
+                        self._analysisHook = None
+                finally:
+                    self._frame = None
+                    # Reset the frame and event
+                    #self._frame.truncate(0)
+                    self._event.clear()
+                    # Return ourselves to the pool
+                    self.put(self)
 
-  def run(self):
-    try:
-      self._camera.grab_start()
-      while self._run:
-        sleep_time = self._image_refresh_timeout - (time.time() - self._image_time)
-        if sleep_time <= 0:
-          ts = time.time()
-          #print "run.1"
-          self._image_lock.acquire()
-          self._camera.grab_one()
-          self._image_lock.release()
-          #print "run.2: " + str(time.time()-ts)
+    def process(self, frame, analysis=None):
+        self._frame = frame
+        self._analysisHook = analysis
+        self._event.set()
 
-          #self.save_image(image.Image(self._camera.get_image_bgr()).filter_color((124,50,74)).to_jpeg())
-          self.save_image(self._camera.get_image_jpeg())
-          #print "run.3: " + str(time.time()-ts)
+    def shutdown(self):
+        self._terminated = True
+        self.join()
+        # Normally, when the thread is stopped, it's after an analysis,
+        # so the ImageProcessor instance is in _finished pool, not in _ready pool.
+        #self.removeReadyProcessor(self)
+        self.remove(self)
+
+    @classmethod
+    def get(cls):
+        return cls._pool.get()
+    @classmethod
+    def put(cls, item):
+        cls._pool.put(item)
+    @classmethod
+    def remove(cls, item):
+        cls._pool.remove(item)
+
+class ImageGrabber(threading.Thread):
+    def __init__(self, camera, size=None, port=0, threads=0, frames=None):
+        super(ImageGrabber, self).__init__()
+        if frames is None: frames = threads
+        if threads:
+            if frames < threads: raise ValueError('number of frames must be greater or equal than number of threads')
+        self._terminated = False
+
+        self._camera = camera
+        self._size = size
+        self._port = port
+
+        self.counter = 0
+        self.dropped = 0
+
+        self._lock = threading.Lock()
+        self._analysisHooks = []
+
+        self.threads = []
+        for i in range(threads):
+            p = ImageProcessor()
+            self.threads.append(p)
+
+        # Create two frame more than ImageProcessor's threads
+        # to get the last frames at all time accessible
+        # TODO: Utiliser un pool et un verrou pour les frames precedentes
+        # avec les methodes d'acces et de recopie afin d'etre thread safe
+        # et eviter les erreurs de segmentation.
+        # Une possibilite est de ne garder QUE l'attribut array de l'objet
+        # car il est recree a chaque traitement d'image. Du coup pas de pointeur nulle.
+
+        self._frames = Pool()
+        #self._readyFrames = Pool()
+        #self._waitFrames = IndexedPool()
+        self.frame = None
+        self.previous_frame = None
+        for i in range(frames + 2):
+            f = picamera.array.PiRGBArray(camera, size)
+            self._frames.put(f)
+
+        self.start()
+
+    def run(self):
+        self._camera.capture_sequence(self._getNextImageProcessor(), 'bgr', resize=self._size, use_video_port=True, splitter_port=self._port)
+
+    def addProcess(self, callback):
+        with self._lock:
+            self._analysisHooks.append(callback)
+    def delProcess(self, callback):
+        with self._lock:
+            self._analysisHooks.remove(callback)
+    def process(self, frame):
+        with self._lock:
+            processes = list(self._analysisHooks)
+        for p in processes:
+            p(frame)
+        # When all image processes are done, return frame to the pool
+        #frame.truncate(0)
+        if self.previous_frame is not None: self._frames.put(self.previous_frame)
+        #if self.frame is not None: self._frames.put(self.frame)
+        self.previous_frame = self.frame
+        self.frame = frame
+
+    def _getNextImageProcessor(self):
+        while not self._terminated:
+            frame = self._frames.get()
+            if frame:
+                frame.truncate(0)
+                yield frame
+
+                processor = ImageProcessor.get()
+                if processor:
+                    processor.process(frame, self.process)
+                    self.counter += 1
+                else:
+                    # When the processes pool is starved, wait a while for it to refill
+                    self.dropped += 1
+                    #frame.truncate(0)
+                    self._frames.put(frame)
+                    time.sleep(0.01)
+            else:
+                # When the frames pool is starved, wait a while for it to refill
+                time.sleep(0.01)
+
+    def shutdown(self):
+        self._terminated = True
+        self.join()
+        while self.threads:
+            self.threads.pop().shutdown()
+
+class Camera(object):
+    ImageGrabberClass = ImageGrabber
+    def __init__(self, resolution=None, framerate=None):
+        self._camera = picamera.PiCamera()
+        if resolution: self._camera.resolution = resolution
+        if framerate: self._camera.framerate = framerate
+        self._grabbers = []
+        self._DCIMpath = ""
+    def getGrabber(self, size=None, port=0, threads=0, frames=None):
+        grabber = Camera.ImageGrabberClass(self._camera, size, port, threads, frames)
+        self._grabbers.append(grabber)
+        return grabber
+    def close(self):
+        for grabber in self._grabbers:
+            grabber.shutdown()
+        self._camera.close()
+
+    def setDCIMpath(self, path):
+        self._DCIMpath = path
+    def _getDCIM_next(self):
+        from os import listdir
+        from os.path import isfile, join, splitext
+        pics = [f for f in listdir(self._DCIMpath) if isfile(join(self._DCIMpath, f)) and splitext(f)[1].lower() in ['.jpg', '.h264'] and f[:3] in ['IMG', 'MOV']]
+        pics.sort()
+        if pics:
+            i = int(splitext(pics[-1])[0][3:]) + 1
         else:
-          time.sleep(sleep_time)
+            i = 1
+        return i
 
-        if self.recording and time.time() - self.video_start_time > VIDEO_ELAPSE_MAX:
-          self.video_stop()
-
-      self._camera.grab_stop()
-    except:
-      logging.error("Unexpected error:" + str(sys.exc_info()[0]))
-      raise
-
-  def get_image(self, maxage = MAX_IMAGE_AGE):
-    return image.Image(self._camera.get_image_bgr())
-
-  def save_image(self, image_jpeg):
-    #self._streamer.set_image(image_jpeg)
-    self._image_time=time.time()
-
-  def get_image_jpeg(self):
-    return copy.copy (self._camera.get_image_jpeg())
-
-  def set_text(self, text):
-    self._camera.set_overlay_text(str(text))
-
-  def get_next_photo_index(self):
-    last_photo_index = 0
-    for p in self._photos:
-      try:
-        index = int(p[len(PHOTO_PREFIX):-len(self._camera.PHOTO_FILE_EXT)])
-        if index > last_photo_index:
-          last_photo_index = index
-      except:
-        pass
-    return last_photo_index + 1
-
-  def photo_take(self):
-    photo_index = self.get_next_photo_index()
-    filename = PHOTO_PREFIX + str(photo_index) + self._camera.PHOTO_FILE_EXT;
-    filename_thumb = PHOTO_PREFIX + str(photo_index) + PHOTO_THUMB_SUFFIX + self._camera.PHOTO_FILE_EXT;
-    of = open(PHOTO_PATH + "/" + filename, "w+")
-    oft = open(PHOTO_PATH + "/" + filename_thumb, "w+")
-    im_str = self._camera.get_image_jpeg()
-    of.write(im_str)
-    # thumb
-    im_pil = PILImage.open(StringIO(im_str)) 
-    im_pil.resize(PHOTO_THUMB_SIZE).save(oft)
-    self._photos.append(filename)
-
-  def is_recording(self):
-    return self.recording
-
-  def video_rec(self, video_name=None):
-    if self.is_recording():
-      return
-    self.recording = True
-
-    if video_name is None:
-      video_index = self.get_next_photo_index()
-      filename = VIDEO_PREFIX + str(video_index) + self._camera.VIDEO_FILE_EXT;
-      filename_thumb = VIDEO_PREFIX + str(video_index) + PHOTO_THUMB_SUFFIX + self._camera.PHOTO_FILE_EXT;
-    else:
-      filename = VIDEO_PREFIX + video_name + self._camera.VIDEO_FILE_EXT;
-      filename_thumb = VIDEO_PREFIX + video_name + PHOTO_THUMB_SUFFIX + self._camera.PHOTO_FILE_EXT;
-      try:
-        os.remove(PHOTO_PATH + "/" + filename)
-      except:
-        pass
-
-    oft = open(PHOTO_PATH +  "/" + filename_thumb, "w")
-    im_str = self._camera.get_image_jpeg()
-    im_pil = PILImage.open(StringIO(im_str)) 
-    im_pil.resize(PHOTO_THUMB_SIZE).save(oft)
-    self._photos.append(filename)
-    self._camera.video_rec(PHOTO_PATH + "/" + filename)
-    self.video_start_time = time.time()
-
-  def video_stop(self):
-    if self.recording:
-      self._camera.video_stop()
-      self.recording = False
-    
-  def get_photo_list(self):
-    return self._photos
-
-  def get_photo_file(self, filename):
-    return open(PHOTO_PATH + "/" + filename)
-
-  def get_photo_thumb_file(self, filename):
-    return open(PHOTO_PATH + "/" + filename[:-len(PHOTO_FILE_EXT)] + PHOTO_THUMB_SUFFIX + PHOTO_FILE_EXT)
-
-  def delete_photo(self, filename):
-    logging.info("delete photo: " + filename)
-    os.remove(PHOTO_PATH + "/" + filename)
-    os.remove(PHOTO_PATH + "/" + filename[:filename.rfind(".")] + PHOTO_THUMB_SUFFIX + self._camera.PHOTO_FILE_EXT)
-    self._photos.remove(filename)
-
-  def exit(self):
-    #self._streamer.server.shutdown()
-    #self._streamer.server_thread.join()
-    self._run = False
-    self.join()
-
-  def calibrate(self):
-    img = self._camera.getImage()
-    self._background = img.hueHistogram()[-1]
-  
-  def get_average(self):
-    self._image_lock.acquire()
-    avg = self.get_image(0).get_average()
-    self._image_lock.release()
-    return avg
-      
-  def find_line(self):
-    self._image_lock.acquire()
-    img = self.get_image(0).binarize()
-    slices = [0,0,0]
-    blobs = [0,0,0]
-    slices[0] = img.crop(0, int(self._camera.out_rgb_resolution[1]/1.2), self._camera.out_rgb_resolution[0], self._camera.out_rgb_resolution[1])
-    slices[1] = img.crop(0, int(self._camera.out_rgb_resolution[1]/1.5), self._camera.out_rgb_resolution[0], int(self._camera.out_rgb_resolution[1]/1.2))
-    slices[2] = img.crop(0, int(self._camera.out_rgb_resolution[1]/2.0), self._camera.out_rgb_resolution[0], int(self._camera.out_rgb_resolution[1]/1.5))
-    coords = [-1, -1, -1]
-    for idx, slice in enumerate(slices):
-      blobs[idx] = slice.find_blobs(minsize=480/(self._cv_image_factor * self._cv_image_factor), maxsize=6400/(self._cv_image_factor * self._cv_image_factor))
-      if len(blobs[idx]):
-        coords[idx] = (blobs[idx][0].center[0] * 100) / self._camera.out_rgb_resolution[0]
-	logging.info("line coord: " + str(idx) + " " +  str(coords[idx])+ " area: " + str(blobs[idx][0].area()))
-    
-    self._image_lock.release()
-    return coords[0]
-
-  def find_signal(self):
-    #print "signal"
-    angle = None
-    ts = time.time()
-    self._image_lock.acquire()
-    img = self.get_image(0)
-    signals = img.find_template(self._img_template)
-     
-    logging.info("signal: " + str(time.time() - ts))
-    if len(signals):
-      angle = signals[0].angle
-
-    self._image_lock.release()
-
-    return angle
-
-  def find_face(self):
-    face_x = face_y = face_size = None
-    self._image_lock.acquire()
-    img = self.get_image(0)
-    ts = time.time()
-    faces = img.grayscale().find_faces()
-    logging.info("face.detect: " + str(time.time() - ts))
-    self._image_lock.release()
-    if len(faces):
-      # Get the largest face, face is a rectangle 
-      x, y, w, h = faces[0]
-      center_x = x + (w/2)
-      face_x = ((center_x * 100) / self._camera.out_rgb_resolution[0]) - 50 #center = 0
-      center_y = y + (h/2)
-      face_y = 50 - (center_y * 100) / self._camera.out_rgb_resolution[1] #center = 0 
-      size = h 
-      face_size = (size * 100) / self._camera.out_rgb_resolution[1]
-      logging.info("face found, x: " + str(face_x) + " y: " + str(face_y) + " size: " + str(face_size))
-    return [face_x, face_y, face_size]
-
-  def path_ahead(self):
-    image_size = self._camera.out_rgb_resolution    
-    ts = time.time()
-    self._image_lock.acquire()
-    img = self.get_image(0)
-
-    size_y = img._data.shape[0]
-    size_x = img._data.shape[1]
-
-    threshold = img.crop(0, size_y - (size_y/12), size_x, size_y)._data.mean() / 2
-
-    blobs = img.binarize(threshold).dilate().find_blobs(minsize=self._path_object_size_min, maxsize=self._path_object_size_max)
-    coordY = 60
-    if len(blobs):
-      obstacle = blob.Blob.sort_distance((image_size[0]/2,image_size[1]), blobs)[0]
-
-      logging.info("obstacle:" + str(obstacle.bottom)) 
-      coords = img.transform([(obstacle.center[0], obstacle.bottom)], img.get_transform(img.size()[1]))
-      x = coords[0][0]
-      y = coords[0][1]
-      coordY = 60 - ((y * 48) / (480 / self._cv_image_factor)) 
-      logging.info("x: " + str(x) + " y: " + str(y) + " coordY: " + str(coordY))
-
-    self._image_lock.release()
-    return coordY
-
-  def find_color(self, s_color):
-    image_size = self._camera.out_rgb_resolution
-    color = (int(s_color[1:3],16), int(s_color[3:5],16), int(s_color[5:7],16))
-    code_data = None
-    ts = time.time()
-    self._image_lock.acquire()
-    img = self.get_image(0)
-    bw = img.filter_color(color)
-    self._image_lock.release()
-    objects = bw.find_blobs(minsize=self._color_object_size_min, maxsize=self._color_object_size_max)
-    logging.debug("objects: " + str(objects))
-    dist = -1
-    angle = 180
-    fov_offset = 12 #cm
-    fov_total_y = 68 #cm
-    fov_total_x = 60 #cm
-
-    if objects and len(objects):
-      obj = objects[-1]
-      bottom = obj.bottom
-      logging.info("bottom: " + str(obj.center[0]) + " " +str(obj.bottom))
-      coords = bw.transform([(obj.center[0], obj.bottom)], bw.get_transform(bw.size()[1]))
-      logging.info("coordinates: " + str(coords))
-      x = coords[0][0]
-      y = coords[0][1]
-      dist = math.sqrt(math.pow(fov_offset + (fov_total_y * (image_size[1] - y) / (image_size[1]/1.2)),2) + (math.pow((x-(image_size[0]/2)) * fov_total_x / image_size[0],2)))
-      angle = math.atan2(x - (image_size[0]/2), image_size[1] - y) * 180 / math.pi
-      logging.info("object found, dist: " + str(dist) + " angle: " + str(angle))
-    #self.save_image(img.to_jpeg())
-    #print "object: " + str(time.time() - ts)
-    return [dist, angle]
-   
-  def find_text(self, accept, back_color):
-    text = None
-    color = (int(back_color[1:3],16), int(back_color[3:5],16), int(back_color[5:7],16))
-    self._image_lock.acquire()
-    img = self.get_image(0)
-    self._image_lock.release()
-    image = img.find_rect(color=color)
-    if image:
-      logging.info("image: " + str(image))
-      bin_image = image.binarize().invert()
-      #self.save_image(bin_image.to_jpeg())
-      text = bin_image.find_text(accept)
-    return text    
-
-  def find_code(self):
-    self._image_lock.acquire()
-    img = self.get_image(0)
-    self._image_lock.release()
-    return img.grayscale().find_code()
+    def capture(self, filename=None, size=None, port=0):
+        if filename is None: filename = "IMG%04d.jpg" % self._getDCIM_next()
+        self._camera.capture(pathJoin(self._DCIMpath, filename), resize=size, use_video_port=True, splitter_port=port)
+    def start_recording(self, filename=None, size=None, port=1):
+        if filename is None: filename = "IMG%04d.h264" % self._getDCIM_next()
+        self._camera.start_recording(pathJoin(self._DCIMpath, filename), resize=size, splitter_port=port)
+    def stop_recording(self, port=1):
+        self._camera.stop_recording(splitter_port=port)
+    def split_recording(self, filename=None, port=1):
+        if filename is None: filename = "IMG%04d.h264" % self._getDCIM_next()
+        self._camera.split_recording(pathJoin(self._DCIMpath, filename), splitter_port=port)
 
 
-  def sleep(self, elapse):
-    logging.debug("sleep: " + str(elapse))
-    time.sleep(elapse)
+if __name__ == '__main__':
+    hog = cv2.HOGDescriptor()
+    hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+
+    def faceDetect(frame):
+        # make a copy for each frames because CascadeClassifier struct is not thread safe
+        if not hasattr(frame, 'cascade'): frame.cascade = cv2.CascadeClassifier ('haarcascade_frontalface.xml')
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        frame.faces = faces = frame.cascade.detectMultiScale(gray)
+        #for (x,y,w,h) in faces:
+        #    cv2.rectangle(frame.array, (x,y), (x+w, y+h), (0,255,0), 2)
+    def personDetect(frame):
+        frame.persons = persons = hog.detect(frame)
+        for (x,y,w,h) in persons:
+            cv2.rectangle(frame.array, (x,y), (x+w, y+h), (0,255,0), 2)
+    def draw(frame):
+        try:
+            faces = LD.frame.faces
+            for (x,y,w,h) in faces:
+                cv2.rectangle(frame.array, (x,y), (x+w, y+h), (255,0,0), 2)
+        except: pass
+
+    cam = Camera((1024,768), 30)
+    start = time.time()
+    SD = cam.getGrabber(threads=4, size=(320,240), port=1)
+    LD = cam.getGrabber(threads=4, size=(160,120), port=2)
+    LD.addProcess(faceDetect)
+    SD.addProcess(draw)
+    time.sleep(10)
+
+    finish = time.time()
+    cam.close()
+
+    print "Analysed SD: %d frames in %d seconds at %.2f fps, Dropped SD: %d frames" % (SD.counter, finish-start, SD.counter/(finish-start), SD.dropped)
+    print "Analysed LD: %d frames in %d seconds at %.2f fps, Dropped LD: %d frames" % (LD.counter, finish-start, LD.counter/(finish-start), LD.dropped)
 

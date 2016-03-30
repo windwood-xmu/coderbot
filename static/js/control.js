@@ -87,19 +87,6 @@ $(document).on( "pagecreate", '#page-control', function( event ) {
 	$('#b_photos').on("click", function (){
         	$.mobile.pageContainer.pagecontainer('change', '#page-photos');
 	});
-	$('#photo_detail').on("click", function (e) {
-                var pos = findPos(e.target);
-                var x = e.pageX - pos.x;
-                var y = e.pageY - pos.y;
-                var img = $("#photo_detail_img");
-                canvas = document.createElement("canvas");
-                canvas.width = img.width();
-                canvas.height = img.height();
-                canvas.getContext('2d').drawImage(img.get(0), 0, 0, img.width(), img.height());
-                var pixelData = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
-                var colorHex = "#" + paddedHexString(pixelData[0]) + paddedHexString(pixelData[1]) + paddedHexString(pixelData[2]);
-		alert("Color at point: " + colorHex); 
-        });
 	$( ".photopopup" ).on({
         	popupbeforeposition: function() {
             	var maxHeight = $( window ).height() - 60 + "px";
@@ -107,24 +94,6 @@ $(document).on( "pagecreate", '#page-control', function( event ) {
         	}
     	});
 });
-}
-
-function paddedHexString(n) {
-        var ns = n.toString(16);
-	return ("00" + ns).substring(ns.length); 
-}
-
-
-function findPos(obj) {
-    var curleft = 0, curtop = 0;
-    if (obj.offsetParent) {
-        do {
-            curleft += obj.offsetLeft;
-            curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-        return { x: curleft, y: curtop };
-    }
-    return undefined;
 }
 
 $(document).on( "pagecreate", '#page-preferences', function( event ) {
@@ -161,15 +130,6 @@ $(document).on( "pagecreate", '#page-preferences', function( event ) {
                 if(confirm("Reboot CoderBot?")){
                         bot.reboot();
                 }
-        });
-        $('#b_update').on("click", function (){
-                if(confirm(BotMessages.UpdateSystem)){
-		        $('#popup-update-system').popup('open');	
-                        $.get(url='/update', success=function (data) {
-                                $('#i_update_system_log').text(data);
-                                $('#b_update_system_close').removeClass('ui-disabled');
-                        });
-		}
         });
 });
 

@@ -6,9 +6,6 @@ $(document).on( "pageshow", '#page-program', function( event, ui ) {
         Blockly.inject(document.getElementById('blocklyDiv'),
             {path: '../../', toolbox: document.getElementById('toolbox'),
              scrollbars:CODERBOT_PROG_SCROLLBARS, maxBlocks:CODERBOT_PROG_MAXBLOCKS});
-        $('.blocklyToolboxDiv').appendTo('#page-program');
-        $('.blocklyTooltipDiv').appendTo('#page-program');
-        $('.blocklyWidgetDiv').appendTo('#page-program');
       }
 
       $('[href="#page-program"]').addClass( "ui-btn-active" );
@@ -102,6 +99,7 @@ $(document).on( "pagecreate", '#page-program', function( event ) {
 
     function saveProg() {
       // Generate Dom code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
       var xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
       var dom_code = Blockly.Xml.domToText(xml_code);
 
@@ -148,8 +146,8 @@ $(document).on( "pagecreate", '#page-program', function( event ) {
     }
 
     function showProg() {
-      // Generate Python code and display it.
-      Blockly.Python.INFINITE_LOOP_TRAP = null;
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
       var code = Blockly.Python.workspaceToCode();
       alert(code);
     }
@@ -157,7 +155,7 @@ $(document).on( "pagecreate", '#page-program', function( event ) {
     function runProg() {
 
       var bot = new CoderBot();
-      // Generate Python code and run it.
+      // Generate JavaScript code and run it.
       window.LoopTrap = 1000;  
       Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
       var code = Blockly.Python.workspaceToCode();

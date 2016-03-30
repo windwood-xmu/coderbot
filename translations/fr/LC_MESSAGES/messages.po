@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-03 21:39+0000\n"
+"POT-Creation-Date: 2015-04-04 00:32+0200\n"
 "PO-Revision-Date: 2015-10-10 00:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.1.1\n"
 
 #: templates/blocks_adv.xml:2 templates/blocks_std.xml:13
 msgid "Logic"
@@ -33,8 +34,8 @@ msgstr "Maths"
 msgid "Text"
 msgstr "Texte"
 
-#: templates/blocks_adv.xml:97 templates/blocks_adv.xml:104
-#: templates/blocks_adv.xml:111
+#: templates/blocks_adv.xml:96 templates/blocks_adv.xml:103
+#: templates/blocks_adv.xml:110
 msgid "text"
 msgstr "texte"
 
@@ -53,7 +54,7 @@ msgstr "Couleur"
 
 #: templates/blocks_adv.xml:170 templates/blocks_std.xml:19
 msgid "Variables"
-msgstr "Variables"
+msgstr ""
 
 #: templates/blocks_adv.xml:171
 msgid "Functions"
@@ -73,7 +74,7 @@ msgstr "Caméra"
 msgid "Sensor"
 msgstr "Détecteurs"
 
-#: templates/blocks_adv.xml:255 templates/blocks_std.xml:73
+#: templates/blocks_adv.xml:246 templates/blocks_std.xml:73
 msgid "Sound"
 msgstr "Son"
 
@@ -82,7 +83,7 @@ msgstr "Son"
 msgid "Control"
 msgstr "Contrôle"
 
-#: templates/config.html:3 templates/control.html:60
+#: templates/config.html:3 templates/control.html:63
 msgid "Back"
 msgstr "Reculer"
 
@@ -102,7 +103,7 @@ msgstr "Démarrage"
 msgid "Button"
 msgstr "Bouton"
 
-#: templates/config.html:18 templates/config.html:144
+#: templates/config.html:18 templates/config.html:127
 msgid "User Interface"
 msgstr "Interface utilisateur"
 
@@ -114,284 +115,198 @@ msgstr "Wifi"
 msgid "Restart, Halt"
 msgstr "Arrêter, Redémarrer"
 
-#: templates/config.html:25 templates/config.html:64
+#: templates/config.html:24 templates/config.html:63
 msgid "Movement assisted by vision"
 msgstr "Mouvement assisté par caméra"
 
-#: templates/config.html:28
+#: templates/config.html:27
 msgid "Step timing | distance / angle"
 msgstr "Pas de temps | distance / angle"
 
-#: templates/config.html:29 templates/config.html:67
+#: templates/config.html:28 templates/config.html:66
 msgid "Forward speed"
 msgstr "Vitesse d'avance"
 
-#: templates/config.html:31 templates/config.html:69
+#: templates/config.html:30 templates/config.html:68
 msgid "Forward elapse / distance"
 msgstr "Temps / Distance d'avance"
 
-#: templates/config.html:33 templates/config.html:71
+#: templates/config.html:32 templates/config.html:70
 msgid "Turn speed"
 msgstr "Vitesse de rotation"
 
-#: templates/config.html:35 templates/config.html:73
+#: templates/config.html:34 templates/config.html:72
 msgid "Turn elapse / angle"
 msgstr "Temps / Angle de rotation"
 
-#: templates/config.html:38
+#: templates/config.html:37
 msgid "Show control counter"
 msgstr "Afficher les compteurs"
 
-#: templates/config.html:41
+#: templates/config.html:40
 msgid "HUD image name"
 msgstr "Nom de l'image"
 
-#: templates/config.html:46
+#: templates/config.html:45
 msgid "Editor level"
 msgstr "Niveau de l'éditeur"
 
-#: templates/config.html:48
+#: templates/config.html:47
 msgid "Move"
 msgstr "2-3 ans"
 
-#: templates/config.html:50
+#: templates/config.html:49
 msgid "Basic"
 msgstr "3-6 ans"
 
-#: templates/config.html:52
+#: templates/config.html:51
 msgid "Standard"
 msgstr "6-10 ans"
 
-#: templates/config.html:54
+#: templates/config.html:53
 msgid "Advanced"
 msgstr "8 ans et plus"
 
-#: templates/config.html:57
+#: templates/config.html:56
 msgid "Program editor details"
 msgstr "Options de l'éditeur"
 
-#: templates/config.html:58
+#: templates/config.html:57
 msgid "Shows Editor scrollbars"
 msgstr "Afficher les ascenceurs"
 
-#: templates/config.html:60
+#: templates/config.html:59
 msgid "Save program before every run"
 msgstr "Enregistrer le programme avant chaque exécution"
 
-#: templates/config.html:76
+#: templates/config.html:75
 msgid "Other program parameters"
 msgstr "Autres paramètres de programmation"
 
-#: templates/config.html:77
+#: templates/config.html:76
 msgid "Auto record video on program run"
 msgstr "Enregistrer automatiquement une vidéo lorsque un programme est exécuté"
 
-#: templates/config.html:80
+#: templates/config.html:79
 msgid "Max number of blocks allowed"
 msgstr "Nombre maximum de bloques autorisés"
 
-#: templates/config.html:84
+#: templates/config.html:83
 msgid "Start sound"
 msgstr "Son au démarrage"
 
-#: templates/config.html:86
+#: templates/config.html:85
 msgid "Stop sound"
 msgstr "Son à l'arrêt"
 
-#: templates/config.html:88
+#: templates/config.html:87
 msgid "Shutter sound"
 msgstr "Son à la prise de photo"
 
-#: templates/config.html:92
+#: templates/config.html:91
 msgid "Camera parameters"
 msgstr "Paramètres de la caméra"
 
-#: templates/config.html:93
+#: templates/config.html:92
 msgid "Exposure mode"
 msgstr "Mode d'exposition"
 
-#: templates/config.html:102
-msgid "Camera refresh timeout"
-msgstr "Temps de rafraîchissement de la caméra"
-
-#: templates/config.html:104
-msgid "Camera jpeg quality"
-msgstr "La qualité de JPEG de la caméra"
-
-#: templates/config.html:106
-msgid "CV image resize factor (1/x)"
-msgstr "Facteur de redimensionnement d'image puor CV (1 / x)"
-
-#: templates/config.html:108
-msgid "Path object min size"
-msgstr "Taille objet min pour Chemin"
-
-#: templates/config.html:110
-msgid "Path object max size"
-msgstr "Taille objet max pour Chemin"
-
-#: templates/config.html:112
-msgid "Color object min size"
-msgstr "Taille objet min pour Couleur"
-
-#: templates/config.html:114
-msgid "Color object max size"
-msgstr "Taille objet max pour Couleur"
-
-#: templates/config.html:118
+#: templates/config.html:103
 msgid "Motor control mode"
 msgstr "Mode de fonctionnement des moteurs"
 
-#: templates/config.html:120
-msgid "Trim factor (1.0 = center)"
-msgstr "Facteur de correction (1.0 = centre)"
-
-#: templates/config.html:122
+#: templates/config.html:105
 msgid "Power (target angle -15)"
 msgstr "Puissance (pour un angle de -15)"
 
-#: templates/config.html:124
+#: templates/config.html:107
 msgid "Power (target angle -4)"
 msgstr "Puissance (pour un angle de -4)"
 
-#: templates/config.html:126
+#: templates/config.html:109
 msgid "Power (target angle -1)"
 msgstr "Puissance (pour un angle de -1)"
 
-#: templates/config.html:130
+#: templates/config.html:113
 msgid "Load at start"
 msgstr "Charger le programme au démarrage"
 
-#: templates/config.html:135
+#: templates/config.html:118
 msgid "Button function"
 msgstr "Fonction du bouton"
 
-#: templates/config.html:136
+#: templates/config.html:119
 msgid "None"
 msgstr "Rien"
 
-#: templates/config.html:138
+#: templates/config.html:121
 msgid "Start/Stop current program"
 msgstr "Démarre/Arrête le programme en cours"
 
-#: templates/config.html:145
+#: templates/config.html:128
 msgid "Show Control page"
 msgstr "Afficher la page de contrôle"
 
-#: templates/config.html:147
+#: templates/config.html:130
 msgid "Show Control movement commands"
 msgstr "Afficher les commandes de déplacement sur la page de contrôle"
 
-#: templates/config.html:149
+#: templates/config.html:132
 msgid "Show Program page"
 msgstr "Afficher la page de programmation"
 
-#: templates/config.html:151
+#: templates/config.html:134
 msgid "Show Preferences button"
 msgstr "Afficher le bouton 'Paramètres'"
 
-#: templates/config.html:156
+#: templates/config.html:139
 msgid "WiFi Client access mode"
 msgstr "Mode d'accès du client Wifi"
 
-#: templates/config.html:159
-msgid "Halt"
-msgstr "Arrêter"
-
-#: templates/config.html:160
-msgid "Restart"
-msgstr "Relancer"
-
-#: templates/config.html:161
-msgid "Reboot"
-msgstr "Redémarrer"
-
-#: templates/config.html:162
-msgid "Update System"
-msgstr ""
-
-#: templates/config.html:165 templates/config.html:186
+#: templates/config.html:142 templates/config.html:164
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/config.html:166 templates/program.html:18
+#: templates/config.html:143 templates/program.html:18
 #: templates/program.html:26
 msgid "Save"
 msgstr "Enregistrer"
 
-#: templates/config.html:173
+#: templates/config.html:151
 msgid "WiFi Client mode access data"
 msgstr "Paramétrage de la connexion Wifi"
 
-#: templates/config.html:175
+#: templates/config.html:153
 msgid "WiFi mode"
 msgstr "Mode Wifi"
 
-#: templates/config.html:177
+#: templates/config.html:155
 msgid "Access Point"
-msgstr "Access Point"
+msgstr ""
 
-#: templates/config.html:179
+#: templates/config.html:157
 msgid "Client"
-msgstr "Client"
+msgstr ""
 
-#: templates/config.html:181
+#: templates/config.html:159
 msgid "WiFi name"
 msgstr "Nom du réseau Wifi"
 
-#: templates/config.html:183
+#: templates/config.html:161
 msgid "WiFi password"
 msgstr "Mot de passe du réseau Wifi"
 
-#: templates/config.html:187
+#: templates/config.html:165
 msgid "Apply Wifi config"
 msgstr "Appliquer"
 
-#: templates/config.html:194
+#: templates/config.html:172
 msgid "WiFi AP mode access"
 msgstr "Mode Access Point"
 
-#: templates/config.html:195
-msgid "Access Point mode is being set"
-msgstr ""
-
-#: templates/config.html:197 templates/config.html:209
-msgid "Wait 30 seconds"
-msgstr ""
-
-#: templates/config.html:198
-msgid "Connect your device to the \"coderbot\" named wifi"
-msgstr ""
-
-#: templates/config.html:199 templates/config.html:211
-msgid "Click on the following link"
-msgstr ""
-
-#: templates/config.html:206
+#: templates/config.html:184
 msgid "WiFi Client mode access"
 msgstr "Mode Client"
-
-#: templates/config.html:207
-msgid "Client mode is being set"
-msgstr ""
-
-#: templates/config.html:210
-msgid ""
-"Connect your device to your own wifi (wifi network must be connected to "
-"internet)"
-msgstr ""
-
-#: templates/config.html:218
-msgid "System update"
-msgstr ""
-
-#: templates/config.html:219
-msgid "Update log (it may require several minutes)"
-msgstr ""
-
-#: templates/config.html:221 templates/config_params.html:30
-msgid "Close"
-msgstr "Fermer"
 
 #: templates/config_params.html:20
 msgid "Say what:"
@@ -429,16 +344,22 @@ msgstr "en cours d'exécution"
 msgid "stopped"
 msgstr "arrêté"
 
-#: templates/config_params.html:29 templates/control.html:48
+#: templates/config_params.html:29 templates/control.html:51
 #: templates/program.html:32
 msgid "Stop"
 msgstr "Arrêter"
 
-#: templates/config_params.html:31
-msgid ""
-"Update System? (this requires that CoderBot is connected to the internet "
-"(via wifi or lan cable, the operation will take a few minutes)."
-msgstr ""
+#: templates/config.html:144
+msgid "Restart"
+msgstr "Relancer"
+
+#: templates/config.html:145
+msgid "Reboot"
+msgstr "Redémarrer"
+
+#: templates/config_params.html:30
+msgid "Close"
+msgstr "Fermer"
 
 #: templates/control.html:5 templates/program.html:5
 msgid "Preferences"
@@ -448,41 +369,41 @@ msgstr "Préférences"
 msgid "Program"
 msgstr "Programmation"
 
-#: templates/control.html:21
+#: templates/control.html:19
+msgid "Halt"
+msgstr "Arrêter"
+
+#: templates/control.html:24
 msgid "Forward"
 msgstr "Avancer"
 
-#: templates/control.html:24
+#: templates/control.html:27
 msgid "Left"
 msgstr "Gauche"
 
-#: templates/control.html:25
+#: templates/control.html:28
 msgid "Right"
 msgstr "Droite"
 
-#: templates/control.html:28
+#: templates/control.html:31
 msgid "Backward"
 msgstr "Reculer"
 
-#: templates/control.html:37
+#: templates/control.html:40
 msgid "Say"
 msgstr "Parler"
 
-#: templates/control.html:42
+#: templates/control.html:45
 msgid "Photo"
-msgstr "hoto\""
+msgstr ""
 
-#: templates/control.html:47
+#: templates/control.html:50
 msgid "Rec"
 msgstr "Enregistrer"
 
-#: templates/control.html:51
+#: templates/control.html:54
 msgid "Photos"
-msgstr "Photos"
-
-#: templates/control.html:72
-msgid "Color at point: "
-msgstr "Couleur au point: "
+msgstr ""
 
 #: templates/program.html:16 templates/program.html:24
 msgid "New"
@@ -528,10 +449,3 @@ msgstr "Enregistrer le programme sous"
 #: templates/program.html:67
 msgid "Load Program"
 msgstr "Sélectionner le programme à ouvrir"
-
-#~ msgid ""
-#~ "Update System? (this requires a internet"
-#~ " connection and will takes a few "
-#~ "minutes)."
-#~ msgstr ""
-

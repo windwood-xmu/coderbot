@@ -1,0 +1,84 @@
+{% if pictures %}
+  <script type="text/javascript">
+    $(function() {
+      /* Handle to remove a photo */
+      $(".photobutton a").on("vclick", function(e) {
+          $this = $(this);
+          $.getJSON($this.attr("href"), function(json) {
+              if (json.result) {
+                  $(".photobutton[title='" + $this.attr('title') + "']").remove();
+              }
+          });
+          e.preventDefault();
+          e.stopPropagation();
+      });
+
+      /* Handle taphold to hide/show delete buttons */
+      $(".photobutton").on("taphold", function() {
+          $(".photobutton a").fadeToggle();
+          $(this).data("tapholdEvent", true);
+      });
+      $(".photobutton").on("vmouseout", function() {
+          $(this).removeData("tapholdEvent");
+      });
+
+      /* Handle click to load image and show it in a popup */
+      $(".photobutton").on("vclick", function(e) {
+          var $this = $(this);
+          if (e.type == "vclick" && $this.data("tapholdEvent")) {
+            e.preventDefault();
+            $this.removeData("tapholdEvent");
+            return;
+          };
+
+          $type = $this.attr("file-type");
+          if ($type == "picture") {
+            $("img", "#photopopup").attr("src", $this.attr("alt")).show();
+            $("video", "#photopopup").attr("src", "").hide();
+          } else {
+            $("img", "#photopopup").attr("src", "").hide();
+            $("video", "#photopopup").attr("src", $this.attr("alt")).show();
+            $("#photopopup").popup("open", {transition: "pop"});
+            return;
+          }
+          $.mobile.loading("show", {
+            text: "{% trans %}Loading{% endtrans %}",
+            textVisible: true,
+            theme: $.mobile.loader.prototype.options.theme,
+            textOnly: false,
+            html: ""
+          });
+
+          // Fallback in case the browser doesn't fire a load event
+          var fallback = setTimeout(function() {
+            $.mobile.loading("hide");
+            $("#photopopup").popup("open", {transition: "pop"});
+          }, 5000);
+
+          // Wait with opening the popup until the popup image has been loaded in the DOM.
+          // This ensures the popup gets the correct size and position
+          $("#photopopup [src!='']").load(function() {
+            $.mobile.loading("hide");
+            // Open the popup
+            $("#photopopup").popup("open", {transition: "pop"});
+            // Clear the fallback
+            clearTimeout(fallback);
+          });
+      });
+    });
+  </script>
+  <style>
+  </style>
+  {% for filename, type in pictures %}
+    <div title="{{ filename }}" file-type="{{ type }}" class="photobutton ui-btn ui-corner-all ui-shadow ui-btn-inline" alt="/camera/DCIM/{{ filename }}" style="position:relative;">
+      <a href="/camera/DCIM/{{ filename }}?delete=True" title="{{ filename }}" style="display: none;" class="ui-btn ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-right">{% trans %}Delete{% endtrans %}</a>
+      <div style="width: 80px; height: 60px; line-height: 60px; overflow: hidden;">
+        <img src="{% if type == 'picture' %}/camera/DCIM/{{ filename }}?thumb=True{% else %}/css/images/icons-png/video-black.png{% endif %}" style="vertical-align: middle;"></img>
+      </div>
+      <div style="max-width: 80px; overflow: hidden;">{{ filename }}</div>
+    </div>
+  {% endfor %}
+{% else %}
+  {% trans %}No image founds{% endtrans %}.
+{% endif %}
+
