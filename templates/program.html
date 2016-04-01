@@ -4,6 +4,7 @@
 {% block head %}
   <script type="text/javascript" src="js/blockly/blockly_compressed.js"></script>
   <script type="text/javascript" src="js/blockly/blocks_compressed.js"></script>
+  <script type="text/javascript" src="js/blockly/messages.js"></script>
   <script type="text/javascript" src="js/blockly/fr.js"></script>
   <script type="text/javascript" src="js/blockly/javascript_compressed.js"></script>
   <script type="text/javascript" src="js/blockly/python_compressed.js"></script>
@@ -35,11 +36,16 @@
     // Inject Blockly into the div
     $(function() {
       Blockly.inject(document.getElementById('blocklyDiv'), {
-        path: '../../',
+        media: '/media/',
         toolbox: document.getElementById('toolbox'),
-        comments: true,
         maxBlocks: Infinity,
-        zoom: false
+        zoom:
+         {controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 2,
+          minScale: 0.33,
+          scaleSpeed: 1.2}
       });
     });
 
