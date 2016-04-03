@@ -50,19 +50,6 @@
     });
 
     $(function() {
-      // Function to create a new program
-      function createNewProg (filename, overwrite=false) {
-        $.getJSON("/program", {action: 'create', filename: filename, overwrite: overwrite}, function(json){
-          if (!json.result) {
-            if (confirm("{% trans %}Filename already exists, overwrite ?{% endtrans %}")) {
-              createNewProg(filename, overwrite=true);
-            }
-          } else {
-            $("#lblFilename").html(json.filename);
-            Blockly.mainWorkspace.clear();
-          }
-        });
-      };
       // Function to load an existing program
       function loadProg (filename) {
         $.getJSON("/program/"+filename, function(json){
@@ -72,7 +59,7 @@
             Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
             $("#lblFilename").html(filename);
           } else {
-            notify("{% trans %}Unable to open program{% endtrans %} "+filename+".");
+            notify("{% trans %}Unable to open program{% endtrans %} "+filename+"."+(json.error?"\n{% trans %}"+json.error+"{% endtrans %}":""));
           }
         });
       };
@@ -80,12 +67,12 @@
       function saveasProg (filename, overwrite=false) {
         xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         dom_code = Blockly.Xml.domToText(xml_code);
-        py_code  = Blockly.Python.workspaceToCode();
-        var data = {action: "save as", filename: filename, overwrite: overwrite, dom_code: dom_code, py_code: py_code};
-        $.post("/program", data, function(json){
+        py_code  = Blockly.Python.workspaceToCode(Blockly.mainWorkspace);
+        var data = {action: "save as", overwrite: overwrite, dom_code: dom_code, py_code: py_code};
+        $.post("/program/"+filename, data, function(json){
           if (!json.result) {
             if (confirm("{% trans %}Filename already exists, overwrite ?{% endtrans %}")) {
-              copyProg(filename, overwrite=true);
+              saveasProg(filename, overwrite=true);
             }
           } else {
             $("#lblFilename").html(json.filename);
@@ -94,14 +81,6 @@
       };
 
       // Event handlers for menu buttons
-
-      $("#frmNewProg").on('submit', function() {
-        if (validate($("#frmNewProg"))) {
-          $("#dlgNewProg").popup("close");
-          createNewProg($('#iNewName').val());
-        }
-        return false;
-      });
 
       $("#frmLoadProg").on('submit', function() {
         if (validate($("#frmLoadProg"))) {
@@ -114,17 +93,26 @@
       $("#frmSaveasProg").on('submit', function() {
         if (validate($("#frmSaveasProg"))) {
           $("#dlgSaveasProg").popup("close");
-          copyProg($('#iSaveasName').val());
+          saveasProg($('#iSaveasName').val());
         }
         return false;
       });
 
       $("#btnSaveProg").on('vclick', function() {
-        xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        dom_code = Blockly.Xml.domToText(xml_code);
-        py_code  = Blockly.Python.workspaceToCode();
-        var data = {action: "save", filename: $("#lblFilename").text(), dom_code: dom_code, py_code: py_code};
-        $.post("/program/"+$("#lblFilename").text(), data);
+        if ($("#lblFilename").text() == "") {
+          $("#dlgSaveasProg").popup("open");
+        } else {
+          xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+          dom_code = Blockly.Xml.domToText(xml_code);
+          py_code  = Blockly.Python.workspaceToCode(Blockly.mainWorkspace);
+          var data = {action: "save", dom_code: dom_code, py_code: py_code};
+          $.post("/program/"+$("#lblFilename").text(), data);
+        }
+      });
+
+      $("#btnNewProg").on('vclick', function() {
+        $("#lblFilename").html("");
+        Blockly.mainWorkspace.clear();
       });
 
       // Dynamically fill the list of programs before popup opening
@@ -152,13 +140,13 @@
   <div class="ui-content" style="padding: 0px; overflow-y: hidden;">
     <div data-role="header">
       <div data-role="controlgroup" data-mini="true" data-type="horizontal" style="display: inline;">
-        <a href="#dlgNewProg" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-notext ui-icon-cb-new">{% trans %}New{% endtrans %}</a>
+        <a id="btnNewProg" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-notext ui-icon-cb-new">{% trans %}New{% endtrans %}</a>
         <a id="btnLoadProg" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-cb-load">{% trans %}Load{% endtrans %}...</a>
         <a id="btnSaveProg" class="ui-btn ui-corner-all ui-btn-icon-notext ui-icon-cb-save">{% trans %}Save{% endtrans %}</a>
         <a href="#dlgSaveasProg" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-cb-copy">{% trans %}Save as{% endtrans %}</a>
       </div>
       <div data-role="controlgroup" data-mini="true" data-type="horizontal" style="display: inline;">
-        <button id="btnShowProg" data-icon="eye" onclick="alert(Blockly.Python.workspaceToCode());">{% trans %}Show{% endtrans %}</button>
+        <button id="btnShowProg" data-icon="eye" onclick="alert(Blockly.Python.workspaceToCode(Blockly.mainWorkspace));">{% trans %}Show{% endtrans %}</button>
         <button id="btnRunProg" data-icon="cb-run">{% trans %}Run{% endtrans %}</button>
         <button id="btnStopProg" data-icon="cb-stop">{% trans %}Stop{% endtrans %}</button>
       </div>
@@ -168,19 +156,6 @@
     <div id="blocklyDiv"></div>
   </div>
 
-  <div data-role="popup" id="dlgNewProg" data-overlay-theme="a" class="ui-corner-all">
-    <form id="frmNewProg" data-ajax="false">
-      <div style="padding:10px 20px;">
-        <h3>{% trans %}New Program{% endtrans %}</h3>
-        <label for="iNewName" class="ui-hidden-accessible">{% trans %}Program name{% endtrans %}:</label>
-        <input id="iNewName" type="text" name="name" value="" placeholder="{% trans %}Program name{% endtrans %}" class="required">
-        <fieldset class="ui-grid-a">
-          <div class="ui-block-a"><input type="button" data-rel="back" data-icon="delete" value="{% trans %}Cancel{% endtrans %}" /></div>
-          <div class="ui-block-b"><input type="submit" data-icon="check" value="{% trans %}Create{% endtrans %}" /></div>
-        </fieldset>
-      </div>
-    </form>
-  </div>
   <div data-role="popup" id="dlgLoadProg" data-overlay-theme="a" class="ui-corner-all">
     <form id="frmLoadProg" data-ajax="false">
       <div style="padding:10px 20px;">
@@ -224,3 +199,4 @@
   </div>
 #}
 {% endblock body %}
+

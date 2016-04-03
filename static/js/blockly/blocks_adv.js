@@ -1,7 +1,7 @@
 'use strict';
 
-Blockly.HSV_SATURATION=.99;
-Blockly.HSV_VALUE=.99;
+Blockly.HSV_SATURATION=0.65;
+Blockly.HSV_VALUE=0.85;
 
 var TOOLTIPS = {
   "FORWARD":  Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,

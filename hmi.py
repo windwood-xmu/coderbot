@@ -1,21 +1,22 @@
 import time
-import coderbot
 import utils.cv
 from config import Config
+from program import Program
+from coderbot import CoderBot
 import Image
 import StringIO
 from re import findall
+import errno
 
 from flask import Flask, render_template, request, send_file, redirect, Response, make_response, jsonify, url_for, abort
 from flask.ext.babel import Babel
 
 app = Flask(__name__, static_url_path='')
 app.debug = True
+app.program = None
 babel = Babel(app)
 
 RECORD_PATH = 'DCIM'
-PROGRAM_PATH = 'data'
-PROGRAM_EXTENSION = 'bot'
 
 # TODO :
 
@@ -31,7 +32,7 @@ def quoted(s):
 
 def run_server(prog=None):
     app.shutdown_requested = False
-    app.bot = coderbot.CoderBot()
+    app.bot = CoderBot()
     app.bot.camera.setDCIMpath(Config().get('record_path', RECORD_PATH))
 
     if prog is not None:
@@ -187,78 +188,37 @@ def handle_photos(filename):
     return send_file(join(Config().get('record_path', RECORD_PATH), filename))
 
 # Path for program API control
-# TODO : Simplifier le code de cette partie
-# Utiliser une classe pour faire tout cela.
-@app.route("/program", methods=['GET', 'POST'])
+@app.route("/program")
 def handle_programs():
-    action = request.form.get ('action', request.args.get('action'))
-    if not action in [None, 'create', 'copy', 'duplicate', 'save as', 'abort', 'status']: abort(400) # Bad request
-    if action == 'create':
-        filename = request.args.get('filename')
-        overwrite = not request.args.get('overwrite').lower() in ['false', '0', '']
-        if not filename: abort(400) # Bad request
-
-        from os.path import exists, join
-        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (request.args.get('filename'), Config().get('program_extension', PROGRAM_EXTENSION)))
-        if exists(path) and not overwrite:
-            return jsonify(result=False, error='File exists', filename=filename)
-        # Create an empty file to filename reservation
-        try: open(path, 'w').close()
-        except: abort(500) # Internal error
-        return jsonify(result=True, filename=filename)
-    if action in ['copy', 'duplicate', 'save as']:
-        from os.path import exists, join
-        import json
-
-        filename = request.form.get('filename')
-        overwrite = not request.form.get('overwrite').lower() in ['false', '0', '']
-        if not filename: abort(400) # Bad request
-        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (request.form.get('filename'), Config().get('program_extension', PROGRAM_EXTENSION)))
-        if exists(path) and not overwrite:
-            return jsonify(result=False, error='File exists', filename=filename)
-        data = {'name': request.form.get('filename'),
-            'dom_code': request.form.get('dom_code'),
-            'py_code': request.form.get('py_code')}
-        try:
-            with open(path, 'w') as f:
-                json.dump(data, f, indent=4, sort_keys=True)
-        except: abort(500) # Internal error
-        return jsonify(result=True, filename=filename)
+    action = request.args.get('action')
     if action is None:
-        from os import listdir
-        from os.path import isfile, join, splitext
-        files = [f for f in listdir(Config().get('program_path', PROGRAM_PATH)) if isfile(join(Config().get('program_path', PROGRAM_PATH), f))]
-        files = [splitext(f)[0] for f in files if splitext(f)[1].lower() == ".%s" % Config().get('program_extension', PROGRAM_EXTENSION)]
-        return jsonify(result=True, files=files)
+        return jsonify(result=True, files=Program.listdir())
     abort(501) # Not implemented
 @app.route("/program/<filename>", methods=['GET', 'POST'])
 def handle_program(filename):
-    from os.path import join
-    import json
-
     action = request.form.get('action', request.args.get('action'))
     if action is None and request.method == 'POST': abort(405) # Not allowed
-    if not action in [None, 'load', 'save', 'delete', 'exec']: abort(400) # Bad request
+    if not action in [None, 'save', 'save as', 'delete', 'exec', 'abort', 'status']: abort(400) # Bad request
+    if action in ['save as']:
+        overwrite = not (request.form.get('overwrite', '').lower() in ['false', '0', ''])
+        try:
+            app.program = Program.new(filename, overwrite, request.form.get('dom_code'), request.form.get('py_code'))
+            app.program.save()
+        except OSError as e:
+            if e.errno == errno.EEXIST: return jsonify(result=False, error='File exists', filename=filename)
+            else: raise
+        return jsonify(result=True, filename=filename)
     if action == 'save':
-        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (filename, Config().get('program_extension', PROGRAM_EXTENSION)))
-        data = {'name': request.form.get('filename'),
-            'dom_code': request.form.get('dom_code'),
-            'py_code': request.form.get('py_code')}
-        try:
-            with open(path, 'w') as f:
-                json.dump(data, f, indent=4, sort_keys=True)
-        except: abort(500) # Internal error
+        if app.program is None: abort(410) # Gone
+        app.program.update(request.form.get('dom_code'), request.form.get('py_code'))
+        app.program.save()
         return jsonify(result=True)
-    if action in [None, 'load']:
-        path = join(Config().get('program_path', PROGRAM_PATH), "%s.%s" % (filename, Config().get('program_extension', PROGRAM_EXTENSION)))
-        try:
-            print path
-            with open(path, 'r') as f:
-                data = json.load(f)
-                print data
-            print data
-            return jsonify(data)
-        except: abort(500) # Internal error
+    if action is None:
+        try: app.program = Program.load(filename)
+        except OSError as e:
+            if e.errno == errno.ENOENT: abort(404) # File not found
+            else: raise
+        return jsonify(app.program.get())
     abort(501) # Not implemented
 
 
