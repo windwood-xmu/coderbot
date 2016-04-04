@@ -115,6 +115,53 @@
         Blockly.mainWorkspace.clear();
       });
 
+
+      $("#btnRunProg").on('vclick', function() {
+        Blockly.Python.INFINITE_LOOP_TRAP = '  program.infinite_loop_trap("via web UI")\n';
+        xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        dom_code = Blockly.Xml.domToText(xml_code);
+        py_code  = Blockly.Python.workspaceToCode(Blockly.mainWorkspace);
+        Blockly.Python.INFINITE_LOOP_TRAP = null;
+        var data = {action: "exec", dom_code: dom_code, py_code: py_code};
+        $.post("/program/"+$("#lblFilename").text(), data, function(json) {
+          if (json.result) {
+            $("#dlgRunProg")
+              .popup("open")
+              .data('refresh_status_interval', setInterval(function() {
+                $.ajax({
+                  dataType: "json",
+                  url: "/program/"+$("#lblFilename").text(),
+                  global: false,
+                  data: {action: 'status'},
+                  success: function(json) {
+                    if (json.status) {
+                      $("#lblStatus").html("CoderBot {%trans%}is running{%endtrans%}").parent().removeClass('ui-bar-b').addClass('ui-bar-a');
+                      $("#btnStopProg").html('{%trans%}Stop{%endtrans%}');
+                    } else {
+                      $("#lblStatus").html('CoderBot {%trans%}stopped{%endtrans%}').parent().removeClass('ui-bar-a').addClass('ui-bar-b');
+                      $("#btnStopProg").html('{%trans%}Close{%endtrans%}');
+                    };
+                  },
+                  error: function(event, jqh, request, error) {
+                    notify(error);
+                    $("#lblStatus").html('CoderBot {%trans%}stopped{%endtrans%}').parent().removeClass('ui-bar-a').addClass('ui-bar-b');
+                    $("#btnStopProg").html('{%trans%}Close{%endtrans%}');
+                  }
+                });
+              }, 2000));
+          }
+        });
+      });
+
+      $("#btnStopProg").on('vclick', function() {
+        $.getJSON("/program/"+$("#lblFilename").text(), {action: 'abort'}, function(json) {
+          $("#dlgRunProg").popup("close");
+          clearInterval($("#dlgRunProg").data('refresh_status_interval'));
+          $("#lblStatus").html("CoderBot {%trans%}is running{%endtrans%}").parent().removeClass('ui-bar-b').addClass('ui-bar-a');
+          $("#btnStopProg").html('{%trans%}Stop{%endtrans%}');
+        });
+      });
+
       // Dynamically fill the list of programs before popup opening
       $("#btnLoadProg").on('vclick', function() {
         $("#frmLoadProg select").empty();
@@ -148,7 +195,7 @@
       <div data-role="controlgroup" data-mini="true" data-type="horizontal" style="display: inline;">
         <button id="btnShowProg" data-icon="eye" onclick="alert(Blockly.Python.workspaceToCode(Blockly.mainWorkspace));">{% trans %}Show{% endtrans %}</button>
         <button id="btnRunProg" data-icon="cb-run">{% trans %}Run{% endtrans %}</button>
-        <button id="btnStopProg" data-icon="cb-stop">{% trans %}Stop{% endtrans %}</button>
+        <button data-icon="cb-stop">{% trans %}Stop{% endtrans %}</button>
       </div>
       <span id="lblFilename"></span>
     </div>
@@ -182,12 +229,22 @@
       </div>
     </form>
   </div>
+  <div data-role="popup" id="dlgRunProg" data-overlay-theme="a" class="ui-corner-all">
+    <div data-role="header" data-theme="a">
+      <h1 id="lblStatus">CoderBot {% trans %}is running{% endtrans %}</h1>
+    </div>
+    <div role="main" class="ui-content">
+      <div class="ui-content-stream" style="width:640px; height:480px;"></div>
+      <button id="btnStopProg" data-icon="delete">{% trans %}End program{% endtrans %}</button>
+      </fieldset>
+    </div>
+  </div>
 {% endblock page %}
 
 {% block body %}
 {#
   <div data-role="popup" id="dialogRunning" data-history="false" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:680px;">
-    <div data-role="header" data-theme="a">
+    <div data-role="header">
       <h1 id="i_dialog_running_title">CoderBot {% trans %}is running{% endtrans %}</h1> 
     </div>
     <div role="main" class="ui-content">

@@ -42,8 +42,8 @@ TODO
 ----
 
 **Blockly**
-- [ ] Upgrade to the latest blockly version (only advanced blocks are done for now)
-- [ ] Write the block's python generator to be compatible with the new Coderbot object (work is started)
+- [.] Upgrade to the latest blockly version (only advanced blocks are done for now)
+- [.] Write the block's python generator to be compatible with the new Coderbot object (work is started)
 - [ ] Write new blocks (like GPIO's sensor blocks, hear blocks, event driven blocks, etc...)
 - [ ] Simplify code generation when the admin configuration page is done by using decorated classes or subclasses for coderbot.motors calls (to render readable code for childs)
 - [ ] Use private user configuration for basic blocks (for default parameters)
@@ -51,7 +51,7 @@ TODO
 
 **Program API**
 - [x] Rewrite cleanly the program API
-- [ ] Integrate the run/abort program feature
+- [x] Integrate the run/abort program feature (execution is done in a secure environment)
 
 **Web based UI**
 - [ ] Write the configuration page
@@ -76,4 +76,5 @@ TODO
 - [ ] Wifi configuration helper (via UI web page)
 - [ ] Audio hearing by using microphone
 - [ ] 3D mapping environment (not sure raspberry can do it alone)
+- [ ] Review all translation files
 

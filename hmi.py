@@ -199,7 +199,7 @@ def handle_program(filename):
     action = request.form.get('action', request.args.get('action'))
     if action is None and request.method == 'POST': abort(405) # Not allowed
     if not action in [None, 'save', 'save as', 'delete', 'exec', 'abort', 'status']: abort(400) # Bad request
-    if action in ['save as']:
+    if action == 'save as':
         overwrite = not (request.form.get('overwrite', '').lower() in ['false', '0', ''])
         try:
             app.program = Program.new(filename, overwrite, request.form.get('dom_code'), request.form.get('py_code'))
@@ -213,6 +213,18 @@ def handle_program(filename):
         app.program.update(request.form.get('dom_code'), request.form.get('py_code'))
         app.program.save()
         return jsonify(result=True)
+    if action == 'exec':
+        if app.program is None: abort(410) # Gone
+        app.program.update(request.form.get('dom_code'), request.form.get('py_code'))
+        if Config().get('program_autosave_on_run', False): app.program.save()
+        return jsonify(result=app.program.start())
+    if action == 'abort':
+        if app.program is None: abort(410) # Gone
+        app.program.stop()
+        return jsonify(result=True)
+    if action == 'status':
+        if app.program is None: abort(410) # Gone
+        return jsonify(status=app.program.isRunning())
     if action is None:
         try: app.program = Program.load(filename)
         except OSError as e:

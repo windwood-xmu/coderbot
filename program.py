@@ -2,8 +2,10 @@ from os.path import exists as pathexists, isfile, join as path_join, splitext
 from os import strerror, unlink, listdir
 import errno
 import json
+import threading
 
 from config import Config
+from coderbot import CoderBot
 
 # Default values, overwrited by admin configuration
 PROGRAM_PATH = 'data'
@@ -59,6 +61,9 @@ class Program(object):
         self._name = filename
         self._dom  = dom
         self._code = code
+        self._running = False
+        self._shutdown = False
+        self._thread = None
 
     def update(self, dom=None, code=None):
         # save in self instance dom and/or code
@@ -89,19 +94,45 @@ class Program(object):
 
     def start(self):
         # if file is loaded
+        if self._running: raise RuntimeError('already running')
+        if not self._code: return False
         # exec in a separate thread the _run method
-        pass
+        self._running = True
+        self._thread = threading.Thread(target=self._run)
+        self._thread.start()
+        return True
 
     def stop(self):
         # try to abort the program
-        # and wait for it (perhaps with timeout to force shutdown
-        pass
+        # and wait for it (perhaps with timeout to force shutdown)
+        if self._running:
+            self._shutdown = True
+            self._thread.join()
 
-    def status(self):
+    def isRunning(self):
         # get the running status of the program
-        pass
+        return self._running
+
+    def infinite_loop_trap(self, msg=""):
+        if self._shutdown:
+            raise KeyboardInterrupt(msg)
 
     def _run(self):
         # exec in a secure environment the coderbot
-        pass
+        coderbot = CoderBot()
+        glbs = {'__name__': self._name,
+          'program': self,
+          'config': Config(),
+          'coderbot': coderbot
+          }
+        if Config().get('program_video_rec', False):
+            coderbot.camera.start_recording()
+        try:
+            exec(self._code, glbs)
+        except: raise
+        finally:
+            coderbot.camera.stop_recording()
+            coderbot.motors.stop()
+            self._running = False
+            self._shutdown = False
 

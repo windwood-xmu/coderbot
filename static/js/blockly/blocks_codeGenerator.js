@@ -30,46 +30,28 @@ Blockly.Python['coderbot_repeat'] = function(block) {
 
 Blockly.Python['coderbot_moveForward'] = function(block) {
   // Generate Python for moving forward.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
-  Blockly.Python.definitions_['import_config'] = "from config import Config";
-  Blockly.Python.definitions_['init_config'] = "config = Config('user')";
-  return 'coderbot.motors.forward(speed=config.get("default_speed_move"), elapse=config.get("default_elapse"))\n';
+  return 'coderbot.motors.forward(speed=config.get("default_speed_move", 100), elapse=config.get("default_elapse", 1))\n';
 };
 
 Blockly.Python['coderbot_moveBackward'] = function(block) {
   // Generate Python for moving forward.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
-  Blockly.Python.definitions_['import_config'] = "from config import Config";
-  Blockly.Python.definitions_['init_config'] = "config = Config('user')";
-  return 'coderbot.motors.backward(speed=config.get("default_speed_move"), elapse=config.get("default_elapse"))\n';
+  return 'coderbot.motors.backward(speed=config.get("default_speed_move", 100), elapse=config.get("default_elapse", 1))\n';
 };
 
 Blockly.Python['coderbot_turnLeft'] = function(block) {
   // Generate Python for turning left.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
-  Blockly.Python.definitions_['import_config'] = "from config import Config";
-  Blockly.Python.definitions_['init_config'] = "config = Config('user')";
-  return 'coderbot.motors.left(speed=config.get("default_speed_turn"), elapse=config.get("default_elapse"))\n';
+  return 'coderbot.motors.left(speed=config.get("default_speed_turn", 100), elapse=config.get("default_elapse", 1))\n';
 };
 
 Blockly.Python['coderbot_turnRight'] = function(block) {
   // Generate Python for turning left or right.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
-  Blockly.Python.definitions_['import_config'] = "from config import Config";
-  Blockly.Python.definitions_['init_config'] = "config = Config('user')";
-  return 'coderbot.motors.right(speed=config.get("default_speed_turn"), elapse=config.get("default_elapse"))\n';
+  return 'coderbot.motors.right(speed=config.get("default_speed_turn", 100), elapse=config.get("default_elapse", 1))\n';
 };
 
 Blockly.Python['coderbot_say'] = function(block) {
   // Generate Python for turning left or right.
   var text = Blockly.Python.valueToCode(block, 'TEXT',
     Blockly.Python.ORDER_NONE) || '\'\'';
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   return 'coderbot.sound.say(' + text + ')\n';
 };
 
@@ -94,8 +76,6 @@ Blockly.Python['coderbot_adv_move'] = function(block) {
   var action = tuple[0];
   var speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
   var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE);
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   var code = "coderbot." + action + "(speed=" + speed + ", elapse="+elapse+")\n";
   return code;
 };
@@ -119,37 +99,27 @@ Blockly.Python['coderbot_adv_motor'] = function(block) {
   var speed_left = Blockly.Python.valueToCode(block, 'SPEED_LEFT', Blockly.Python.ORDER_NONE);
   var speed_right = Blockly.Python.valueToCode(block, 'SPEED_RIGHT', Blockly.Python.ORDER_NONE);
   var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE);
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   var code = "coderbot.motors.set(speed_left=" + speed_left + ", speed_right=" + speed_right + ", elapse=" + elapse + ")\n";
   return code;
 };
 
 Blockly.Python['coderbot_adv_stop'] = function(block) {
   // Generate Python to stop the get_bot().
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   return 'coderbot.motors.stop()\n';
 };
 
 Blockly.Python['coderbot_camera_photoTake'] = function(block) {
   // Generate Python for turning left or right.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   return 'coderbot.camera.capture()\n';
 };
 
 Blockly.Python['coderbot_camera_videoRec'] = function(block) {
   // Generate Python for turning left or right.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   return 'coderbot.camera.start_recording()\n';
 };
 
 Blockly.Python['coderbot_camera_videoStop'] = function(block) {
   // Generate Python for turning left or right.
-  Blockly.Python.definitions_['import_coderbot'] = "from coderbot import coderbot";
-  Blockly.Python.definitions_['init_coderbot'] = "coderbot = coderbot()";
   return 'coderbot.camera.stop_recording()\n';
 };
 

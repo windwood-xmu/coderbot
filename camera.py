@@ -194,6 +194,7 @@ class Camera(object):
         if framerate: self._camera.framerate = framerate
         self._grabbers = []
         self._DCIMpath = ""
+        self._recording = {}
     def getGrabber(self, size=None, port=0, threads=0, frames=None):
         grabber = Camera.ImageGrabberClass(self._camera, size, port, threads, frames)
         self._grabbers.append(grabber)
@@ -221,9 +222,12 @@ class Camera(object):
         self._camera.capture(pathJoin(self._DCIMpath, filename), resize=size, use_video_port=True, splitter_port=port)
     def start_recording(self, filename=None, size=None, port=1):
         if filename is None: filename = "IMG%04d.h264" % self._getDCIM_next()
+        self._recording[port] = True
         self._camera.start_recording(pathJoin(self._DCIMpath, filename), resize=size, splitter_port=port)
     def stop_recording(self, port=1):
-        self._camera.stop_recording(splitter_port=port)
+        if (port in self._recording and self._recording[port]):
+            self._camera.stop_recording(splitter_port=port)
+            self._recording[port] = False
     def split_recording(self, filename=None, port=1):
         if filename is None: filename = "IMG%04d.h264" % self._getDCIM_next()
         self._camera.split_recording(pathJoin(self._DCIMpath, filename), splitter_port=port)

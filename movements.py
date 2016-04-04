@@ -1,4 +1,5 @@
 import sensors
+import time
 
 # Classes for movements by servos or motors
 # All herited the MovementsControl super class
