@@ -29,6 +29,8 @@ import motion
 import config
 import audio
 
+import api
+
 PROGRAM_PATH = "./data/"
 PROGRAM_PREFIX = "program_"
 PROGRAM_SUFFIX = ".data"
@@ -70,14 +72,21 @@ class ProgramEngine:
   def list(self):
     return self._repository.keys()
     
-  def save(self, program):
+  def save(self, program_new):
+    program = self._repository.get(program_new.name, None)
+    if program:
+      program.update(program.code, program.dom_code)
+    else:
+      program = program_new
+  
     self._program = self._repository[program.name] = program
     f = open(PROGRAM_PATH + PROGRAM_PREFIX + program.name + PROGRAM_SUFFIX, 'w')
     json.dump(program.as_json(), f)
     f.close()
     
+    api.CoderBotServerAPI.program_save(program.name, program.as_json(), [])
+   
   def load(self, name):
-    #return self._repository[name]
     f = open(PROGRAM_PATH + PROGRAM_PREFIX + name + PROGRAM_SUFFIX, 'r')
     self._program = Program.from_json(json.load(f))
     return self._program
@@ -97,6 +106,33 @@ class ProgramEngine:
   def check_end(self):
     return self._program.check_end()
 
+  def sync_with_server(self):
+    remote_programs = api.CoderBotServerAPI.programs_list()
+    logging.info(str(remote_programs))
+    progs_r = dict(map(lambda x: (x.get("uid"), x), remote_programs)) 
+    # save to server
+    for p in self._repository:
+      # save new to server
+      if p.uid is None:
+        retval = prog_api.CoderBotServerAPI.program_save(p.name, p.as_json)
+        if retval.get("status", "ko") == "ok":
+          p.uid = retval.get("program").get("uid")
+      else:
+        #update existing
+        p_r = progs_r.get(p.uid)
+        if p_r and p_r.version < p.version:
+          retval = prog_api.CoderBotServerAPI.program_save(p.name, p.as_json)
+
+    #load from server
+    progs_l = dict(map(lambda x: (x.uid, x), self._repository))        
+    for p_r in remote_programs:
+      if progs_l.get(p_r.get("uid")) is None:
+        p = Program.from_json(p_r)
+        self._repository[p.name] = p
+
+        
+        
+      
 class Program:
   _running = False
 
@@ -104,12 +140,18 @@ class Program:
   def dom_code(self):
     return self._dom_code
 
-  def __init__(self, name, code=None, dom_code=None):
+  def __init__(self, name, code=None, dom_code=None, version=0):
     #super(Program, self).__init__()
     self._thread = None
     self.name = name
     self._dom_code = dom_code
     self._code = code 
+    self._version = version
+
+  def update(self, dom_code, code):
+    self._dom_code = dom_code
+    self._code = code
+    self._version += 1
 
   def execute(self):
     if self._running:
@@ -165,9 +207,10 @@ class Program:
   def as_json(self):
     return {'name': self.name,
             'dom_code': self._dom_code,
-            'code': self._code}
+            'code': self._code,
+            'version': self._version}
 
   @classmethod
   def from_json(cls, map):
-    return Program(name=map['name'], dom_code=map['dom_code'], code=map['code'])
+    return Program(name=map['name'], dom_code=map['dom_code'], code=map['code'], version=map.get('version', 0))
 

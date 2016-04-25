@@ -21,16 +21,19 @@ import os
 import json
 import logging
 import time
+import uuid
 import logging.handlers
 import subprocess
 import picamera
 
-from coderbot import CoderBot, PIN_PUSHBUTTON
+from coderbot import CoderBot 
 from camera import Camera
 from motion import Motion
 from audio import Audio
 from program import ProgramEngine, Program
 from config import Config
+from wifi import WiFi
+from api import CoderBotServerAPI
 
 from flask import Flask, render_template, request, send_file, redirect, Response
 from flask.ext.babel import Babel
@@ -40,8 +43,8 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
  
 # add a rotating handler
-handler = logging.handlers.RotatingFileHandler('logs/coderbot.log', maxBytes=1000000, backupCount=5)
-logger.addHandler(handler)
+#handler = logging.handlers.RotatingFileHandler('logs/coderbot.log', maxBytes=1000000, backupCount=5)
+#logger.addHandler(handler)
 
 bot = None
 cam = None
@@ -276,6 +279,12 @@ def handle_program_status():
       prog = app.prog
     return json.dumps({'name': prog.name, "running": prog.is_running()}) 
 
+@app.route("/program/sync", methods=["GET"])
+def handle_program_sync():
+    logging.debug("program_sync")
+    app.prog_engine.sync_with_server()
+    return "ok"
+
 @app.route("/tutorial")
 def handle_tutorial():
     return redirect("/blockly-tutorial/apps/index.html", code=302)
@@ -322,7 +331,12 @@ def run_server():
       app.bot_config = {}
       logging.error(e)
 
-    bot.set_callback(PIN_PUSHBUTTON, button_pushed, 100)
+    if True or WiFi.get_mode() == WiFi.WIFI_MODE_CLIENT:
+      retval = CoderBotServerAPI.get_bot()
+      if retval.get("status") == "ok":
+        CoderBotServerAPI.set_bot(app.bot_config.get("bot_name"), WiFi.get_ipaddr())
+      else:
+        CoderBotServerAPI.bot_new(app.bot_config.get("bot_name"), WiFi.get_ipaddr(), "1.0", "roberto.previtera@gmail.com")
     app.run(host="0.0.0.0", port=8080, debug=True, use_reloader=False, threaded=True)
   finally:
     if cam:

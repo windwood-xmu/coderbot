@@ -10,14 +10,18 @@ import urllib2
 import fcntl
 import struct
 import json
+import uuid
 
 class WiFi():
 
   CONFIG_FILE = "/etc/coderbot_wifi.conf"
   adapters = ["RT5370", "RTL8188CUS"] 
   hostapds = {"RT5370": "hostapd.RT5370", "RTL8188CUS": "hostapd.RTL8188"} 
-  web_url = "http://my.coderbot.org/coderbot/v1.0/bot/new"
+  web_url = "http://my.coderbot.org/coderbot/v1.0/bot"
   wifi_client_conf_file = "/etc/wpa_supplicant/wpa_supplicant.conf"
+  WIFI_MODE_CLIENT = "client"
+  WIFI_MODE_AP = "ap"
+
   _config = {}
 
   @classmethod
@@ -35,6 +39,10 @@ class WiFi():
   @classmethod
   def get_config(cls):
     return cls._config
+
+  @classmethod
+  def get_mode(cls):
+    return cls.get_config().get("wifi_mode")
 
   @classmethod
   def get_adapter_type(cls):
@@ -66,7 +74,7 @@ class WiFi():
       print e.output
 
   @classmethod
-  def get_ipaddr(cls, ifname):
+  def get_ipaddr(cls, ifname="wlan0"):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     return socket.inet_ntoa(fcntl.ioctl(
         s.fileno(),
@@ -77,7 +85,7 @@ class WiFi():
   @classmethod
   def register_ipaddr(cls, botname, ipaddr):
     try:
-      data = {"bot_uid": "ABCDFGHI",
+      data = {"bot_uid": str(uuid.getnode()),
               "bot_name": botname,
               "bot_ip": ipaddr,
               "bot_version": "1.0",
@@ -153,7 +161,7 @@ network={\n""")
 def main():
   w = WiFi()
   if len(sys.argv) > 2 and sys.argv[1] == "updatecfg":
-    if len(sys.argv) > 2 and sys.argv[2] == "ap":
+    if sys.argv[2] == "ap":
       w.set_start_as_ap()
       #w.start_as_ap()
     elif len(sys.argv) > 2 and sys.argv[2] == "client":
