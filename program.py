@@ -76,12 +76,11 @@ class ProgramEngine:
   def save(self, program_new):
     program = self.load(program_new.name)
     if program:
-      program.update(program.code, program.dom_code)
+      program.update(program_new)
     else:
       program = program_new
 
     program.m_d = datetime.datetime.now()
-  
     self._program = program
     self._repository[program.name] = PROGRAM_PREFIX + program.name + PROGRAM_SUFFIX
     f = open(PROGRAM_PATH + PROGRAM_PREFIX + program.name + PROGRAM_SUFFIX, 'w')
@@ -121,9 +120,8 @@ class ProgramEngine:
     logging.info("saving to server")
     for p_name in self._repository.keys():
       p = self.load(p_name)
-      logging.info("name: " + p_name)
       # save new to server
-      if p.uid is None:
+      if p.uid is None or progs_r.get(p.uid) == None:
         logging.info("saving: " + p.name)
         retval = api.CoderBotServerAPI.program_save(p.uid, p.name, p.as_json())
         if retval.get("status", "ko") == "ok":
@@ -149,10 +147,6 @@ class ProgramEngine:
 class Program:
   _running = False
 
-  @property
-  def dom_code(self):
-    return self._dom_code
-
   def __init__(self, uid=None, name=None, code=None, dom_code=None, version=0):
     self._thread = None
     self.name = name
@@ -163,17 +157,12 @@ class Program:
     self.c_d = datetime.datetime.now()
     self.m_d = datetime.datetime.now()
 
-  @property
-  def code(self):
-    return self._code
-
-  @property
-  def dom_code(self):
-    return self._dom_code
-
-  def update(self, dom_code, code):
-    self._dom_code = dom_code
-    self._code = code
+  def update(self, program):
+    self.uid = program.uid
+    self._dom_code = program._dom_code
+    self._code = program._code
+    self.c_d = program.c_d
+    self.m_d = program.m_d
     self.version += 1
 
   def execute(self):
@@ -228,7 +217,6 @@ class Program:
       self._running = False
 
   def as_json(self):
-    logging.info("c_d: " + str(self.c_d))
     return {'uid': self.uid,
             'name': self.name,
             'dom_code': self._dom_code,
