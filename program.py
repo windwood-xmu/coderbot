@@ -87,7 +87,7 @@ class ProgramEngine:
     json.dump(program.as_json(), f)
     f.close()
     
-    api.CoderBotServerAPI.program_save(program.uid, program.name, program.as_json(), [])
+    #api.CoderBotServerAPI.program_save(program.uid, program.name, program.as_json(), [])
    
   def load(self, name):
     f = open(PROGRAM_PATH + PROGRAM_PREFIX + name + PROGRAM_SUFFIX, 'r')
@@ -157,6 +157,14 @@ class Program:
     self.c_d = datetime.datetime.now()
     self.m_d = datetime.datetime.now()
 
+  @property
+  def code(self):
+    return self._code
+
+  @property
+  def dom_code(self):
+    return self._dom_code
+  
   def update(self, program):
     self.uid = program.uid
     self._dom_code = program._dom_code

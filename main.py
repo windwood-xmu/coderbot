@@ -244,8 +244,9 @@ def handle_program_save():
     name = request.form.get('name')
     dom_code = request.form.get('dom_code')
     code = request.form.get('code')
-    prog = Program(name, dom_code = dom_code, code = code)
+    prog = Program(uid=None, name=name, dom_code=dom_code, code=code)
     app.prog_engine.save(prog)
+    app.prog_engine.sync_with_server()
     return "ok"
 
 @app.route("/program/delete", methods=["POST"])
@@ -274,7 +275,7 @@ def handle_program_end():
 @app.route("/program/status", methods=["GET"])
 def handle_program_status():
     logging.debug("program_status")
-    prog = Program("")
+    prog = Program(uid=None,name="")
     if app.prog:
       prog = app.prog
     return json.dumps({'name': prog.name, "running": prog.is_running()}) 
