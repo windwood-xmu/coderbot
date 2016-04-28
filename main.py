@@ -244,8 +244,12 @@ def handle_program_save():
     name = request.form.get('name')
     dom_code = request.form.get('dom_code')
     code = request.form.get('code')
-    prog = Program(uid=None, name=name, dom_code=dom_code, code=code)
-    app.prog_engine.save(prog)
+    program = app.prog_engine.load(name)
+    if program:
+        program.update(code=code, dom_code=dom_code)
+    else:
+        program = Program(uid=None, name=name, code=code, dom_code=dom_code)
+    app.prog_engine.save(program)
     app.prog_engine.sync_with_server()
     return "ok"
 
