@@ -7,18 +7,18 @@ import Image
 import StringIO
 from re import findall
 import errno
+import json
 
-from flask import Flask, render_template, request, send_file, redirect, Response, make_response, jsonify, url_for, abort
+from flask import Flask, render_template, request, send_file, redirect, Response, make_response, jsonify, url_for, abort, session
 from flask.ext.babel import Babel
 
 app = Flask(__name__, static_url_path='')
 app.debug = True
+app.secret_key = 'CoderBot v4.0'
 app.program = None
 babel = Babel(app)
 
 RECORD_PATH = 'DCIM'
-
-# TODO :
 
 
 # A template filter to get quoted elements in a string
@@ -49,7 +49,7 @@ def run_server(prog=None):
 @babel.localeselector
 def get_locale():
     # Try to use the browser language
-    loc = request.accept_languages.best_match(Config().get('accepted_languages', ['en', 'fr', 'it']))
+    loc = request.accept_languages.best_match(['en', 'fr', 'it'])
     if loc is None:
         # Otherwise, use a universal language
         loc = 'en'
@@ -63,7 +63,7 @@ def get_locale():
 # Paths for IHM
 @app.route('/')
 def handle_home():
-    return redirect('control.html')
+    return redirect('/control.html')
 @app.route('/<filename>.html')
 def handle_template(filename):
     if filename == 'gallery':
@@ -80,6 +80,47 @@ def handle_template(filename):
         return render_template("gallery.html", pictures=files)
     return render_template("%s.html" % filename)
 
+# Path for configuration API
+@app.route("/config/<command>", methods=['GET', 'POST'])
+def handle_config(command):
+    if command not in ['get', 'save']: abort(404) # Not found
+    if command == 'get' and request.method == 'GET':
+        if len(request.args):
+            d = dict([(k,Config().get(k)) for k in request.args.iterkeys()])
+        else:
+            d = Config()._config
+        return jsonify(**d)
+    if command == 'save' and request.method == 'POST':
+        glbs = {'__builtins__':None, 'yes':True, 'true':True, 'no':False, 'false':False}
+        for k,v in json.loads(request.form.get('json')).iteritems():
+            if k == 'camera_resolutions':
+                for i,r in v.iteritems(): v[i] = eval(r.lower(), glbs)
+            else:
+                try: v = eval(v.lower(), glbs)
+                except: pass
+            print "%s\t=\t%s\t%s" % (k, v, type(v))
+        # TODO here: Save to file depend on session.get('username', False)
+        return jsonify(result=True)
+    abort(405) # Not allowed
+
+# Path for user's session API
+@app.route('/user/<command>', methods=['GET', 'POST'])
+def handle_user(command):
+    if command == 'login' and request.method == 'POST':
+        if request.form.get('username', '').lower() in ['admin', 'evan', 'mael', 'jimmy']:
+            session['username'] = request.form.get('username')
+            #app.coderbot.config.load("%s.cfg" % session['username'])
+            #return jsonify(result=True)
+            return redirect(request.referrer)
+        abort(401) # Unauthorized without authentication
+    if command == 'logout' and request.method == 'GET':
+        session.pop('username', None)
+        #return jsonify(result=True)
+        return redirect(request.referrer)
+    if command == 'list' and method == 'GET':
+        users = ['admin', 'Evan', 'Mael', 'Jimmy']
+        return jsonify(users)
+    abort(405) # Not allowed
 
 # Paths for video streaming
 @app.route('/video')
@@ -232,7 +273,6 @@ def handle_program(filename):
             else: raise
         return jsonify(app.program.get())
     abort(501) # Not implemented
-
 
 
 

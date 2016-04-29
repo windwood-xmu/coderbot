@@ -42,8 +42,8 @@ TODO
 ----
 
 **Blockly**
-- [.] Upgrade to the latest blockly version (only advanced blocks are done for now)
-- [.] Write the block's python generator to be compatible with the new Coderbot object (work is started)
+- [ ] Upgrade to the latest blockly version (only advanced blocks are done for now)
+- [ ] Write the block's python generator to be compatible with the new Coderbot object (work is started)
 - [ ] Write new blocks (like GPIO's sensor blocks, hear blocks, event driven blocks, etc...)
 - [ ] Simplify code generation when the admin configuration page is done by using decorated classes or subclasses for coderbot.motors calls (to render readable code for childs)
 - [ ] Use private user configuration for basic blocks (for default parameters)
@@ -54,9 +54,9 @@ TODO
 - [x] Integrate the run/abort program feature (execution is done in a secure environment)
 
 **Web based UI**
-- [ ] Write the configuration page
-- [ ] Write the admin configuration page. This is the CoderBot object specific configuration (default sensors according hardware, video configuration, ...)
-- [ ] Write the per-user (basic and advanced) configuration page. This is the UI configuration according user's age
+- [ ] Write the configuration page (work is started, need to load the current conf and save the new one)
+- [x] Write the admin configuration page. This is the CoderBot object specific configuration (default sensors according hardware, video configuration, ...)
+- [x] Write the per-user (basic and advanced) configuration page. This is the UI configuration according user's age
 
 **Sensor features**
 - [ ] Write functions to be called back by image processors:

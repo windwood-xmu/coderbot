@@ -46,7 +46,7 @@
     $(function(){
       // Opening the panel on click/swap button tab
       $('#gallery').on('panelopen', function(){
-        $('#gallerycontent').load('gallery.html');
+        $('#gallerycontent').load('/gallery.html');
       });
       $("a[href='#gallery']").on({
         swipeleft: function(){
@@ -126,8 +126,8 @@
   </div>
   <div data-role="popup" id="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
     <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">{% trans %}Close{% endtrans %}</a>
-    <img src="" style="display: none;">
-    <video src="" alt="Video" autoplay controls style="display: none;">
+    <img style="display: none;">
+    <video alt="Video" autoplay controls style="display: none;">
       Sorry, your browser does not support embedded videos.
     </video>
   </div>
