@@ -88,9 +88,13 @@ class ProgramEngine:
     f.close()
     
   def load(self, name):
-    f = open(PROGRAM_PATH + PROGRAM_PREFIX + name + PROGRAM_SUFFIX, 'r')
-    self._program = Program.from_json(json.load(f))
-    return self._program
+    program = None
+    try:
+      f = open(PROGRAM_PATH + PROGRAM_PREFIX + name + PROGRAM_SUFFIX, 'r')
+      program = self._program = Program.from_json(json.load(f))
+    except IOError:
+      logging.warn("program not found: " + str(name))
+    return program
 
   def delete(self, name):
     del self._repository[name]
