@@ -3,7 +3,7 @@ import movements
 import sensors
 import sound
 from utils.POO import SingletonDecorator as Singleton
-from config import Config
+from config import MultifileConfig as Config
 
 
 @Singleton

@@ -1,6 +1,6 @@
 import time
 import utils.cv
-from config import Config
+from config import MultifileConfig as Config
 from program import Program
 from coderbot import CoderBot
 import Image
@@ -19,7 +19,8 @@ app.program = None
 babel = Babel(app)
 
 RECORD_PATH = 'DCIM'
-
+CONFIG_PATH = '.'
+DEFAULT_CONFIG_PATH = 'coderbot.cfg'
 
 # A template filter to get quoted elements in a string
 @app.template_filter('quoted')
@@ -32,6 +33,7 @@ def quoted(s):
 
 def run_server(prog=None):
     app.shutdown_requested = False
+    Config().load(DEFAULT_CONFIG_PATH)
     app.bot = CoderBot()
     app.bot.camera.setDCIMpath(Config().get('record_path', RECORD_PATH))
 
@@ -72,12 +74,12 @@ def handle_template(filename):
         files = [f for f in listdir(Config().get('record_path', RECORD_PATH)) if isfile(join(Config().get('record_path', RECORD_PATH), f))]
         pics = [f for f in files if splitext(f)[1].lower() in ['.jpg', '.jpeg', '.png']]
         vids = [f for f in files if splitext(f)[1].lower() in ['.h264', '.avi']]
-        #pics.sort()
-        #vids.sort()
         files = zip(pics, ['picture']*len(pics))
         files.extend(zip(vids, ['video']*len(vids)))
         files.sort()
         return render_template("gallery.html", pictures=files)
+    if filename == 'preferences':
+        return render_template("preferences.html", config=Config())
     return render_template("%s.html" % filename)
 
 # Path for configuration API
@@ -98,28 +100,46 @@ def handle_config(command):
             else:
                 try: v = eval(v.lower(), glbs)
                 except: pass
-            print "%s\t=\t%s\t%s" % (k, v, type(v))
-        # TODO here: Save to file depend on session.get('username', False)
+            Config().set(k, v)
+            # TODO: call the commands to set new Coderbot configuration
+        Config().save()
         return jsonify(result=True)
+    # TODO: if command == 'reset': erase config file content
     abort(405) # Not allowed
 
 # Path for user's session API
 @app.route('/user/<command>', methods=['GET', 'POST'])
 def handle_user(command):
     if command == 'login' and request.method == 'POST':
-        if request.form.get('username', '').lower() in ['admin', 'evan', 'mael', 'jimmy']:
-            session['username'] = request.form.get('username')
-            #app.coderbot.config.load("%s.cfg" % session['username'])
-            #return jsonify(result=True)
+        from os.path import isfile
+        from os.path import isfile, join, splitext
+        username = request.form.get('username', '')
+        filename = join(Config().get('config_path', CONFIG_PATH), "%s.cfg" % username.lower())
+        if username.lower() == 'admin' or isfile(filename):
+            session['username'] = username
+            if username.lower() != 'admin':
+                Config().load(filename)
+                # TODO: call the commands to set new Coderbot configuration
             return redirect(request.referrer)
         abort(401) # Unauthorized without authentication
     if command == 'logout' and request.method == 'GET':
-        session.pop('username', None)
-        #return jsonify(result=True)
+        if session.pop('username', None) != 'admin':
+            # Close only the last config file, the user file
+            Config().close()
         return redirect(request.referrer)
-    if command == 'list' and method == 'GET':
-        users = ['admin', 'Evan', 'Mael', 'Jimmy']
-        return jsonify(users)
+    if command == 'list' and request.method == 'GET':
+        from os import listdir
+        from os.path import isfile, join, splitext
+
+        files = [f for f in listdir(Config().get('config_path', CONFIG_PATH)) if isfile(join(Config().get('config_path', CONFIG_PATH), f))]
+        users = [f for f in files if splitext(f)[1].lower() == '.cfg']
+        if Config().get('config_path', CONFIG_PATH) == CONFIG_PATH:
+            users = [splitext(f)[0] for f in users if f.lower() != DEFAULT_CONFIG_PATH]
+        else: users = [splitext(f)[0] for f in users]
+        users.append('admin')
+        users.sort()
+
+        return jsonify(users=users)
     abort(405) # Not allowed
 
 # Paths for video streaming

@@ -90,23 +90,32 @@
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions0" name="camera_resolutions[default]" data-native-menu="false">
-                    <option value="[1024,768]" selected>1024x768</option><option value="[640,480]">640x480</option><option value="[320,240]">320x240</option><option value="[160,120]">160x120</option>
+                    <option value="[1024,768]"{% if config.camera_resolutions['default'] == [1024,768] %} selected{% endif %}>1024x768</option>
+                    <option value="[640,480]"{% if config.camera_resolutions['default'] == [640,480] %} selected{% endif %}>640x480</option>
+                    <option value="[320,240]"{% if config.camera_resolutions['default'] == [320,240] %} selected{% endif %}>320x240</option>
+                    <option value="[160,120]"{% if config.camera_resolutions['default'] == [160,120] %} selected{% endif %}>160x120</option>
                   </select>
                 </div>
                 <div class="ui-block-a">
-                  <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="SD" data-wrapper-class="controlgroup-textinput">
+                  <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="{{ config.camera_resolutions.keys[1] }}" data-wrapper-class="controlgroup-textinput">
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions1" name="camera_resolutions[SD]" data-native-menu="false">
-                    <option value="[1024,768]">1024x768</option><option value="[640,480]">640x480</option><option value="[320,240]" selected>320x240</option><option value="[160,120]">160x120</option>
+                    <option value="[1024,768]"{% if config.camera_resolutions['SD'] == [1024,768] %} selected{% endif %}>1024x768</option>
+                    <option value="[640,480]"{% if config.camera_resolutions['SD'] == [640,480] %} selected{% endif %}>640x480</option>
+                    <option value="[320,240]"{% if config.camera_resolutions['SD'] == [320,240] %} selected{% endif %}>320x240</option>
+                    <option value="[160,120]"{% if config.camera_resolutions['SD'] == [160,120] %} selected{% endif %}>160x120</option>
                   </select>
                 </div>
                 <div class="ui-block-a">
-                  <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="LD" data-wrapper-class="controlgroup-textinput">
+                  <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="{{ config.camera_resolutions.keys[2] }}" data-wrapper-class="controlgroup-textinput">
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions2" name="camera_resolutions[LD]" data-native-menu="false">
-                    <option value="[1024,768]">1024x768</option><option value="[640,480]">640x480</option><option value="[320,240]">320x240</option><option value="[160,120]" selected>160x120</option>
+                    <option value="[1024,768]"{% if config.camera_resolutions['LD'] == [1024,768] %} selected{% endif %}>1024x768</option>
+                    <option value="[640,480]"{% if config.camera_resolutions['LD'] == [640,480] %} selected{% endif %}>640x480</option>
+                    <option value="[320,240]"{% if config.camera_resolutions['LD'] == [320,240] %} selected{% endif %}>320x240</option>
+                    <option value="[160,120]"{% if config.camera_resolutions['LD'] == [160,120] %} selected{% endif %}>160x120</option>
                   </select>
                 </div>
               </div>
@@ -116,7 +125,10 @@
                   <div data-role="controlgroup" data-type="horizontal">
                     <input class="camera_resolutions_name" for="camera_resolutions0" type="text" value="default" disabled="true" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions0" name="camera_resolutions[default]" data-native-menu="false">
-                      <option value="[1024,768]" selected>1024x768</option><option value="[640,480]">640x480</option><option value="[320,240]">320x240</option><option value="[160,120]">160x120</option>
+                      <option value="[1024,768]"{% if config.camera_resolutions['default'] == [1024,768] %} selected{% endif %}>1024x768</option>
+                      <option value="[640,480]"{% if config.camera_resolutions['default'] == [640,480] %} selected{% endif %}>640x480</option>
+                      <option value="[320,240]"{% if config.camera_resolutions['default'] == [320,240] %} selected{% endif %}>320x240</option>
+                      <option value="[160,120]"{% if config.camera_resolutions['default'] == [160,120] %} selected{% endif %}>160x120</option>
                     </select>
                   </div>
                 </div>
@@ -124,7 +136,10 @@
                   <div data-role="controlgroup" data-type="horizontal">
                     <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="SD" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions1" name="camera_resolutions[SD]" data-native-menu="false">
-                      <option value="[1024,768]">1024x768</option><option value="[640,480]">640x480</option><option value="[320,240]" selected>320x240</option><option value="[160,120]">160x120</option>
+                      <option value="[1024,768]"{% if config.camera_resolutions['SD'] == [1024,768] %} selected{% endif %}>1024x768</option>
+                      <option value="[640,480]"{% if config.camera_resolutions['SD'] == [640,480] %} selected{% endif %}>640x480</option>
+                      <option value="[320,240]"{% if config.camera_resolutions['SD'] == [320,240] %} selected{% endif %}>320x240</option>
+                      <option value="[160,120]"{% if config.camera_resolutions['SD'] == [160,120] %} selected{% endif %}>160x120</option>
                     </select>
                   </div>
                 </div>
@@ -132,7 +147,10 @@
                   <div data-role="controlgroup" data-type="horizontal">
                     <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="LD" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions2" name="camera_resolutions[LD]" data-native-menu="false">
-                      <option value="[1024,768]">1024x768</option><option value="[640,480]">640x480</option><option value="[320,240]">320x240</option><option value="[160,120]" selected>160x120</option>
+                      <option value="[1024,768]"{% if config.camera_resolutions['LD'] == [1024,768] %} selected{% endif %}>1024x768</option>
+                      <option value="[640,480]"{% if config.camera_resolutions['LD'] == [640,480] %} selected{% endif %}>640x480</option>
+                      <option value="[320,240]"{% if config.camera_resolutions['LD'] == [320,240] %} selected{% endif %}>320x240</option>
+                      <option value="[160,120]"{% if config.camera_resolutions['LD'] == [160,120] %} selected{% endif %}>160x120</option>
                     </select>
                   </div>
                 </div>
@@ -141,7 +159,7 @@
             </div>
             <div class="ui-field-contain">
               <label for="camera_framerate">{% trans %}framerate{% endtrans %}</label>
-              <input id="camera_framerate" name="camera_framerate" pattern="[0-9]*" value="30" placeholder="{% trans %}framerate{% endtrans %}">
+              <input id="camera_framerate" name="camera_framerate" pattern="[0-9]*" value="{{ config.get('camera_framerate', 30) }}" placeholder="{% trans %}framerate{% endtrans %}">
             </div>
           </li>
 
@@ -150,44 +168,44 @@
             <div class="ui-field-contain">
               <label for="use_servos">{% trans %}Use servos{% endtrans %}</label>
               <select id="use_servos" name="use_servos" data-role="flipswitch">
-                <option value="false">{% trans %}No{% endtrans %}</option>
-                <option value="true" selected="">{% trans %}Yes{% endtrans %}</option>
+                <option value="false"{% if config.get('use_servos', True) == False %} selected{% endif %}>{% trans %}No{% endtrans %}</option>
+                <option value="true"{% if config.get('use_servos', True) == True %} selected{% endif %}>{% trans %}Yes{% endtrans %}</option>
               </select>
             </div>
             <div id="servos_configuration">
               <div class="ui-field-contain">
                 <label for="pin_servo_left">{% trans %}PIN for left servo{% endtrans %}</label>
-                <input id="pin_servo_left" name="pin_servo_left" pattern="[0-9]*" value="25" placeholder="{% trans %}PIN for left servo{% endtrans %}">
+                <input id="pin_servo_left" name="pin_servo_left" pattern="[0-9]*" value="{{ config.get('pin_servo_left', 25) }}" placeholder="{% trans %}PIN for left servo{% endtrans %}">
               </div>
               <div class="ui-field-contain">
                 <label for="pin_servo_right">{% trans %}PIN for right servo{% endtrans %}</label>
-                <input id="pin_servo_right" name="pin_servo_right" pattern="[0-9]*" value="4" placeholder="{% trans %}PIN for right servo{% endtrans %}">
+                <input id="pin_servo_right" name="pin_servo_right" pattern="[0-9]*" value="{{ config.get('pin_servo_right', 4) }}" placeholder="{% trans %}PIN for right servo{% endtrans %}">
               </div>
             </div>
             <div id="motors_configuration" style="display: none;">
               <div class="ui-field-contain">
                 <label for="PWM_frequency">{% trans %}PWM frequency{% endtrans %}</label>
-                <input id="PWM_frequency" name="PWM_frequency" pattern="[0-9]*" value="100" placeholder="{% trans %}PWM frequency{% endtrans %}">
+                <input id="PWM_frequency" name="PWM_frequency" pattern="[0-9]*" value="{{ config.get('PWM_frequency', 100) }}" placeholder="{% trans %}PWM frequency{% endtrans %}">
               </div>
               <div class="ui-field-contain">
                 <label for="pin_enable_motor">{% trans %}PIN for motors enabled{% endtrans %}</label>
-                <input id="pin_enable_motor" name="pin_enable_motor" pattern="[0-9]*" value="22" placeholder="{% trans %}PIN for motors enabled{% endtrans %}">
+                <input id="pin_enable_motor" name="pin_enable_motor" pattern="[0-9]*" value="{{ config.get('pin_enable_motor', 22) }}" placeholder="{% trans %}PIN for motors enabled{% endtrans %}">
               </div>
               <div class="ui-field-contain">
                 <label for="pin_motor_left_forward">{% trans %}PIN for left forward motor{% endtrans %}</label>
-                <input id="pin_motor_left_forward" name="pin_motor_left_forward" pattern="[0-9]*" value="25" placeholder="{% trans %}PIN for left forward motor{% endtrans %}">
+                <input id="pin_motor_left_forward" name="pin_motor_left_forward" pattern="[0-9]*" value="{{ config.get('pin_motor_left_forward', 25) }}" placeholder="{% trans %}PIN for left forward motor{% endtrans %}">
               </div>
               <div class="ui-field-contain">
                 <label for="pin_motor_left_backward">{% trans %}PIN for left backward motor{% endtrans %}</label>
-                <input id="pin_motor_left_backward" name="pin_motor_left_backward" pattern="[0-9]*" value="24" placeholder="{% trans %}PIN for left backward motor{% endtrans %}">
+                <input id="pin_motor_left_backward" name="pin_motor_left_backward" pattern="[0-9]*" value="{{ config.get('pin_motor_left_backward', 24) }}" placeholder="{% trans %}PIN for left backward motor{% endtrans %}">
               </div>
               <div class="ui-field-contain">
                 <label for="pin_motor_right_forward">{% trans %}PIN for right forward motor{% endtrans %}</label>
-                <input id="pin_motor_right_forward" name="pin_motor_right_forward" pattern="[0-9]*" value="4" placeholder="{% trans %}PIN for right forward motor{% endtrans %}">
+                <input id="pin_motor_right_forward" name="pin_motor_right_forward" pattern="[0-9]*" value="{{ config.get('pin_motor_right_forward', 4) }}" placeholder="{% trans %}PIN for right forward motor{% endtrans %}">
               </div>
               <div class="ui-field-contain">
                 <label for="pin_motor_right_backward">{% trans %}PIN for right backward motor{% endtrans %}</label>
-                <input id="pin_motor_right_backward" name="pin_motor_right_backward" pattern="[0-9]*" value="17" placeholder="{% trans %}PIN for right backward motor{% endtrans %}">
+                <input id="pin_motor_right_backward" name="pin_motor_right_backward" pattern="[0-9]*" value="{{ config.get('pin_motor_right_backward', 17) }}" placeholder="{% trans %}PIN for right backward motor{% endtrans %}">
               </div>
             </div>
           </li>
@@ -202,7 +220,7 @@
           <li>
             <div class="ui-field-contain">
               <label for="listen_port">{% trans %}Listen port for connexion{% endtrans %}</label>
-              <input id="listen_port" name="listen_port" pattern="[0-9]*" value="8080" placeholder="{% trans %}User interface port to listen{% endtrans %}">
+              <input id="listen_port" name="listen_port" pattern="[0-9]*" value="{{ config.get('listen_port', 8080) }}" placeholder="{% trans %}User interface port to listen{% endtrans %}">
             </div>
           </li>
           <li data-role="list-divider">{% trans %}Speech synthesis{% endtrans %}</li>
@@ -210,8 +228,8 @@
             <div class="ui-field-contain">
               <label for="useMbrola">{% trans %}Use mBrola{% endtrans %}</label>
               <select id="useMbrola" name="useMbrola" data-role="flipswitch">
-                <option value="false">{% trans %}No{% endtrans %}</option>
-                <option value="true" selected="">{% trans %}Yes{% endtrans %}</option>
+                <option value="false"{% if config.get('useMbrola', True) == False %} selected{% endif %}>{% trans %}No{% endtrans %}</option>
+                <option value="true"{% if config.get('useMbrola', True) == True %} selected{% endif %}>{% trans %}Yes{% endtrans %}</option>
               </select>
             </div>
           </li>
@@ -227,18 +245,18 @@
           <li>
             <div class="ui-field-contain">
               <label for="record_path">{% trans %}Path{% endtrans %}</label>
-              <input id="record_path" name="record_path" value="DCIM" placeholder="{% trans %}Path of recorded images and videos{% endtrans %}">
+              <input id="record_path" name="record_path" value="{{ config.get('record_path', 'DCIM') }}" placeholder="{% trans %}Path of recorded images and videos{% endtrans %}">
             </div>
           </li>
           <li data-role="list-divider">{% trans %}Program files storage parameters{% endtrans %}</li>
           <li>
             <div class="ui-field-contain">
               <label for="program_path">{% trans %}Path{% endtrans %}</label>
-              <input id="program_path" name="program_path" value="data" placeholder="{% trans %}Path for save program to{% endtrans %}">
+              <input id="program_path" name="program_path" value="{{ config.get('program_path', 'data') }}" placeholder="{% trans %}Path for save program to{% endtrans %}">
             </div>
             <div class="ui-field-contain advanced">
               <label for="program_extension">{% trans %}File extension{% endtrans %}</label>
-              <input id="program_extension" name="program_extension" value="bot" placeholder="{% trans %}Extension for program files{% endtrans %}">
+              <input id="program_extension" name="program_extension" value="{{ config.get('program_extension', 'bot') }}" placeholder="{% trans %}Extension for program files{% endtrans %}">
             </div>
           </li>
         </ul>

@@ -4,7 +4,7 @@ import errno
 import json
 import threading
 
-from config import Config
+from config import MultifileConfig as Config
 from coderbot import CoderBot
 
 # Default values, overwrited by admin configuration

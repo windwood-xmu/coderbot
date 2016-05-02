@@ -54,9 +54,21 @@ TODO
 - [x] Integrate the run/abort program feature (execution is done in a secure environment)
 
 **Web based UI**
-- [ ] Write the configuration page (work is started, need to load the current conf and save the new one)
-- [x] Write the admin configuration page. This is the CoderBot object specific configuration (default sensors according hardware, video configuration, ...)
-- [x] Write the per-user (basic and advanced) configuration page. This is the UI configuration according user's age
+- [x] Login available (only if a username.cfg file exists, no password is needed)
+- [x] Control like drone page
+  - [x] Write the page
+  - [ ] User can choose the streaming definition (HD, SD or LD)
+- [x] Programmation page
+  - [x] Write the page
+  - [x] Use blockly div
+  - [x] Load/Save/Rename/Run/Abort a blockly program
+- [x] Configuration page
+  - [x] Write the page
+  - [x] Admin configuration page, for CoderBot object specific configuration (default sensors according hardware, video configuration, ...)
+  - [x] Per-user (basic and advanced) configuration page. This is the UI configuration according user's age
+  - [ ] Reset the configuration to the default (by deleting the configuration file content)
+  - [ ] Add the users management for the admin user (create/delete users, by creating/deleting the user config file)
+  - [ ] Use the list of available users to simplify logon (for youngest users)
 
 **Sensor features**
 - [ ] Write functions to be called back by image processors:

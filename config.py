@@ -5,7 +5,7 @@ from utils.POO import SingletonDecorator as Singleton
 # - make less coderbot dependent (default filename)
 # - don't use singleton here
 #DEFAULT_CONFIG_FILENAME = "config.cfg"
-DEFAULT_CONFIG_FILENAME = "coderbot.cfg"
+#DEFAULT_CONFIG_FILENAME = "coderbot.cfg"
 
 @Singleton
 class Config:
@@ -13,7 +13,7 @@ class Config:
         # Avoid reinitialisation in case of multiple call
         if hasattr(self, '_config') and self._config: return
 
-        if filename is None: filename = DEFAULT_CONFIG_FILENAME
+        #if filename is None: filename = DEFAULT_CONFIG_FILENAME
         self._filename = filename
         self._config = {}
         self.load()
@@ -40,7 +40,59 @@ class Config:
                 return len(self._config.keys())
         except IOError:
             return 0
-    def save(self):
+    def save(self, filename=None):
+        if not filename is None: self._filename = filename
         with open(self._filename, 'w') as f:
             json.dump(self._config, f, indent=4)
+
+@Singleton
+class MultifileConfig:
+    def __init__(self, filename=None):
+        self._filenames = [None]
+        self._configs = [{}]
+        if not filename is None: self.load(filename)
+
+    def get(self, item, default=None):
+        for d in self._configs:
+            if item in d.keys():
+                return d[item]
+        return default
+    def set(self, item, value, filename=None):
+        if filename is None: filename = self._filenames[0]
+        self._configs[self._filenames.index(filename)][item] = value
+
+    def __getitem__(self, item):
+        for d in self._configs:
+            if item in d.keys():
+                return d[item]
+        raise AttributeError
+    def __setitem__(self, item, value):
+        # The default is to set to the last conf file loaded
+        self._configs[0][item] = value
+    def __contains__(self, key):
+        return True in map(lambda d: d.has_key(key), self._configs)
+
+    def load(self, filename=None):
+        if filename is None: return
+        try:
+            with open(filename, 'r') as f:
+                self._configs.insert(0, json.load(f))
+                self._filenames.insert(0, filename)
+            return len(self._configs[0].keys())
+        except IOError:
+            return 0
+    def save(self, saveas=None):
+        for filename, config in zip(self._filenames, self._configs):
+            if filename is None: filename = saveas
+            if filename is None: continue
+            with open(filename, 'w') as f:
+                json.dump(config, f, indent=4)
+    def close(self, filename=None):
+        if filename is None:
+            self._filenames.pop(0)
+            self._configs.pop(0)
+        else:
+            index = self._filenames.index(filename)
+            self._filenames.pop(index)
+            self._configs.pop(index)
 
