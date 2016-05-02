@@ -339,9 +339,9 @@ def run_server():
     if True or WiFi.get_mode() == WiFi.WIFI_MODE_CLIENT:
       retval = CoderBotServerAPI.get_bot()
       if retval.get("status") == "ok":
-        CoderBotServerAPI.set_bot(app.bot_config.get("bot_name"), WiFi.get_ipaddr(), "1.0")
+        CoderBotServerAPI.set_bot(app.bot_config.get("bot_name", "My CoderBot"), WiFi.get_ipaddr(), "1.0")
       else:
-        CoderBotServerAPI.bot_new(app.bot_config.get("bot_name"), WiFi.get_ipaddr(), "1.0", "roberto.previtera@gmail.com")
+        CoderBotServerAPI.bot_new(app.bot_config.get("bot_name", "My CoderBot"), WiFi.get_ipaddr(), "1.0", "roberto.previtera@gmail.com")
     app.run(host="0.0.0.0", port=8080, debug=True, use_reloader=False, threaded=True)
   finally:
     if cam:
