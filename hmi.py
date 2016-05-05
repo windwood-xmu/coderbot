@@ -110,10 +110,10 @@ def handle_config(command):
 # Path for user's session API
 @app.route('/user/<command>', methods=['GET', 'POST'])
 def handle_user(command):
-    if command == 'login' and request.method == 'POST':
+    if command == 'login':
         from os.path import isfile
         from os.path import isfile, join, splitext
-        username = request.form.get('username', '')
+        username = request.form.get('username', request.args.get('username', ''))
         filename = join(Config().get('config_path', CONFIG_PATH), "%s.cfg" % username.lower())
         if username.lower() == 'admin' or isfile(filename):
             session['username'] = username
@@ -140,6 +140,18 @@ def handle_user(command):
         users.sort()
 
         return jsonify(users=users)
+    if command == 'add' and request.method == 'GET':
+        from os import unlink
+        username = request.args.get('username', '')
+        try: open(join(Config().get('config_path', CONFIG_PATH), "%s.cfg" % username.lower()), 'a').close()
+        except: abort(500) # Internal error
+        return jsonify(result=True)
+    if command == 'del' and request.method == 'GET':
+        from os import unlink
+        username = request.args.get('username', '')
+        try: unlink(join(Config().get('config_path', CONFIG_PATH), "%s.cfg" % username.lower()))
+        except: abort(500) # Internal error
+        return jsonify(result=True)
     abort(405) # Not allowed
 
 # Paths for video streaming

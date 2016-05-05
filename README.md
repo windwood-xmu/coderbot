@@ -54,21 +54,27 @@ TODO
 - [x] Integrate the run/abort program feature (execution is done in a secure environment)
 
 **Web based UI**
-- [x] Login available (only if a username.cfg file exists, no password is needed)
+- [x] Login available - only if a username.cfg file exists, no password is needed, only one user at a time for now
 - [x] Control like drone page
-  - [x] Write the page
+  - [x] Real time coderbot vision by camera streaming
+  - [x] Control the bot motors (forward, backward, left, right)
+  - [x] Take pictures or record videos
+  - [x] View recorded pictures and videos in a gallery
   - [ ] User can choose the streaming definition (HD, SD or LD)
 - [x] Programmation page
-  - [x] Write the page
-  - [x] Use blockly div
+  - [x] Use blockly for code scripting
   - [x] Load/Save/Rename/Run/Abort a blockly program
+  - [x] Real time coderbot vision by camera streaming while a program runs
 - [x] Configuration page
-  - [x] Write the page
-  - [x] Admin configuration page, for CoderBot object specific configuration (default sensors according hardware, video configuration, ...)
-  - [x] Per-user (basic and advanced) configuration page. This is the UI configuration according user's age
-  - [ ] Reset the configuration to the default (by deleting the configuration file content)
-  - [ ] Add the users management for the admin user (create/delete users, by creating/deleting the user config file)
-  - [ ] Use the list of available users to simplify logon (for youngest users)
+  - [x] Admin configuration, for CoderBot object specific configuration (default sensors according hardware, video configuration, ...)
+    - [x] Basic hardware configuration (camera resolutions/framerate, motors/servos pins configuration)
+    - [ ] Advanced hardware configuration (add sensors to the default configuration)
+    - [x] Basic system configuration (TCP port to UI listen on, system command to use for speech synthesis or other)
+    - [x] Users management (add/delete users) for admin only
+  - [x] Per-user (basic and advanced) configuration. This is the UI configuration according user's age
+    - [x] User can choose advanced or easy mode for configuration and save the choice
+    - [x] Path to store pictures and videos recorded by the camera
+  - [ ] Reset the configuration to the default (by deleting the configuration file content, for now: echo > path_to_user_profil/user.cfg)
 
 **Sensor features**
 - [ ] Write functions to be called back by image processors:

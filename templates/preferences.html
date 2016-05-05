@@ -7,13 +7,76 @@
 
 <script type="text/javascript">
   {% block script %}
+
+    $(function(){
+      // Helper function to fill listview of users
+      function loadUserList () {
+        $("#list_users").empty();
+        $("<li data-icon='plus'><a href='#dlgAddUser' data-rel='popup' data-position-to='window' data-transition='pop')><span class='ui-icon-user ui-btn-icon-left ui-icon-big'>{% trans %}Add a new user{% endtrans %}</span></a></li>").appendTo("#list_users");
+        $.getJSON('/user/list', function(json) {
+          if (json.users) {
+            $.each(json.users, function(i, user) {
+              $("<li><a class='confirm'><span class='ui-icon-user ui-icon-big ui-btn-icon-left ui-icon-color"+(i%10)+"'>"+user.ucFirst()+"</span></a></li>")
+                .appendTo("#list_users")
+                .on('vclick', delUser);
+            });
+            $("#list_users").listview("refresh");
+          } else {
+            notify("{% trans %}Unable to get list of users{% endtrans %}.");
+          }
+        });
+      };
+
+      // Helper function to create new user
+      function addUser (username) {
+        $.getJSON("/user/add", {username: username}, function(json){
+          if (json.result == true) {
+            loadUserList();
+          } else {
+            notify("{% trans %}Unable to create user{% endtrans %} "+username+"."+(json.error?"\n"+json.error:""));
+          }
+        });
+      };
+      // Helper function to delete a user
+      function delUser () {
+        username = $(this).text();
+        if (confirm("{% trans %}Do you really want to delete this user{% endtrans %} : "+username+" ?")) {
+          $.getJSON("/user/del", {username: username}, function(json){
+            if (json.result == true) {
+              loadUserList();
+            } else {
+              notify("{% trans %}Unable to delete user{% endtrans %} "+username+"."+(json.error?"\n"+json.error:""));
+            }
+          });
+        }
+        return false;
+      };
+
+      // Load user list when page is loaded
+      loadUserList();
+
+      $("#frmAddUser").on('submit', function() {
+        if (validate($("#frmAddUser"))) {
+          $("#dlgAddUser").popup("close");
+          addUser($("#iNewUsername").val());
+        }
+        return false;
+      });
+    });
+
+
     $(function(){
       $(".camera_resolutions_name").change(function(e) {
         $("#" + $(this).attr("for")).attr("name", "camera_resolutions["+$(this).val()+"]");
       });
 
-      $("#toggle_advanced").change(function(e) {
-        $(".advanced").fadeToggle();
+      {% if config.get('advanced_user', True) == False %}
+        $(".advanced").hide();
+      {% endif %}
+      $("#advanced_user").change(function(e) {
+        console.log($("#advanced_user").val());
+        if ($("#advanced_user").val() == "true") { $(".advanced").show(); }
+        else                                     { $(".advanced").hide(); }
       });
 
       $("#use_servos").change(function() {
@@ -55,6 +118,25 @@
 </script>
 <style>
   {% block style %}
+    .medium-flipswitch.ui-flipswitch .ui-btn.ui-flipswitch-on {
+        text-indent: -6em;
+    }
+    .medium-flipswitch.ui-flipswitch {
+        width: 8.875em;
+    }
+    .medium-flipswitch.ui-flipswitch.ui-flipswitch-active {
+        padding-left: 7em;
+        width: 1.875em;
+    }
+    html .ui-field-contain > label + .medium-flipswitch.ui-flipswitch,
+    html .ui-popup .ui-field-contain > label + .medium-flipswitch.ui-flipswitch {
+        width: 8.875em;
+    }
+    .ui-field-contain .medium-flipswitch.ui-flipswitch.ui-flipswitch-active,
+    .ui-popup .ui-field-contain .medium-flipswitch.ui-flipswitch.ui-flipswitch-active {
+        width: 1.875em;
+    }
+
     .ui-collapsible-set .ui-collapsible {
       margin: 0px;
     }
@@ -68,12 +150,8 @@
 
 {% block page %}
   <form id="frmConfig" action="/config/save" method="POST" data-ajax="false">
-    <label for="toggle_advanced">
-      {% trans %}Advanced user mode{% endtrans %}
-      <input id="toggle_advanced" type="checkbox" data-iconpos="right" checked="">
-    </label>
     <div data-role="collapsibleset" data-inset="false">
-      {% if session.username == 'admin' %}
+{% if session.username == 'admin' %}
       <fieldset data-role="collapsible" data-collapsed="false">
         <legend>{% trans %}Hardware{% endtrans %}</legend>
 
@@ -82,8 +160,8 @@
           <li>
             <div class="ui-field-contain">
               <label>{% trans %}Camera resolutions{% endtrans %}</label>
-{# Just a test, time to determine which is better #}
-{% if false %}
+  {# Just a test, time to determine which is better #}
+  {% if false %}
               <div class="ui-grid-a">
                 <div class="ui-block-a">
                   <input class="camera_resolutions_name" for="camera_resolutions0" type="text" value="default" disabled="true" data-wrapper-class="controlgroup-textinput">
@@ -119,7 +197,7 @@
                   </select>
                 </div>
               </div>
-{% else %}
+  {% else %}
               <div class="ui-grid-solo">
                 <div class="ui-block-a">
                   <div data-role="controlgroup" data-type="horizontal">
@@ -155,7 +233,7 @@
                   </div>
                 </div>
               </div>
-{% endif %}
+  {% endif %}
             </div>
             <div class="ui-field-contain">
               <label for="camera_framerate">{% trans %}framerate{% endtrans %}</label>
@@ -214,7 +292,6 @@
 
       <fieldset data-role="collapsible">
         <legend>{% trans %}System{% endtrans %}</legend>
-
         <ul data-role="listview" data-inset="false">
           <li data-role="list-divider">{% trans %}User Interface parameters{% endtrans %}</li>
           <li>
@@ -235,9 +312,38 @@
           </li>
         </ul>
       </fieldset>
-      {% endif %}
+{% endif %}
 
       <fieldset data-role="collapsible" {% if not session.username == 'admin' %}data-collapsed="false"{% endif %}>
+        <legend>{% trans %}Profil{% endtrans %}</legend>
+        <ul data-role="listview" data-inset="false">
+{% if session.username == 'admin' %}
+          <li data-role="list-divider">{% trans %}Users{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label for="config_path">{% trans %}Profils path{% endtrans %}</label>
+              <input id="config_path" name="config_path" value="{{ config.get('config_path', '.') }}" placeholder="{% trans %}Path of user profils{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label for="config_path">{% trans %}Users{% endtrans %}</label>
+              <ul id="list_users" data-role="listview" data-icon="delete" data-inset="true"></ul>
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Profil of all users and guest user (without login){% endtrans %}</li>
+{% endif %}
+          <li>
+            <div class="ui-field-contain">
+              <label for="advanced_user">{% trans %}Configuration mode{% endtrans %}</label>
+              <select id="advanced_user" name="advanced_user" data-role="flipswitch" data-wrapper-class="medium-flipswitch">
+                <option value="false"{% if config.get('advanced_user', True) == False %} selected{% endif %}>{% trans %}standard{% endtrans %}</option>
+                <option value="true"{% if config.get('advanced_user', True) == True %} selected{% endif %}>{% trans %}advanced{% endtrans %}</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+
+      <fieldset data-role="collapsible">
         <legend>{% trans %}Storage{% endtrans %}</legend>
 
         <ul data-role="listview" data-inset="false">
@@ -409,5 +515,19 @@
       <div class="ui-block-b"><button type="submit">{% trans %}Save{% endtrans %}</button></div>
     </div>
   </form>
+
+  <div data-role="popup" id="dlgAddUser" data-overlay-theme="a" class="ui-corner-all">
+    <form id="frmAddUser" data-ajax="false">
+      <div style="padding:10px 20px;">
+        <h3>{% trans %}Add a new user{% endtrans %}</h3>
+        <label for="iNewUsername" class="ui-hidden-accessible">{% trans %}User name{% endtrans %}:</label>
+        <input id="iNewUsername" type="text" name="username" value="" placeholder="{% trans %}User name{% endtrans %}" class="required">
+        <fieldset class="ui-grid-a">
+          <div class="ui-block-a"><input type="button" data-rel="back" data-icon="delete" value="{% trans %}Cancel{% endtrans %}" /></div>
+          <div class="ui-block-b"><input type="submit" data-icon="check" value="{% trans %}Create{% endtrans %}" /></div>
+        </fieldset>
+      </div>
+    </form>
+  </div>
 {% endblock %}
 

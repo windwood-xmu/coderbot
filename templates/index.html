@@ -47,6 +47,12 @@
         return isFormValid;
       }
 
+      // Helper function to capitalize first letter of words in a string
+      // TODO : Could be in a global .js
+      String.prototype.ucFirst = function() {
+        return this.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+      }
+
 
       $(function(){
         // Configure loader widget with defaults
@@ -91,12 +97,41 @@
         }, 5000);
       });
 
+      $(function(){
+        // Dynamically fill the list of users before popup opening
+        $("#btnLogin").on('vclick', function() {
+          $("#lstUsers").empty();
+          $.getJSON('/user/list', function(json) {
+            if (json.users) {
+              $.each(json.users, function(i, user) {
+                $("<li><a href='/user/login?username="+user+"' data-ajax='false'><span class='ui-icon-user ui-icon-big ui-btn-icon-left ui-icon-color"+(i%10)+"'>"+user.ucFirst()+"</span></a></li>").appendTo("#lstUsers");
+              });
+              $("#lstUsers").listview("refresh");
+              $("#login").popup("open");
+            } else {
+              notify("{% trans %}Unable to get list of users{% endtrans %}.");
+            }
+          });
+        });
+      });
+
       {% block script %}
       {% endblock script %}
     </script>
     <style>
+      .ui-icon-big:after {
+        background-size: 20px;
+        width: 32px;
+        height: 32px;
+        margin-top: -16px;
+      }
+      {% for i in range(0, 10) %}
+        .ui-icon-color{{ i }}:after {
+          background-color: hsl({{ (i*108)%360 }},100%,50%);
+        }
+      {% endfor %}
       .ui-notification-bar {
-        position: absolute;
+        position: absolute; /* TODO: Try to position at top of window, not top of page */
         top:    1em;
         left:   1em;
         /*right:  1em;*/
@@ -130,9 +165,9 @@
         <h1>CoderBot</h1>
         <a href="#" id="a_bot_status" data-icon="check" class="s_bot_status ui-btn-left">{% trans %}Online{% endtrans %}</a>
         {% if session.username %}
-          <a href="/user/logout" data-icon="user" class="ui-btn-right" data-ajax="false">{{ session.username }}</a>
+          <a href="/user/logout" data-icon="user" class="ui-btn-right" data-ajax="false">{{ session.username|capitalize }}</a>
         {% else %}
-          <a href="#login" data-icon="user" class="ui-btn-right" data-theme="b" data-rel="popup" data-transition="pop" data-position-to="window">{% trans %}Login{% endtrans %}</a>
+          <a id="btnLogin" data-icon="user" class="ui-btn-right" data-theme="b" data-rel="popup" data-transition="pop" data-position-to="window">{% trans %}Login{% endtrans %}</a>
         {% endif %}
         <div data-role="navbar" data-iconpos="left">
           <ul>
@@ -145,14 +180,8 @@
       {% block page %}{% endblock %}
       {% if not session.username %}
         <div id="login" data-role="popup" data-overlay-theme="a">
-          <form action="/user/login" method="post" data-ajax="false">
-            <div style="padding:10px 20px;">
-              <h3>{% trans %}Please sign in{% endtrans %}</h3>
-              <label for="username" class="ui-hidden-accessible">{% trans %}Username{% endtrans %} :</label>
-              <input id="username" name="username" placeholder="{% trans %}Username{% endtrans %}" type="text">
-              <button type="submit">{% trans %}Sign in{% endtrans %}</button>
-            </div>
-          </form>
+          <h3 class='ui-bar'>{% trans %}Please sign in{% endtrans %}</h3>
+          <ul id="lstUsers" data-role="listview" data-ajax="false"></ul>
         </div>
       {% endif %}
     </div><!-- data-role="page" -->

@@ -2,10 +2,7 @@ import json
 from utils.POO import SingletonDecorator as Singleton
 
 # TODO:
-# - make less coderbot dependent (default filename)
-# - don't use singleton here
-#DEFAULT_CONFIG_FILENAME = "config.cfg"
-#DEFAULT_CONFIG_FILENAME = "coderbot.cfg"
+# - don't use singleton here (or not)
 
 @Singleton
 class Config:
@@ -13,7 +10,6 @@ class Config:
         # Avoid reinitialisation in case of multiple call
         if hasattr(self, '_config') and self._config: return
 
-        #if filename is None: filename = DEFAULT_CONFIG_FILENAME
         self._filename = filename
         self._config = {}
         self.load()
