@@ -91,7 +91,7 @@ $(document).on( "pagecreate", '#page-program', function( event ) {
         var data =  {'name': prog.name};
         $.ajax({url: '/program/load', data: data, type: "GET", success:function(data) {
           var xml = Blockly.Xml.textToDom(data);
-          Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+          Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
           $.mobile.loading("hide");
           $('#id_prog_name').text("[ " + prog.name + " ]");
 	}});
