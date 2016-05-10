@@ -1,0 +1,297 @@
+<xml id="toolbox" style="display: none">
+{###########################################################################}
+{############################ Basics definition ############################}
+{###########################################################################}
+
+{% if config.get('editor_level', 'basic_move') in ['basic_move', 'basic'] %}
+  <block type="coderbot_moveForward"></block>
+  <block type="coderbot_moveBackward"></block>
+  <block type="coderbot_turnLeft"></block>
+  <block type="coderbot_turnRight"></block>
+  {% if config.get('editor_level', 'basic_move') == 'basic' %}
+    <block type="coderbot_say">
+      <value name="TEXT">
+        <block type="text">
+          <field name="TEXT">{{ session.get('username', gettext('Hello'))|capitalize }}</field>
+        </block>
+      </value>
+    </block>
+    <block type="coderbot_camera_photoTake"></block>
+    <block type="coderbot_camera_videoRec"></block>
+    <block type="coderbot_camera_videoStop"></block>
+    <block type="coderbot_repeat"></block>
+      <value name="TIMES">
+        <block type="math_number">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+  {% endif %}
+
+{###########################################################################}
+{########################### Advanced definition ###########################}
+{###########################################################################}
+
+{% else %}
+  <category name="{% trans %}Logic{% endtrans %}" colour="210">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    {% endif %}
+  </category>
+  <category name="{% trans %}Loops{% endtrans %}" colour="120">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    {% endif %}
+  </category>
+  <category name="{% trans %}Math{% endtrans %}" colour="230">
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+      <block type="math_number_property"></block>
+      <block type="math_change">
+        <value name="DELTA">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round"></block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo"></block>
+      <block type="math_constrain">
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    {% endif %}
+  </category>
+  <category name="{% trans %}Text{% endtrans %}" colour="160">
+    <block type="text"></block>
+    <block type="text_join"></block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="text_append">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+    {% endif %}
+    <block type="text_length"></block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="text_isEmpty"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}text{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}text{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}text{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_changeCase"></block>
+      <block type="text_trim"></block>
+    {% endif %}
+    <block type="text_print"></block>
+  </category>
+  {% if config.get('editor_level', 'basic_move') == 'adv' %}
+    <category name="{% trans %}Lists{% endtrans %}" colour="260">
+      <block type="lists_create_empty"></block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}list{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}list{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}list{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <shadow type="variables_get">
+            <field name="VAR">{% trans %}list{% endtrans %}</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="{% trans %}Colour{% endtrans %}" colour="20">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb"></block>
+      <block type="colour_blend"></block>
+    </category>
+  {% endif %}
+  <category name="{% trans %}Variables{% endtrans %}" colour="330" custom="VARIABLE"></category>
+  {% if config.get('editor_level', 'basic_move') == 'adv' %}
+    <category name="{% trans %}Functions{% endtrans %}" colour="290" custom="PROCEDURE"></category>
+  {% endif %}
+  <category name="{% trans %}Movement{% endtrans %}" colour="40">
+    <block type="coderbot_moveForward"></block>
+    <block type="coderbot_moveBackward"></block>
+    <block type="coderbot_turnLeft"></block>
+    <block type="coderbot_turnRight"></block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="coderbot_motion_move">
+        <value name="DIST">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="coderbot_motion_turn">
+        <value name="ANGLE">
+          <shadow type="math_number">
+            <field name="NUM">90</field>
+          </shadow>
+        </value>
+      </block>
+    {% endif %}
+    <block type="coderbot_adv_move">
+      <value name="SPEED">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+      <value name="ELAPSE">
+        <shadow type="math_number">
+          <field name="NUM">0.2</field>
+        </shadow>
+      </value>
+    </block>
+    {% if config.get('editor_level', 'basic_move') == 'adv' %}
+      <block type="coderbot_adv_motor">
+        <value name="SPEED_LEFT">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+        <value name="SPEED_RIGHT">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+        <value name="ELAPSE">
+          <shadow type="math_number">
+            <field name="NUM">1.0</field>
+          </shadow>
+        </value>
+      </block>
+    {% endif %}
+    <block type="coderbot_adv_stop"></block>
+    <block type="coderbot_sleep">
+      <value name="ELAPSE">
+        <shadow type="math_number">
+          <field name="NUM">1.0</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="{% trans %}Camera{% endtrans %}" colour="120">
+    <block type="coderbot_camera_photoTake"></block>
+    <block type="coderbot_camera_videoRec"></block>
+    <block type="coderbot_camera_videoStop"></block>
+  </category>
+  <category name="{% trans %}Sensor{% endtrans %}" colour="290">
+    <block type="coderbot_adv_pathAhead"></block>
+    <block type="coderbot_adv_findLine"></block>
+    <block type="coderbot_adv_findSignal"></block>
+    <block type="coderbot_adv_findFace"></block>
+    <block type="coderbot_adv_findColor">
+      <value name="COLOR">
+        <shadow type="colour_picker">
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="{% trans %}Sound{% endtrans %}" colour="290">
+    <block type="coderbot_say"></block>
+  </category>      
+{% endif %}
+</xml>

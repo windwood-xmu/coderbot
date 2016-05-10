@@ -58,6 +58,9 @@ def get_locale():
     # Set the speech synthesis to the language detected (according to IHM)
     app.bot.sound.language(loc)
     return loc
+@app.context_processor
+def utility_processor():
+    return dict(get_locale=get_locale)
 
 ######################################################################################################
 # Routes definition
@@ -77,10 +80,10 @@ def handle_template(filename):
         files = zip(pics, ['picture']*len(pics))
         files.extend(zip(vids, ['video']*len(vids)))
         files.sort()
-        return render_template("gallery.html", pictures=files)
-    if filename == 'preferences':
-        return render_template("preferences.html", config=Config())
-    return render_template("%s.html" % filename)
+        return render_template("gallery.html", pictures=files, config=Config())
+    #if filename == 'preferences':
+    #    return render_template("preferences.html", config=Config())
+    return render_template("%s.html" % filename, config=Config())
 
 # Path for configuration API
 @app.route("/config/<command>", methods=['GET', 'POST'])

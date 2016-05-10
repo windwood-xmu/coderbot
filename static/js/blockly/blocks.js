@@ -31,10 +31,10 @@ Blockly.Blocks['coderbot_repeat'] = {
     this.setColour(120);
     var di = this.appendDummyInput();
     if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-    	di.appendField(new Blockly.FieldImage('/images/blocks/loop_repeat.png', 32, 32, '*'));
+        di.appendField(new Blockly.FieldImage('/images/blocks/loop_repeat.png', 32, 32, '*'));
     } else {
         di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
-    }		
+    }        
     di.appendField(new Blockly.FieldTextInput('10',
             Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
     if(CODERBOT_PROG_LEVEL.indexOf("basic")<0) {
@@ -42,7 +42,7 @@ Blockly.Blocks['coderbot_repeat'] = {
     }
     var si = this.appendStatementInput('DO');
     if(CODERBOT_PROG_LEVEL.indexOf("basic")<0) {
-    	si.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+        si.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     }
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -223,7 +223,7 @@ Blockly.Blocks['coderbot_say'] = {
     if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
         vi.appendField(new Blockly.FieldImage('/images/blocks/say.png', 32, 32, '*'));
     } else {
-    	vi.appendField(Blockly.Msg.CODERBOT_SAY);
+        vi.appendField(Blockly.Msg.CODERBOT_SAY);
     }
     this.setPreviousStatement(true);
     this.setNextStatement(true);

@@ -10,27 +10,8 @@ var TOOLTIPS = {
   "RIGHT":    Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT
 };
 
-// Advanced extensions to Blockly's language.
+// Advanced extension to Blockly's language.
 
-Blockly.Blocks['coderbot_repeat'] = {
-  /**
-   * Block for repeat n times (internal number).
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
-    this.setColour(120);
-    var di = this.appendDummyInput();
-    di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
-    di.appendField(new Blockly.FieldTextInput('10', Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
-    di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES);
-    var si = this.appendStatementInput('DO');
-  	si.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
-  }
-};
 
 Blockly.Blocks['coderbot_moveForward'] = {
   // Block for moving forward.

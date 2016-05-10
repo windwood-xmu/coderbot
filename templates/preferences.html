@@ -8,87 +8,97 @@
 <script type="text/javascript">
   {% block script %}
 
-    $(function(){
-      // Helper function to fill listview of users
-      function loadUserList () {
-        $("#list_users").empty();
-        $("<li data-icon='plus'><a href='#dlgAddUser' data-rel='popup' data-position-to='window' data-transition='pop')><span class='ui-icon-user ui-btn-icon-left ui-icon-big'>{% trans %}Add a new user{% endtrans %}</span></a></li>").appendTo("#list_users");
-        $.getJSON('/user/list', function(json) {
-          if (json.users) {
-            $.each(json.users, function(i, user) {
-              $("<li><a class='confirm'><span class='ui-icon-user ui-icon-big ui-btn-icon-left ui-icon-color"+(i%10)+"'>"+user.ucFirst()+"</span></a></li>")
-                .appendTo("#list_users")
-                .on('vclick', delUser);
-            });
-            $("#list_users").listview("refresh");
-          } else {
-            notify("{% trans %}Unable to get list of users{% endtrans %}.");
-          }
-        });
-      };
+    {% if session.username == "admin" %}
+      $(function(){
+        // Helper function to fill listview of users
+        function loadUserList () {
+          $("#list_users").empty();
+          $("<li data-icon='plus'><a href='#dlgAddUser' data-rel='popup' data-position-to='window' data-transition='pop')><span class='ui-icon-user ui-btn-icon-left ui-icon-big'>{% trans %}Add a new user{% endtrans %}</span></a></li>").appendTo("#list_users");
+          $.getJSON('/user/list', function(json) {
+            if (json.users) {
+              $.each(json.users, function(i, user) {
+                $("<li><a class='confirm'><span class='ui-icon-user ui-icon-big ui-btn-icon-left ui-icon-color"+(i%10)+"'>"+user.ucFirst()+"</span></a></li>")
+                  .appendTo("#list_users")
+                  .on('vclick', delUser);
+              });
+              $("#list_users").listview("refresh");
+            } else {
+              notify("{% trans %}Unable to get list of users{% endtrans %}.");
+            }
+          });
+        };
 
-      // Helper function to create new user
-      function addUser (username) {
-        $.getJSON("/user/add", {username: username}, function(json){
-          if (json.result == true) {
-            loadUserList();
-          } else {
-            notify("{% trans %}Unable to create user{% endtrans %} "+username+"."+(json.error?"\n"+json.error:""));
-          }
-        });
-      };
-      // Helper function to delete a user
-      function delUser () {
-        username = $(this).text();
-        if (confirm("{% trans %}Do you really want to delete this user{% endtrans %} : "+username+" ?")) {
-          $.getJSON("/user/del", {username: username}, function(json){
+        // Helper function to create new user
+        function addUser (username) {
+          $.getJSON("/user/add", {username: username}, function(json){
             if (json.result == true) {
               loadUserList();
             } else {
-              notify("{% trans %}Unable to delete user{% endtrans %} "+username+"."+(json.error?"\n"+json.error:""));
+              notify("{% trans %}Unable to create user{% endtrans %} "+username+"."+(json.error?"\n"+json.error:""));
             }
           });
-        }
-        return false;
-      };
+        };
+        // Helper function to delete a user
+        function delUser () {
+          username = $(this).text();
+          if (confirm("{% trans %}Do you really want to delete this user{% endtrans %} : "+username+" ?")) {
+            $.getJSON("/user/del", {username: username}, function(json){
+              if (json.result == true) {
+                loadUserList();
+              } else {
+                notify("{% trans %}Unable to delete user{% endtrans %} "+username+"."+(json.error?"\n"+json.error:""));
+              }
+            });
+          }
+          return false;
+        };
 
-      // Load user list when page is loaded
-      loadUserList();
+        // Load user list when page is loaded
+        loadUserList();
 
-      $("#frmAddUser").on('submit', function() {
-        if (validate($("#frmAddUser"))) {
-          $("#dlgAddUser").popup("close");
-          addUser($("#iNewUsername").val());
-        }
-        return false;
+        // Call useradd api facilities
+        $("#frmAddUser").on('submit', function() {
+          if (validate($("#frmAddUser"))) {
+            $("#dlgAddUser").popup("close");
+            addUser($("#iNewUsername").val());
+          }
+          return false;
+        });
+
+        // Automatic facilities
+
+        $(".camera_resolutions_name").change(function(e) {
+          $("#" + $(this).attr("for")).attr("name", "camera_resolutions["+$(this).val()+"]");
+        });
+
+        $("#use_servos").change(function() {
+          if ($(this).val() == "true") {
+            $("#servos_configuration").show();
+            $("#motors_configuration").hide();
+          } else {
+            $("#servos_configuration").hide();
+            $("#motors_configuration").show();
+          }
+        });
+
       });
-    });
+    {% endif %}
 
 
     $(function(){
-      $(".camera_resolutions_name").change(function(e) {
-        $("#" + $(this).attr("for")).attr("name", "camera_resolutions["+$(this).val()+"]");
-      });
-
-      {% if config.get('advanced_user', True) == False %}
+      // Advanced parameters accessibility
+      {% if config.get('advanced_user', False) == False and session.username != "admin" %}
         $(".advanced").hide();
       {% endif %}
-      $("#advanced_user").change(function(e) {
-        console.log($("#advanced_user").val());
-        if ($("#advanced_user").val() == "true") { $(".advanced").show(); }
-        else                                     { $(".advanced").hide(); }
-      });
+      {% if session.username != "admin" %}
+        $("#advanced_user").change(function(e) {
+          console.log($("#advanced_user").val());
+          if ($("#advanced_user").val() == "true") { $(".advanced").show(); }
+          else                                     { $(".advanced").hide(); }
+        });
+      {% endif %}
 
-      $("#use_servos").change(function() {
-        if ($(this).val() == "true") {
-          $("#servos_configuration").show();
-          $("#motors_configuration").hide();
-        } else {
-          $("#servos_configuration").hide();
-          $("#motors_configuration").show();
-        }
-      });
-
+      // Form submit function
       $("#frmConfig").on('submit', function(e) {
         e.preventDefault();
 
@@ -149,6 +159,7 @@
 </style>
 
 {% block page %}
+  <h5 style="text-align: center">Work in progress... Some parameters are disabled.</h5>
   <form id="frmConfig" action="/config/save" method="POST" data-ajax="false">
     <div data-role="collapsibleset" data-inset="false">
 {% if session.username == 'admin' %}
@@ -168,6 +179,7 @@
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions0" name="camera_resolutions[default]" data-native-menu="false">
+                    <option value="[1296,972]"{% if config.camera_resolutions['default'] == [1296,972] %} selected{% endif %}>1296x972</option>
                     <option value="[1024,768]"{% if config.camera_resolutions['default'] == [1024,768] %} selected{% endif %}>1024x768</option>
                     <option value="[640,480]"{% if config.camera_resolutions['default'] == [640,480] %} selected{% endif %}>640x480</option>
                     <option value="[320,240]"{% if config.camera_resolutions['default'] == [320,240] %} selected{% endif %}>320x240</option>
@@ -179,6 +191,7 @@
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions1" name="camera_resolutions[SD]" data-native-menu="false">
+                    <option value="[1296,972]"{% if config.camera_resolutions['SD'] == [1296,972] %} selected{% endif %}>1296x972</option>
                     <option value="[1024,768]"{% if config.camera_resolutions['SD'] == [1024,768] %} selected{% endif %}>1024x768</option>
                     <option value="[640,480]"{% if config.camera_resolutions['SD'] == [640,480] %} selected{% endif %}>640x480</option>
                     <option value="[320,240]"{% if config.camera_resolutions['SD'] == [320,240] %} selected{% endif %}>320x240</option>
@@ -190,6 +203,7 @@
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions2" name="camera_resolutions[LD]" data-native-menu="false">
+                    <option value="[1296,972]"{% if config.camera_resolutions['LD'] == [1296,972] %} selected{% endif %}>1296x972</option>
                     <option value="[1024,768]"{% if config.camera_resolutions['LD'] == [1024,768] %} selected{% endif %}>1024x768</option>
                     <option value="[640,480]"{% if config.camera_resolutions['LD'] == [640,480] %} selected{% endif %}>640x480</option>
                     <option value="[320,240]"{% if config.camera_resolutions['LD'] == [320,240] %} selected{% endif %}>320x240</option>
@@ -203,6 +217,7 @@
                   <div data-role="controlgroup" data-type="horizontal">
                     <input class="camera_resolutions_name" for="camera_resolutions0" type="text" value="default" disabled="true" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions0" name="camera_resolutions[default]" data-native-menu="false">
+                      <option value="[1296,972]"{% if config.camera_resolutions['default'] == [1296,972] %} selected{% endif %}>1296x972</option>
                       <option value="[1024,768]"{% if config.camera_resolutions['default'] == [1024,768] %} selected{% endif %}>1024x768</option>
                       <option value="[640,480]"{% if config.camera_resolutions['default'] == [640,480] %} selected{% endif %}>640x480</option>
                       <option value="[320,240]"{% if config.camera_resolutions['default'] == [320,240] %} selected{% endif %}>320x240</option>
@@ -214,6 +229,7 @@
                   <div data-role="controlgroup" data-type="horizontal">
                     <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="SD" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions1" name="camera_resolutions[SD]" data-native-menu="false">
+                      <option value="[1296,972]"{% if config.camera_resolutions['SD'] == [1296,972] %} selected{% endif %}>1296x972</option>
                       <option value="[1024,768]"{% if config.camera_resolutions['SD'] == [1024,768] %} selected{% endif %}>1024x768</option>
                       <option value="[640,480]"{% if config.camera_resolutions['SD'] == [640,480] %} selected{% endif %}>640x480</option>
                       <option value="[320,240]"{% if config.camera_resolutions['SD'] == [320,240] %} selected{% endif %}>320x240</option>
@@ -225,6 +241,7 @@
                   <div data-role="controlgroup" data-type="horizontal">
                     <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="LD" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions2" name="camera_resolutions[LD]" data-native-menu="false">
+                      <option value="[1296,972]"{% if config.camera_resolutions['LD'] == [1296,972] %} selected{% endif %}>1296x972</option>
                       <option value="[1024,768]"{% if config.camera_resolutions['LD'] == [1024,768] %} selected{% endif %}>1024x768</option>
                       <option value="[640,480]"{% if config.camera_resolutions['LD'] == [640,480] %} selected{% endif %}>640x480</option>
                       <option value="[320,240]"{% if config.camera_resolutions['LD'] == [320,240] %} selected{% endif %}>320x240</option>
@@ -237,7 +254,39 @@
             </div>
             <div class="ui-field-contain">
               <label for="camera_framerate">{% trans %}framerate{% endtrans %}</label>
-              <input id="camera_framerate" name="camera_framerate" pattern="[0-9]*" value="{{ config.get('camera_framerate', 30) }}" placeholder="{% trans %}framerate{% endtrans %}">
+              <input id="camera_framerate" name="camera_framerate" min="1" max="90" value="{{ config.get('camera_framerate', 30) }}" type="range" data-highlight="true">
+            </div>
+            <div class="ui-field-contain">
+              <label for="exposure_mode">{% trans %}Exposure mode{% endtrans %}</label>
+              <select disabled="true" id="exposure_mode" data-native-menu="false">
+                <option>{% trans %}Auto{% endtrans %}</option>
+                <option>{% trans %}Sports{% endtrans %}</option>
+                <option>{% trans %}Night{% endtrans %}</option>
+                <option>{% trans %}Snow{% endtrans %}</option>
+                <option>{% trans %}Beach{% endtrans %}</option>
+                <option>{% trans %}Fireworks{% endtrans %}</option>
+                <option>{% trans %}Fixed FPS{% endtrans %}</option>
+                <option>{% trans %}Anti shake{% endtrans %}</option>
+                <option>{% trans %}Very long{% endtrans %}</option>
+              </select>
+            </div>
+            <div class="ui-field-contain">
+              <label for="awb_mode">{% trans %}AWB Mode{% endtrans %}</label>
+              <select disabled="true" id="awb_mode" data-native-menu="false">
+                <option>{% trans %}Auto{% endtrans %}</option>
+                <option>{% trans %}Sunlight{% endtrans %}</option>
+                <option>{% trans %}Cloudy{% endtrans %}</option>
+                <option>{% trans %}Shade{% endtrans %}</option>
+                <option>{% trans %}Tungsten{% endtrans %}</option>
+                <option>{% trans %}Fluorescent{% endtrans %}</option>
+                <option>{% trans %}Incandescent{% endtrans %}</option>
+                <option>{% trans %}Flash{% endtrans %}</option>
+                <option>{% trans %}Horizon{% endtrans %}</option>
+              </select>
+            </div>
+            <div class="ui-field-contain">
+              <label for="jpeg_quality">{% trans %}Jpeg quality{% endtrans %}</label>
+              <input disabled="true" id="jpeg_quality" min="0" max="100" value="85" type="range" data-highlight="true">
             </div>
           </li>
 
@@ -287,6 +336,27 @@
               </div>
             </div>
           </li>
+
+          <li data-role="list-divider">{% trans %}Sensors{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <button>{% trans %}Add new sensor{% endtrans %}</button>
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Sensors{% endtrans %}</label>
+              <div data-role="controlgroup" data-type="horizontal">
+                <input disabled="true" placeholder="Name" data-wrapper-class="controlgroup-textinput ui-btn" />
+                <select disabled="true" data-native-menu="false">
+                  <option>In</option>
+                  <option>Out</option>
+                  <option>PWM</option>
+                  <option>Servo</option>
+                </select>
+                <input disabled="true" placeholder="Pin" data-wrapper-class="controlgroup-textinput ui-btn" />
+                <button disabled="true" data-iconpos="notext" data-icon="delete">delete</button>
+              </div>
+            </div>
+          </li>
         </ul>
       </fieldset>
 
@@ -300,6 +370,24 @@
               <input id="listen_port" name="listen_port" pattern="[0-9]*" value="{{ config.get('listen_port', 8080) }}" placeholder="{% trans %}User interface port to listen{% endtrans %}">
             </div>
           </li>
+          <li data-role="list-divider">{% trans %}Program to launch at startup{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label for="program_launch_at_start">{% trans %}Program name{% endtrans %}</label>
+              <input disabled="true" id="program_launch_at_start" placeholder="{% trans %}Program name{% endtrans %}">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}System commands{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label for="speech_command">{% trans %}Speech synthesis{% endtrans %}</label>
+              <input disabled="true" id="speech_command" placeholder="{% trans %}Speech synthesis{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label for="sound_player_command">{% trans %}Sound player{% endtrans %}</label>
+              <input disabled="true" id="sound_player_command" placeholder="{% trans %}Sound player{% endtrans %}">
+            </div>
+          </li>
           <li data-role="list-divider">{% trans %}Speech synthesis{% endtrans %}</li>
           <li>
             <div class="ui-field-contain">
@@ -308,6 +396,55 @@
                 <option value="false"{% if config.get('useMbrola', True) == False %} selected{% endif %}>{% trans %}No{% endtrans %}</option>
                 <option value="true"{% if config.get('useMbrola', True) == True %} selected{% endif %}>{% trans %}Yes{% endtrans %}</option>
               </select>
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Restart/Halt{% endtrans %}</li>
+          <li>
+            <div class="ui-grid-c">
+              <div class="ui-block-a"><button disabled="true">{% trans %}Halt{% endtrans %}</button></div>
+              <div class="ui-block-b"><button disabled="true">{% trans %}Restart{% endtrans %}</button></div>
+              <div class="ui-block-c"><button disabled="true">{% trans %}Reboot{% endtrans %}</button></div>
+              <div class="ui-block-d"><button disabled="true">{% trans %}Update{% endtrans %}</button></div>
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+
+      <fieldset data-role="collapsible">
+        <legend>{% trans %}Wifi{% endtrans %}</legend>
+        <ul data-role="listview" data-inset="false">
+          <li data-role="list-divider">{% trans %}Wifi parameters{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}SSID{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}SSID{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}keypass{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}keypass{% endtrans %}">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}IP parameters{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}DHCP{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}IP{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}IP{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Subnet{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Subnet{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Gateway{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Gateway{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}DNS{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}DNS{% endtrans %}">
             </div>
           </li>
         </ul>
@@ -330,185 +467,198 @@
             </div>
           </li>
           <li data-role="list-divider">{% trans %}Profil of all users and guest user (without login){% endtrans %}</li>
+{% else %}
+          <li data-role="list-divider">{% trans %}Personal profil{% endtrans %}</li>
 {% endif %}
           <li>
             <div class="ui-field-contain">
               <label for="advanced_user">{% trans %}Configuration mode{% endtrans %}</label>
               <select id="advanced_user" name="advanced_user" data-role="flipswitch" data-wrapper-class="medium-flipswitch">
-                <option value="false"{% if config.get('advanced_user', True) == False %} selected{% endif %}>{% trans %}standard{% endtrans %}</option>
-                <option value="true"{% if config.get('advanced_user', True) == True %} selected{% endif %}>{% trans %}advanced{% endtrans %}</option>
+                <option value="false"{% if config.get('advanced_user', False) == False %} selected{% endif %}>{% trans %}standard{% endtrans %}</option>
+                <option value="true"{% if config.get('advanced_user', False) == True %} selected{% endif %}>{% trans %}advanced{% endtrans %}</option>
+              </select>
+            </div>
+            <div class="ui-field-contain">
+              <label for="editor_level">{% trans %}Programming level{% endtrans %}</label>
+              <select id="editor_level" name="editor_level" data-native-menu="false">
+                <option value="basic_move"{% if config.get('editor_level', 'basic_move') == 'basic_move' %} selected{% endif %}>{% trans %}Move{% endtrans %}</option>
+                <option value="basic"{% if config.get('editor_level', 'basic_move') == 'basic' %} selected{% endif %}>{% trans %}Basic{% endtrans %}</option>
+                <option value="std"{% if config.get('editor_level', 'basic_move') == 'std' %} selected{% endif %}>{% trans %}Standard{% endtrans %}</option>
+                <option value="adv"{% if config.get('editor_level', 'basic_move') == 'adv' %} selected{% endif %}>{% trans %}Advanced{% endtrans %}</option>
               </select>
             </div>
           </li>
-        </ul>
-      </fieldset>
-
-      <fieldset data-role="collapsible">
-        <legend>{% trans %}Storage{% endtrans %}</legend>
-
-        <ul data-role="listview" data-inset="false">
-          <li data-role="list-divider">{% trans %}Image and video files storage parameters{% endtrans %}</li>
-          <li>
+          <li data-role="list-divider" class="advanced">{% trans %}Storage path{% endtrans %}</li>
+          <li class="advanced">
             <div class="ui-field-contain">
-              <label for="record_path">{% trans %}Path{% endtrans %}</label>
+              <label for="record_path">{% trans %}Pictures and videos{% endtrans %}</label>
               <input id="record_path" name="record_path" value="{{ config.get('record_path', 'DCIM') }}" placeholder="{% trans %}Path of recorded images and videos{% endtrans %}">
             </div>
-          </li>
-          <li data-role="list-divider">{% trans %}Program files storage parameters{% endtrans %}</li>
-          <li>
             <div class="ui-field-contain">
-              <label for="program_path">{% trans %}Path{% endtrans %}</label>
+              <label for="program_path">{% trans %}Programs{% endtrans %}</label>
               <input id="program_path" name="program_path" value="{{ config.get('program_path', 'data') }}" placeholder="{% trans %}Path for save program to{% endtrans %}">
             </div>
-            <div class="ui-field-contain advanced">
-              <label for="program_extension">{% trans %}File extension{% endtrans %}</label>
+            <div class="ui-field-contain">
+              <label for="program_extension">{% trans %}Programs extension{% endtrans %}</label>
               <input id="program_extension" name="program_extension" value="{{ config.get('program_extension', 'bot') }}" placeholder="{% trans %}Extension for program files{% endtrans %}">
             </div>
           </li>
         </ul>
       </fieldset>
 
-      <!--div data-role="collapsible"><h3>{% trans %}Control{% endtrans %}</h3>
-        <div class="ui-field-contain">
-          <label for="i_ctrl_move_mode">{% trans %}Movement assisted by vision{% endtrans %}</label>
-          <input type="checkbox" data-role="flipswitch" id="i_ctrl_move_mode" name="ctrl_move_motion" value="yes"{%if config.ctrl_move_motion%} checked{%endif%}>
-        </div>
-        <legend>{% trans %}Step timing | distance / angle{% endtrans %}</legend>
-        <label for="i_ctrl_fw_speed">{% trans %}Forward speed{% endtrans %}</label>
-        <input type="text" id="i_ctrl_fw_speed" name="ctrl_fw_speed" value="{{config.ctrl_fw_speed}}">
-        <label for="i_ctrl_fw_elapse">{% trans %}Forward elapse / distance{% endtrans %}</label>
-        <input type="text" id="i_ctrl_fw_elapse" name="ctrl_fw_elapse" value="{{config.ctrl_fw_elapse}}">
-        <label for="i_ctrl_tr_speed">{% trans %}Turn speed{% endtrans %}</label>
-        <input type="text" id="i_ctrl_tr_speed" name="ctrl_tr_speed" value="{{config.ctrl_tr_speed}}">
-        <label for="i_ctrl_tr_elapse">{% trans %}Turn elapse / angle{% endtrans %}</label>
-        <input type="text" id="i_ctrl_tr_elapse" name="ctrl_tr_elapse" value="{{config.ctrl_tr_elapse}}">
-        <div class="ui-field-contain">
-          <label for="i_ctrl_counter">{% trans %}Show control counter{% endtrans %}</label>
-          <input type="checkbox" data-role="flipswitch" id="i_ctrl_counter" name="ctrl_counter" value="yes"{%if config.ctrl_counter%} checked{%endif%}>
-        </div>
-        <label for="i_ctrl_hud_image">{% trans %}HUD image name{% endtrans %}</label>
-        <input type="text" id="i_ctrl_hud_image" name="ctrl_hud_image" value="{{config.ctrl_hud_image}}">
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Programming{% endtrans %}</h3>
-        <fieldset data-role="controlgroup" data-mini="true">
-          <legend>{% trans %}Editor level{% endtrans %}</legend>
-          <input type="radio" name="prog_level" id="r_prog_level_a" value="basic_move" {%if config.prog_level=='basic_move'%}checked="checked"{%endif%}>
-          <label for="r_prog_level_a">{% trans %}Move{% endtrans %}</label>
-          <input type="radio" name="prog_level" id="r_prog_level_b" value="basic" {%if config.prog_level=='basic'%}checked="checked"{%endif%}>
-          <label for="r_prog_level_b">{% trans %}Basic{% endtrans %}</label>
-          <input type="radio" name="prog_level" id="r_prog_level_c" value="std" {%if config.prog_level=='std'%}checked="checked"{%endif%}>
-          <label for="r_prog_level_c">{% trans %}Standard{% endtrans %}</label> 
-          <input type="radio" name="prog_level" id="r_prog_level_d" value="adv" {%if config.prog_level=='adv'%}checked="checked"{%endif%}>
-          <label for="r_prog_level_d">{% trans %}Advanced{% endtrans %}</label>     
-        </fieldset>
-        <fieldset data-role="controlgroup" data-mini="true">
-          <legend>{% trans %}Program editor details{% endtrans %}</legend>
-          <label for="c_prog_scrollbars">{% trans %}Shows Editor scrollbars{% endtrans %}</label>
-          <input type="checkbox" name="prog_scrollbars" id="c_prog_scrollbars" value="true" {%if config.prog_scrollbars=='true'%}checked="checked"{%endif%}>
-          <label for="c_prog_saveonrun">{% trans %}Save program before every run{% endtrans %}</label>
-          <input type="checkbox" name="prog_saveonrun" id="c_prog_saveonrun" value="true" {%if config.prog_saveonrun=='true'%}checiked="checked"{%endif%}>
-        </fieldset>
-        <div class="ui-field-contain">
-          <label for="i_prog_move_mode">{% trans %}Movement assisted by vision{% endtrans %}</label>
-          <input type="checkbox" data-role="flipswitch" id="i_prog_move_mode" name="prog_move_motion" value="yes"{%if config.prog_move_motion%} checked{%endif%}>
-        </div>
-        <label for="i_move_fw_speed">{% trans %}Forward speed{% endtrans %}</label>
-        <input type="text" id="i_move_fw_speed" name="move_fw_speed" value="{{config.move_fw_speed}}">
-        <label for="i_move_fw_elapse">{% trans %}Forward elapse / distance{% endtrans %}</label>
-        <input type="text" id="i_move_fw_elapse" name="move_fw_elapse" value="{{config.move_fw_elapse}}">
-        <label for="i_move_tr_speed">{% trans %}Turn speed{% endtrans %}</label>
-        <input type="text" id="i_move_tr_speed" name="move_tr_speed" value="{{config.move_tr_speed}}">
-        <label for="i_move_tr_elapse">{% trans %}Turn elapse / angle{% endtrans %}</label>
-        <input type="text" id="i_move_tr_elapse" name="move_tr_elapse" value="{{config.move_tr_elapse}}">
-        <fieldset data-role="controlgroup" data-mini="true">
-          <legend>{% trans %}Other program parameters{% endtrans %}</legend>
-          <label for="c_prog_video_rec">{% trans %}Auto record video on program run{% endtrans %}</label>
-          <input type="checkbox" name="prog_video_rec" id="c_prog_video_rec" value="true" {%if config.prog_video_rec=='true'%}checked="checked"{%endif%}>
-        </fieldset>
-        <label for="c_prog_maxblocks">{% trans %}Max number of blocks allowed{% endtrans %}</label>
-        <input type="text" name="prog_maxblocks" id="c_prog_maxblocks" value="{{config.prog_maxblocks}}">
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Sounds{% endtrans %}</h3>
-        <label for="i_sound_start">{% trans %}Start sound{% endtrans %}</label>
-        <input type="text" id="i_sound_start" name="sound_start" value="{{config.sound_start}}">
-        <label for="i_sound_stop">{% trans %}Stop sound{% endtrans %}</label>
-        <input type="text" id="i_sound_stop" name="sound_stop" value="{{config.sound_stop}}">
-        <label for="i_sound_shutter">{% trans %}Shutter sound{% endtrans %}</label>
-        <input type="text" id="i_sound_shutter" name="sound_shutter" value="{{config.sound_shutter}}">
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Sensor{% endtrans %}</h3>
-        <legend>{% trans %}Camera parameters{% endtrans %}</legend>
-        <label for="i_camera_exposure_mode">{% trans %}Exposure mode{% endtrans %}</label>
-        <select name="camera_exposure_mode" id="i_camera_exposure_mode" value="{{config.camera_exposure_mode}}">
-          <option value="auto"{%if config.camera_exposure_mode=='auto'%} selected{%endif%}>Auto</option>
-          <option value="sports"{%if config.camera_exposure_mode=='sports'%} selected{%endif%}>Sports</option>
-          <option value="night"{%if config.camera_exposure_mode=='night'%} selected{%endif%}>Night</option>
-          <option value="fixedfps"{%if config.camera_exposure_mode=='fixedfps'%} selected{%endif%}>Fixed FPS</option>
-          <option value="antishake"{%if config.camera_exposure_mode=='antishake'%} selected{%endif%}>Anti shake</option>
-          <option value="verylong"{%if config.camera_exposure_mode=='verylong'%} selected{%endif%}>Very long</option>
-        </select>
-        <label for="i_camera_refresh_timeout">{% trans %}Camera refresh timeout{% endtrans %}</label>
-        <input type="text" id="i_camera_refresh_timeout" name="camera_refresh_timeout" value="{{config.camera_refresh_timeout}}">
-        <label for="i_camera_jpeg_quality">{% trans %}Camera jpeg quality{% endtrans %}</label>
-        <input type="text" id="i_camera_jpeg_quality" name="camera_jpeg_quality" value="{{config.camera_jpeg_quality}}">
-        <label for="i_cv_image_factor">{% trans %}CV image resize factor (1/x){% endtrans %}</label>
-        <input type="text" id="i_cv_image_factor" name="cv_image_factor" value="{{config.cv_image_factor}}">
-        <label for="i_camera_path_object_size_min">{% trans %}Path object min size{% endtrans %}</label>
-        <input type="text" id="i_camera_path_object_size_min" name="camera_path_object_size_min" value="{{config.camera_path_object_size_min}}">
-        <label for="i_camera_path_object_size_max">{% trans %}Path object max size{% endtrans %}</label>
-        <input type="text" id="i_camera_path_object_size_max" name="camera_path_object_size_max" value="{{config.camera_path_object_size_max}}">
-        <label for="i_camera_color_object_size_min">{% trans %}Color object min size{% endtrans %}</label>
-        <input type="text" id="i_camera_color_object_size_min" name="camera_color_object_size_min" value="{{config.camera_color_object_size_min}}">
-        <label for="i_camera_color_object_size_max">{% trans %}Color object max size{% endtrans %}</label>
-        <input type="text" id="i_camera_color_object_size_max" name="camera_color_object_size_max" value="{{config.camera_color_object_size_max}}">
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Movement{% endtrans %}</h3>
-        <label for="i_move_motor_mode">{% trans %}Motor control mode{% endtrans %}</label>
-        <input type="text" id="i_move_motor_mode" name="move_motor_mode" value="{{config.move_motor_mode}}">
-        <label for="i_move_motor_trim">{% trans %}Trim factor (1.0 = center){% endtrans %}</label>
-        <input type="text" id="i_move_motor_trim" name="move_motor_trim" value="{{config.move_motor_trim}}">
-        <label for="i_move_power_angle_1">{% trans %}Power (target angle -15){% endtrans %}</label>
-        <input type="text" id="i_move_power_angle_1" name="move_power_angle_1" value="{{config.move_power_angle_1}}"> 
-        <label for="i_move_power_angle_2">{% trans %}Power (target angle -4){% endtrans %}</label>
-        <input type="text" id="i_move_power_angle_2" name="move_power_angle_2" value="{{config.move_power_angle_2}}">
-        <label for="i_move_power_angle_3">{% trans %}Power (target angle -1){% endtrans %}</label>
-        <input type="text" id="i_move_power_angle_3" name="move_power_angle_3" value="{{config.move_power_angle_3}}">
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Start{% endtrans %}</h3>
-        <label for="i_load_at_start">{% trans %}Load at start{% endtrans %}</label>
-        <input type="text" id="i_load_at_start" name="load_at_start" value="{{config.load_at_start}}">
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Button{% endtrans %}</h3>
-        <fieldset data-role="controlgroup" data-mini="true">
-          <legend>{% trans %}Button function{% endtrans %}</legend>
-          <label for="r_button_func_a">{% trans %}None{% endtrans %}</label>
-          <input type="radio" name="button_func" id="r_button_func_a" value="none" {%if config.button_func=='none'%}checked="checked"{%endif%}>
-          <label for="r_button_func_b">{% trans %}Start/Stop current program{% endtrans %}</label>
-          <input type="radio" name="button_func" id="r_button_func_b" value="startstop" {%if config.button_func=='startstop'%}checked="checked"{%endif%}>
-        </fieldset>
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}User Interface{% endtrans %}</h3>
-        <fieldset data-role="controlgroup" data-mini="true">
-          <legend>{% trans %}User Interface{% endtrans %}</legend>
-          <label for="c_show_page_control">{% trans %}Show Control page{% endtrans %}</label>
-          <input type="checkbox" name="show_page_control" id="c_show_page_control" value="true" {%if config.show_page_control=='true'%}checked="checked"{%endif%}>
-          <label for="c_show_control_move_commands">{% trans %}Show Control movement commands{% endtrans %}</label>
-          <input type="checkbox" name="show_control_move_commands" id="c_show_control_move_commands" value="true" {%if config.show_control_move_commands=='true'%}checked="checked"{%endif%}>
-          <label for="c_show_page_program">{% trans %}Show Program page{% endtrans %}</label>
-          <input type="checkbox" name="show_page_program" id="c_show_page_program" value="true" {%if config.show_page_program=='true'%}checked="checked"{%endif%}>
-          <label for="c_show_page_prefs">{% trans %}Show Preferences button{% endtrans %}</label>
-          <input type="checkbox" name="show_page_prefs" id="c_show_page_prefs" value="true" {%if config.show_page_prefs=='true'%}checked="checked"{%endif%}>
-        </fieldset>
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}WiFi{% endtrans %}</h3>
-        <a href="#popup-wifi" data-rel="popup" id="b_wifi_access_mode" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">{% trans %}WiFi Client access mode{% endtrans %}</a>
-      </div>
-      <div data-role="collapsible"><h3>{% trans %}Restart, Halt{% endtrans %}</h3>
-        <button id="b_halt" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-icon-left ui-icon-power" type="button">{% trans %}Halt{% endtrans %}</button>
-        <button id="b_restart" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-icon-left ui-icon-refresh" type="button">{% trans %}Restart{% endtrans %}</button>
-        <button id="b_reboot" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-icon-left ui-icon-alert" type="button">{% trans %}Reboot{% endtrans %}</button>
-        <button id="b_update" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-icon-left ui-icon-alert" type="button">{% trans %}Update System{% endtrans %}</button>
-      </div-->
+      <fieldset data-role="collapsible">
+        <legend>{% trans %}User interface{% endtrans %}</legend>
+        <ul data-role="listview" data-inset="false">
+          <li data-role="list-divider" class="advanced">{% trans %}UI's element visibility{% endtrans %}</li>
+          <li class="advanced">
+            <div class="ui-field-contain">
+              <label>{% trans %}Show control page{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Show program page{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Show preferences page{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Control page{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain advanced">
+              <label>{% trans %}Show movement commands{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Show counter of moves{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}HUD Image{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}HUD Image{% endtrans %}">
+            </div>
+            <div class="ui-field-contain advanced">
+              <label for="jpeg_quality">{% trans %}Streaming framerate{% endtrans %}</label>
+              <input disabled="true" id="jpeg_quality" min="1" max="10" value="10" type="range" data-highlight="true">
+            </div>
+          </li>
+          <li data-role="list-divider" class="advanced">{% trans %}Program page{% endtrans %}</li>
+          <li class="advanced">
+            <div class="ui-field-contain">
+              <label>{% trans %}Show scrollbars{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Auto save program{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Max number of blocks{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Max number of blocks{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label for="jpeg_quality">{% trans %}Streaming framerate{% endtrans %}</label>
+              <input disabled="true" id="jpeg_quality" min="1" max="10" value="10" type="range" data-highlight="true">
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+
+      <fieldset data-role="collapsible" class="advanced">
+        <legend>{% trans %}Movements{% endtrans %}</legend>
+        <ul data-role="listview" data-inset="false">
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Camera assisted moves{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Simple move blocks parameters{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Move speed{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Move speed{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Move time{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Move time{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Turn speed{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Turn speed{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Turn time{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Turn time{% endtrans %}">
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+
+      <fieldset data-role="collapsible">
+        <legend>{% trans %}Sounds and Camera{% endtrans %}</legend>
+        <ul data-role="listview" data-inset="false">
+          <li data-role="list-divider">{% trans %}Sounds{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}When startup{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Sound path{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}When shutdown{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Sound path{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}When shutter{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Sound path{% endtrans %}">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Camera{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Auto record video on program run{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+
+      <fieldset data-role="collapsible" class="advanced">
+        <legend>{% trans %}Detections parameters{% endtrans %}</legend>
+        <ul data-role="listview" data-inset="false">
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Draw detection on streaming images{% endtrans %}</label>
+              <input disabled="true" type="checkbox" data-role="flipswitch">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Path detection{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Min size{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Min size{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Max size{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Max size{% endtrans %}">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Color detection{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Min size{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Min size{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Max size{% endtrans %}</label>
+              <input disabled="true" placeholder="{% trans %}Max size{% endtrans %}">
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+
+
     </div>
     <div class="ui-grid-a">
       <div class="ui-block-a"><button type="reset">{% trans %}Cancel{% endtrans %}</button></div>
