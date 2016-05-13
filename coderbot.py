@@ -31,7 +31,7 @@ class CoderBot(object):
         self.streamers = {}
         definitions = [r for r in resolutions.keys() if r <> 'default']
         for i, definition in enumerate(definitions, start=2):
-            self.streamers[definition] = self.camera.getGrabber(threads=2, size=resolutions[definition], port=i)
+            self.streamers[definition] = self.camera.getGrabber(threads=4, size=resolutions[definition], port=i)
         self._init_complete = True
     def shutdown(self):
         self._init_complete = False

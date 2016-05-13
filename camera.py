@@ -8,6 +8,7 @@ from os.path import join as pathJoin
 
 RECORD_PATH = 'DCIM'
 
+# TODO : Perhaps use the Threading.Queue object insteed
 # Create a pool of image processors
 class Pool(object):
     def __init__(self):
@@ -132,8 +133,9 @@ class ImageGrabber(threading.Thread):
         #self._waitFrames = IndexedPool()
         self.frame = None
         self.previous_frame = None
-        for i in range(frames + 2):
+        for i in range(frames):
             f = picamera.array.PiRGBArray(camera, size)
+            f.lock = threading.Lock()
             self._frames.put(f)
 
         self.start()
@@ -150,21 +152,25 @@ class ImageGrabber(threading.Thread):
     def process(self, frame):
         with self._lock:
             processes = list(self._analysisHooks)
-        for p in processes:
-            p(frame)
+        with frame.lock:
+            for p in processes:
+                p(frame)
         # When all image processes are done, return frame to the pool
         #frame.truncate(0)
-        if self.previous_frame is not None: self._frames.put(self.previous_frame)
+        #if self.previous_frame is not None: self._frames.put(self.previous_frame)
+        #self.previous_frame = self.frame
         #if self.frame is not None: self._frames.put(self.frame)
-        self.previous_frame = self.frame
+        #self.frame = frame
         self.frame = frame
+        self._frames.put(frame)
 
     def _getNextImageProcessor(self):
         while not self._terminated:
             frame = self._frames.get()
             if frame:
-                frame.truncate(0)
-                yield frame
+                with frame.lock:
+                    frame.truncate(0)
+                    yield frame
 
                 processor = ImageProcessor.get()
                 if processor:

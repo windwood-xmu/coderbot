@@ -99,7 +99,7 @@
 
       $(function(){
         // Dynamically fill the list of users before popup opening
-        $("#btnLogin").on('vclick', function() {
+        $("#btnLogin").on('click', function() {
           $("#lstUsers").empty();
           $.getJSON('/user/list', function(json) {
             if (json.users) {

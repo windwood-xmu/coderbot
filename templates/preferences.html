@@ -578,19 +578,38 @@
           <li>
             <div class="ui-field-contain">
               <label>{% trans %}Move speed{% endtrans %}</label>
-              <input disabled="true" placeholder="{% trans %}Move speed{% endtrans %}">
+              <input name="default_speed_move" placeholder="{% trans %}Move speed{% endtrans %}">
             </div>
             <div class="ui-field-contain">
               <label>{% trans %}Move time{% endtrans %}</label>
-              <input disabled="true" placeholder="{% trans %}Move time{% endtrans %}">
+              <input name="default_elapse_move" placeholder="{% trans %}Move time{% endtrans %}">
             </div>
             <div class="ui-field-contain">
               <label>{% trans %}Turn speed{% endtrans %}</label>
-              <input disabled="true" placeholder="{% trans %}Turn speed{% endtrans %}">
+              <input name="default_speed_turn" placeholder="{% trans %}Turn speed{% endtrans %}">
             </div>
             <div class="ui-field-contain">
               <label>{% trans %}Turn time{% endtrans %}</label>
-              <input disabled="true" placeholder="{% trans %}Turn time{% endtrans %}">
+              <input name="default_elapse_turn" placeholder="{% trans %}Turn time{% endtrans %}">
+            </div>
+          </li>
+          <li data-role="list-divider">{% trans %}Camera assisted move blocks parameters{% endtrans %}</li>
+          <li>
+            <div class="ui-field-contain">
+              <label>{% trans %}Move speed{% endtrans %}</label>
+              <input name="default_speed_motion_move" placeholder="{% trans %}Move speed{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Move distance{% endtrans %}</label>
+              <input name="default_distance_motion_move" placeholder="{% trans %}Move time{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Turn speed{% endtrans %}</label>
+              <input name="default_speed_motion_turn" placeholder="{% trans %}Turn speed{% endtrans %}">
+            </div>
+            <div class="ui-field-contain">
+              <label>{% trans %}Turn angle{% endtrans %}</label>
+              <input name="default_angle_motion_turn" placeholder="{% trans %}Turn time{% endtrans %}">
             </div>
           </li>
         </ul>

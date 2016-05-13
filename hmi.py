@@ -37,6 +37,7 @@ def run_server(prog=None):
     app.bot = CoderBot()
     app.bot.camera.setDCIMpath(Config().get('record_path', RECORD_PATH))
 
+    # TODO : Launch the Config().get('program_launch_at_start', None) program
     if prog is not None:
         prog()
 
@@ -165,7 +166,8 @@ def handle_video():
 @app.route('/video/snapshot/<definition>')
 def video_snapshot(definition):
     if definition not in app.bot.streamers.keys(): abort(404) # Not found
-    frame = utils.cv.JPEGencode(app.bot.streamers[definition].frame)
+    with app.bot.streamers[definition].frame.lock:
+        frame = utils.cv.JPEGencode(app.bot.streamers[definition].frame)
     response = make_response(frame)
     response.headers['Content-Type'] = 'image/jpeg'
     response.headers['Content-Disposition'] = 'attachment; filename=snapshot.jpg'
@@ -176,7 +178,8 @@ def handle_video_stream(definition):
     if not definition in app.bot.streamers.keys(): abort(404) # Not found
     def streamer():
         while not app.shutdown_requested:
-            frame = utils.cv.JPEGencode(app.bot.streamers[definition].frame)
+            with app.bot.streamers[definition].frame.lock:
+                frame = utils.cv.JPEGencode(app.bot.streamers[definition].frame)
             yield ("--BOUNDARYSTRING\r\n" +
                    "Content-type: image/jpeg\r\n" +
                    "Content-Length: " + str(len(frame)) + "\r\n\r\n" +
@@ -315,11 +318,13 @@ if __name__ == '__main__':
     def demo():
 
         def retrieveDetections(frame):
-            if hasattr(app.bot.streamers['LD'].frame, 'faces'):
-                faces = app.bot.streamers['LD'].frame.faces
-                # Apply zoom on rectangles
-                # TODO: Pourquoi *2 ? le rapport entre le flux SD et LD est de 4 !
-                frame.faces = faces*2
+            LDframe = app.bot.streamers['LD'].frame
+            if not hasattr(LDframe, 'lock'): return
+            with LDframe.lock:
+                if not hasattr(LDframe, 'faces'): return
+                faces = LDframe.faces
+            # Apply zoom on rectangles
+            frame.faces = faces*2
 
         app.bot.streamers['LD'].addProcess(utils.cv.faceDetect)
         app.bot.streamers['SD'].addProcess(retrieveDetections)

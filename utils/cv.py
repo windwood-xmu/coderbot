@@ -31,6 +31,8 @@ def drawFPS(frame):
         FPS = counter / (step-start)
         start = step
         counter = 0
+    #FPS = counter / (step-start)
+
     cv2.putText(frame.array, "%.2f fps" % FPS, (2,14), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
 
 

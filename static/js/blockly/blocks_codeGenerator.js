@@ -30,22 +30,22 @@ Blockly.Python['coderbot_repeat'] = function(block) {
 
 Blockly.Python['coderbot_moveForward'] = function(block) {
   // Generate Python for moving forward.
-  return 'coderbot.motors.forward(speed=config.get("default_speed_move", 100), elapse=config.get("default_elapse", 1))\n';
+  return 'coderbot.motors.forward(speed=config.get("default_speed_move", 100), elapse=config.get("default_elapse_move", 1))\n';
 };
 
 Blockly.Python['coderbot_moveBackward'] = function(block) {
   // Generate Python for moving forward.
-  return 'coderbot.motors.backward(speed=config.get("default_speed_move", 100), elapse=config.get("default_elapse", 1))\n';
+  return 'coderbot.motors.backward(speed=config.get("default_speed_move", 100), elapse=config.get("default_elapse_move", 1))\n';
 };
 
 Blockly.Python['coderbot_turnLeft'] = function(block) {
   // Generate Python for turning left.
-  return 'coderbot.motors.left(speed=config.get("default_speed_turn", 100), elapse=config.get("default_elapse", 1))\n';
+  return 'coderbot.motors.left(speed=config.get("default_speed_turn", 100), elapse=config.get("default_elapse_turn", 1))\n';
 };
 
 Blockly.Python['coderbot_turnRight'] = function(block) {
   // Generate Python for turning left or right.
-  return 'coderbot.motors.right(speed=config.get("default_speed_turn", 100), elapse=config.get("default_elapse", 1))\n';
+  return 'coderbot.motors.right(speed=config.get("default_speed_turn", 100), elapse=config.get("default_elapse_turn", 1))\n';
 };
 
 Blockly.Python['coderbot_say'] = function(block) {
@@ -67,16 +67,15 @@ Blockly.Python['coderbot_sleep'] = function(block) {
 Blockly.Python['coderbot_adv_move'] = function(block) {
   // Generate Python for moving forward.
   var OPERATORS = {
-    FORWARD: ['forward'],
-    BACKWARD: ['backward'],
-    LEFT: ['left'],
-    RIGHT: ['right']
+    FORWARD: 'forward',
+    BACKWARD: 'backward',
+    LEFT: 'left',
+    RIGHT: 'right'
   };
-  var tuple = OPERATORS[block.getFieldValue('ACTION')];
-  var action = tuple[0];
+  var action = OPERATORS[block.getFieldValue('ACTION')];
   var speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
   var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE);
-  var code = "coderbot." + action + "(speed=" + speed + ", elapse="+elapse+")\n";
+  var code = "coderbot.motors." + action + "(speed=" + speed + ", elapse="+elapse+")\n";
   return code;
 };
 
