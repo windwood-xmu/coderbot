@@ -98,7 +98,7 @@ def handle_wifi():
 @app.route("/update", methods=["GET"])
 def handle_update():
    logging.info("updating system.start")
-   return Response(execute("./scripts/update_coderbot.sh"), mimetype='text/plain')
+   return Response(execute("./scripts/update_all.sh"), mimetype='text/plain')
 
 @app.route("/bot", methods=["GET"])
 def handle_bot():
