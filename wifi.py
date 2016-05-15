@@ -46,11 +46,17 @@ class WiFi():
 
   @classmethod
   def get_adapter_type(cls):
+    ad_type = None
     lsusb_out = subprocess.check_output("lsusb")
     for a in cls.adapters:
       if a in lsusb_out:
-        return a
-    return cls.adapters[0] 
+        ad_type = a
+    if ad_type is None:
+      iwcfg = subprocess.check_output("iwconfig")
+      if "wlan0" in iwcfg:
+        ad_type = "RT5370"
+      
+    return ad_type 
     
   @classmethod
   def start_hostapd(cls):
@@ -83,22 +89,6 @@ class WiFi():
     )[20:24])
 
   @classmethod
-  def register_ipaddr(cls, botname, ipaddr):
-    try:
-      data = {"bot_uid": str(uuid.getnode()),
-              "bot_name": botname,
-              "bot_ip": ipaddr,
-              "bot_version": "1.0",
-              "user_email": "roberto.previtera@gmail.com"}
-      req = urllib2.Request(cls.web_url, json.dumps(data))
-      ret = urllib2.urlopen(req)
-      if ret.getcode() != 200:
-        raise Exception()
-    except Exception as e:
-      print "except: " + str(e)
-      raise
-
-  @classmethod
   def get_wlans(cls):
     out = subprocess.check_output(["iwlist", "wlan0", "scan"])  
 
@@ -125,8 +115,6 @@ network={\n""")
       time.sleep(1.0)
       out = subprocess.check_output(["ifdown", "--force", "wlan0"])
       out = subprocess.check_output(["ifup", "wlan0"])
-      cls.register_ipaddr(cls.get_config().get('bot_name', 'CoderBot'), cls.get_ipaddr("wlan0"))
-      #print "registered bot, ip: " + str(cls.get_ipaddr("wlan0") + " name: " + cls.get_config().get('bot_name', 'CoderBot'))
     except subprocess.CalledProcessError as e:
       print e.output
       raise

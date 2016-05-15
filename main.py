@@ -94,6 +94,7 @@ def handle_wifi():
       return "http://coder.bot:8080";
     else:
       return "http://coderbotsrv.appspot.com/"
+    os.system("sudo python wifi.py")
 
 @app.route("/update", methods=["GET"])
 def handle_update():
