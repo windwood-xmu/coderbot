@@ -3,6 +3,20 @@ import json
 import uuid 
 import logging
 
+class MethodRequest(urllib2.Request):
+    def __init__(self, *args, **kwargs):
+        if 'method' in kwargs:
+            self._method = kwargs['method']
+            del kwargs['method']
+        else:
+            self._method = None
+        return urllib2.Request.__init__(self, *args, **kwargs)
+
+    def get_method(self, *args, **kwargs):
+        if self._method is not None:
+            return self._method
+        return urllib2.Request.get_method(self, *args, **kwargs)
+
 class CoderBotServerAPI:
 
   API_HOST_PROD = "http://my.coderbot.org"
@@ -39,7 +53,9 @@ class CoderBotServerAPI:
     data = {"bot_name": bot_name,
             "bot_ip": bot_ipaddr,
             "bot_version": bot_version}
-    req = urllib2.Request(cls.API_HOST + cls.API_BASE_URL + "/bot/" + bot_id, json.dumps(data))
+    logging.info("bot: " + str(data))
+    req = MethodRequest(cls.API_HOST + cls.API_BASE_URL + "/bot/" + bot_id, json.dumps(data), method="PUT")
+ 
     return cls.http_send(req)
 
   @classmethod
