@@ -60,7 +60,7 @@ class ImageProcessor(threading.Thread):
         self.put(self)
         while not self._terminated:
             # Wait for an image to be analysis
-            if self._event.wait(1):
+            if self._event.wait(0.2):
                 try:
                     #self._frame.seek(0)
                     if self._analysisHook:
@@ -187,6 +187,8 @@ class ImageGrabber(threading.Thread):
                 time.sleep(0.01)
 
     def shutdown(self):
+        with self._lock:
+            self._analysisHooks = []
         self._terminated = True
         self.join()
         while self.threads:

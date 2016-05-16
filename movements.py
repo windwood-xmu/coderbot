@@ -78,3 +78,13 @@ class MotorsControl(MovementsControl):
         self._pin_enable.clear()
         super(MotorsControl, self).stop()
 
+
+if __name__ == '__main__':
+    s = ServosControl(25, 4)
+
+    for s in range(-100, 101, 10):
+        print 'speed:', s
+        s.set(s, s)
+        time.sleep(1)
+    s.stop()
+

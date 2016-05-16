@@ -38,8 +38,19 @@ class PIGPIO(object):
         return getattr(self._pi, attr)
 
 
+class SensorInterface(object):
+    def read(self): pass
+    def write(self, level): pass
+    def set(self):   self.write(ON)
+    def clear(self): self.write(OFF)
+    on = high = set
+    off = low = clear
+    def addProcess(self, function, edge=RISING_EDGE): pass
+    def delProcess(self, function): pass
+    def wait(self, level, timeout=0): pass
 
-class Sensor(object):
+
+class Sensor(SensorInterface):
     def __init__(self, pin, mode=INPUT):
         self._mode = mode
         self._pi = PIGPIO()
@@ -61,24 +72,24 @@ class Sensor(object):
     on = high = set
     off = low = clear
 
-    def addHook(self, function, edge=RISING_EDGE):
-        self._callbacks[function] = self._pi.callback(self._pin, edge, function)
-    def delHook(self, function):
+    def addProcess(self, function, edge=RISING_EDGE):
+        self._callbacks[function] = self._pi.callback(self._pin, edge, lambda p,l,t: function(self))
+    def delProcess(self, function):
         self._callbacks[function].cancel()
-        del self._callbacks[function]
+        self._callbacks.remove(function)
 
-    def wait(self, level, timeout=0):
+    def wait(self, level=RISING_EDGE, timeout=0):
         class _wait(pigpio._callback):
             def __init__(this, pin, edge, timeout=0):
-                this._triggered = False
-                this._start = time.time()
-                pigpio._callback.__init__(this, self._pi.notify, pin, edge, this.trigger)
-                while not (this._triggered or (timeout and ((time.time()-self._start) < timeout))):
-                    time.sleep(0.01)
+                start = time.time()
+                this.triggered = False
+                pigpio._callback.__init__(this, self._pi._notify, pin, edge, this.trigger)
+                while (not this.triggered) and (not timeout or ((time.time()-start) < timeout)):
+                    time.sleep(0.05)
                 this.cancel()
             def trigger(this, pin, level, tick):
                 this.triggered = True
-        return _wait(self._pin, level, timeout)
+        return _wait(self._pin, level, timeout).triggered
 
 class Input(Sensor):
     def __init__(self, pin):
@@ -140,6 +151,42 @@ class ServoOutput(Output):
 
 
 if __name__ == '__main__':
+    def printState(sensor):
+        print sensor.read()
+
+    def test():
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_UP)
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_DOWN)
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_UP)
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_DOWN)
+        time.sleep(10)
+        pi.set_pull_up_down(17, pigpio.PUD_UP)
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_DOWN)
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_UP)
+        time.sleep(1)
+        pi.set_pull_up_down(17, pigpio.PUD_DOWN)
+
+    pi = PIGPIO()
+    from threading import Thread
+    Thread(target=test).start()
+
+    s = Input(17)
+    s.addProcess(printState, EITHER_EDGE)
+    time.sleep(6)
+    print 'wait test'
+    print s.wait(timeout=2),
+    print 'returned'
+
+    import sys
+    sys.exit()
+
+
     PIN_LEFT = 25
     PIN_RIGHT = 4
     pins = [ServoOutput(PIN_LEFT), ServoOutput(PIN_RIGHT)]

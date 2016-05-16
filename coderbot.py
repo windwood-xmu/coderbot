@@ -1,6 +1,6 @@
 import camera
-import movements
 import sensors
+import movements
 import sound
 from utils.POO import SingletonDecorator as Singleton
 from config import MultifileConfig as Config
