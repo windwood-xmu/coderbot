@@ -19,8 +19,8 @@ class MethodRequest(urllib2.Request):
 
 class CoderBotServerAPI:
 
-  API_HOST_PROD = "http://my.coderbot.org"
-  API_HOST = "http://192.168.1.102:8080"
+  API_HOST = "http://my.coderbot.org"
+  API_HOST_TEST = "http://192.168.1.102:8080"
   API_BASE_URL = "/api/coderbot/1.0"
 
   @classmethod

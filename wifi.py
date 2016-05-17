@@ -17,7 +17,7 @@ class WiFi():
   CONFIG_FILE = "/etc/coderbot_wifi.conf"
   adapters = ["RT5370", "RTL8188CUS"] 
   hostapds = {"RT5370": "hostapd.RT5370", "RTL8188CUS": "hostapd.RTL8188"} 
-  web_url = "http://my.coderbot.org/coderbot/v1.0/bot"
+  API_HOST = "my.coderbot.org"
   wifi_client_conf_file = "/etc/wpa_supplicant/wpa_supplicant.conf"
   WIFI_MODE_CLIENT = "client"
   WIFI_MODE_AP = "ap"
@@ -43,6 +43,16 @@ class WiFi():
   @classmethod
   def get_mode(cls):
     return cls.get_config().get("wifi_mode")
+
+  @classmethod
+  def get_current_mode(cls):
+    iwcfg = subprocess.check_output("ifconfig")
+    return "ap" if "10.0.0.1" in iwcfg else "client"
+
+  @classmethod
+  def is_server_available(cls):
+    iwcfg = subprocess.check_output("/usr/bin/curl http://my.coderbot.org/api/coderbot/1.0/")
+    return "ok" in iwcfg
 
   @classmethod
   def get_adapter_type(cls):
