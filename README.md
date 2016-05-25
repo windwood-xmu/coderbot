@@ -42,11 +42,11 @@ TODO
 ----
 
 **Blockly**
-- [ ] Upgrade to the latest blockly version (only advanced blocks are done for now)
+- [x] Upgrade to the latest blockly version
 - [ ] Write the block's python generator to be compatible with the new Coderbot object (work is started)
 - [ ] Write new blocks (like GPIO's sensor blocks, hear blocks, event driven blocks, etc...)
 - [ ] Simplify code generation when the admin configuration page is done by using decorated classes or subclasses for coderbot.motors calls (to render readable code for childs)
-- [ ] Use private user configuration for basic blocks (for default parameters)
+- [x] Use private user configuration for basic blocks (for default parameters)
 - [ ] Rewrite the javascript code generator to use Blockly debugger
 
 **Program API**
@@ -77,17 +77,17 @@ TODO
   - [ ] Reset the configuration to the default (by deleting the configuration file content, for now: echo > path_to_user_profil/user.cfg)
 
 **Sensor features**
-- [ ] Write functions to be called back by image processors:
+- [x] Write classes to be called back by image processors:
   - [ ] code detection
-  - [ ] color detection
-  - [ ] face detection
+  - [x] color detection
+  - [x] face detection
   - [ ] line detection
   - [ ] logo detection
-  - [ ] optical flow detection
+  - [x] optical flow detection
   - [ ] pedestrian detection
   - [ ] path detection
   - [ ] signal detection
-  - [ ] drawing detections on streamed images
+  - [ ] drawing feature on streamed images (to use the print block)
 
 **Other features (optionnaly)**
 - [ ] All TODOs in the code will be treated
