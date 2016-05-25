@@ -93,6 +93,6 @@ TODO
 - [ ] All TODOs in the code will be treated
 - [ ] Wifi configuration helper (via UI web page)
 - [ ] Audio hearing by using microphone
-- [ ] 3D mapping environment (not sure raspberry can do it alone)
+- [ ] 3D mapping environment (not sure raspberry can do it alone with only one camera and moves)
 - [ ] Review all translation files
 
