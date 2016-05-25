@@ -86,6 +86,7 @@
             success: function(json) {
               if (json.status) {
                 $("#a_bot_status").removeClass('ui-btn-b ui-icon-delete').addClass('ui-icon-check').html('{% trans %}Online{% endtrans %}');
+                //$(".ui-content-stream").css("background-image", "url('/video/stream/SD?_="+((new Date()).getTime())+"')")
               } else {
                 $("#a_bot_status").addClass('ui-btn-b ui-icon-delete').removeClass('ui-icon-check').html('{% trans %}Offline{% endtrans %}');
               };

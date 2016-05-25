@@ -187,7 +187,7 @@
                   </select>
                 </div>
                 <div class="ui-block-a">
-                  <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="{{ config.camera_resolutions.keys[1] }}" data-wrapper-class="controlgroup-textinput">
+                  <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="{{ config.camera_resolutions.keys[1] }}" disabled="true" data-wrapper-class="controlgroup-textinput">
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions1" name="camera_resolutions[SD]" data-native-menu="false">
@@ -199,7 +199,7 @@
                   </select>
                 </div>
                 <div class="ui-block-a">
-                  <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="{{ config.camera_resolutions.keys[2] }}" data-wrapper-class="controlgroup-textinput">
+                  <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="{{ config.camera_resolutions.keys[2] }}" disabled="true" data-wrapper-class="controlgroup-textinput">
                 </div>
                 <div class="ui-block-b">
                   <select id="camera_resolutions2" name="camera_resolutions[LD]" data-native-menu="false">
@@ -227,7 +227,7 @@
                 </div>
                 <div class="ui-block-a">
                   <div data-role="controlgroup" data-type="horizontal">
-                    <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="SD" data-wrapper-class="controlgroup-textinput ui-btn">
+                    <input class="camera_resolutions_name" for="camera_resolutions1" type="text" value="SD" disabled="true" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions1" name="camera_resolutions[SD]" data-native-menu="false">
                       <option value="[1296,972]"{% if config.camera_resolutions['SD'] == [1296,972] %} selected{% endif %}>1296x972</option>
                       <option value="[1024,768]"{% if config.camera_resolutions['SD'] == [1024,768] %} selected{% endif %}>1024x768</option>
@@ -239,7 +239,7 @@
                 </div>
                 <div class="ui-block-a">
                   <div data-role="controlgroup" data-type="horizontal">
-                    <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="LD" data-wrapper-class="controlgroup-textinput ui-btn">
+                    <input class="camera_resolutions_name" for="camera_resolutions2" type="text" value="LD" disabled="true" data-wrapper-class="controlgroup-textinput ui-btn">
                     <select id="camera_resolutions2" name="camera_resolutions[LD]" data-native-menu="false">
                       <option value="[1296,972]"{% if config.camera_resolutions['LD'] == [1296,972] %} selected{% endif %}>1296x972</option>
                       <option value="[1024,768]"{% if config.camera_resolutions['LD'] == [1024,768] %} selected{% endif %}>1024x768</option>

@@ -1,6 +1,6 @@
 'use strict';
 
-goog.provide('Blockly.Msg.en');
+goog.provide('Blockly.Msg.fr');
 
 goog.require('Blockly.Msg');
 
@@ -30,13 +30,10 @@ Blockly.Msg.CODERBOT_CAMERA_STOP_RECORDING = "arrêter l'enregistrement vidéo";
 Blockly.Msg.CODERBOT_SOUND_SAY = "dire %1";
 Blockly.Msg.CODERBOT_SLEEP = "attendre %1 seconde(s)";
 
-Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD = "chemin devant ?";
-Blockly.Msg.CODERBOT_SENSOR_FINDLINE = "trouver une ligne";
-Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL = "trouver un signal";
-Blockly.Msg.CODERBOT_SENSOR_FINDFACE = "trouver un visage et retourner %1";
-Blockly.Msg.CODERBOT_SENSOR_FINDCODE = "trouver un code";
-Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR = "trouver %1 de cette couleur %2";
-Blockly.Msg.CODERBOT_SENSOR_FINDLOGO = "trouver le logo";
+Blockly.Msg.CODERBOT_SENSOR_DETECT = "%1 trouvé ?";
+Blockly.Msg.CODERBOT_SENSOR_WHEN = "quand %1 détecté, avec : sensor";
+Blockly.Msg.CODERBOT_SENSOR_WHEN_DO = "faire %1";
+Blockly.Msg.CODERBOT_SENSOR_WAIT = "attendre un %1";
 
 /* Tooltips texts */
 Blockly.Msg.CODERBOT_MOVE_TOOLTIP = "déplace le robot %1";
@@ -58,6 +55,28 @@ Blockly.Msg.CODERBOT_CAMERA_STOP_RECORDING_TOOLTIP = "arrête l'enregistrement d
 Blockly.Msg.CODERBOT_SOUND_SAY_TOOLTIP = "fait parler le robot";
 Blockly.Msg.CODERBOT_SLEEP_TOOLTIP = "arrête le déroulement du programme temporairement";
 
+Blockly.Msg.CODERBOT_SENSOR_DETECT_TOOLTIP = "Récupère la valeur du capteur";
+Blockly.Msg.CODERBOT_SENSOR_WHEN_TOOLTIP = "Déclenche des actions lors du déclenchement d'un capteur";
+Blockly.Msg.CODERBOT_SENSOR_WAIT_TOOLTIP = "Attend que le capteur se déclenche avant de passer à la suite";
+
+Blockly.Msg.CODERBOT_SENSOR_TIP_FPS = "fps";
+Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE = "carré";
+Blockly.Msg.CODERBOT_SENSOR_TIP_CIRCLE = "cercle";
+Blockly.Msg.CODERBOT_SENSOR_TIP_LIGHT = "lumière";
+Blockly.Msg.CODERBOT_SENSOR_TIP_COLOR = "couleur";
+Blockly.Msg.CODERBOT_SENSOR_TIP_MOTION = "mouvement";
+Blockly.Msg.CODERBOT_SENSOR_TIP_FACE = "visage";
+
+
+/*
+Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD = "chemin devant ?";
+Blockly.Msg.CODERBOT_SENSOR_FINDLINE = "trouver une ligne";
+Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL = "trouver un signal";
+Blockly.Msg.CODERBOT_SENSOR_FINDFACE = "trouver un visage et retourner %1";
+Blockly.Msg.CODERBOT_SENSOR_FINDCODE = "trouver un code";
+Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR = "trouver %1 de cette couleur %2";
+Blockly.Msg.CODERBOT_SENSOR_FINDLOGO = "trouver le logo";
+
 Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD_TOOLTIP = "détecte si le chemin devant le robot est libre";
 Blockly.Msg.CODERBOT_SENSOR_FINDLINE_TOOLTIP = "détecte si une ligne se trouve devant le robot";
 Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL_TOOLTIP = "détecte un signal devant le robot";
@@ -73,50 +92,4 @@ Blockly.Msg.CODERBOT_SENSOR_FINDFACE_TIP_ALL = "x, y, taille (sous forme de list
 Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TIP_DIST = "la distance";
 Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TIP_ANGLE = "l'angle";
 Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TIP_BOTH = "la distance et l'angle (sous forme de liste)";
-
-
-/* Deprecated */
-/* This will be removed later */
-/*
-Blockly.Msg.CODERBOT_MOVE_BACKWARD = "reculer";
-Blockly.Msg.CODERBOT_MOVE_LEFT = "tourner à gauche";
-Blockly.Msg.CODERBOT_MOVE_RIGHT = "tourner à droite";
-Blockly.Msg.CODERBOT_MOVE_ADV_MOVE = "déplacer le robot";
-Blockly.Msg.CODERBOT_MOVE_MOTION_MOVE = "déplacer le robot (motion control)";
-Blockly.Msg.CODERBOT_MOVE_MOTION_TURN = "tourner le robot (motion control)";
-Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR = "contrôler les moteurs :";
-Blockly.Msg.CODERBOT_MOVE_ADV_SPEED = "vitesse";
-Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_LEFT = "vitesse à gauche";
-Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_RIGHT = "vitesse à droite";
-Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE = "durant";
-Blockly.Msg.CODERBOT_MOVE_MOTION_DIST = "distance";
-Blockly.Msg.CODERBOT_MOVE_MOTION_ANGLE = "angle";
-Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD = "en avant";
-Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD = "en arrière";
-Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT = "à droite";
-Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT = "à gauche";
-Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL= " avec une vitesse (0-100%) durant (secondes)";
-Blockly.Msg.CODERBOT_MOVE_MOTION_MOVE_TIP = "déplace le robot, en utilisant la caméra pour controller";
-Blockly.Msg.CODERBOT_MOVE_MOTION_TURN_TIP = "tourne le robot, en utilisant la caméra pour controller";
-Blockly.Msg.CODERBOT_MOVE_STOP = "stop";
-Blockly.Msg.CODERBOT_SAY = "dit";
-Blockly.Msg.CODERBOT_PHOTO_TAKE = "prend une photo";
-Blockly.Msg.CODERBOT_VIDEO_REC = "démarre l'enregistrement vidéo";
-Blockly.Msg.CODERBOT_VIDEO_STOP = "arrête l'enregistrement vidéo";
-Blockly.Msg.CODERBOT_SLEEP = "attend pendant";
-Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD = "chemin devant";
-Blockly.Msg.CODERBOT_SENSOR_FINDLINE = "trouve la ligne";
-Blockly.Msg.CODERBOT_SENSOR_FINDFACE = "trouve un visage";
-Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL = "trouve un signal";
-Blockly.Msg.CODERBOT_SENSOR_FINDCODE = "trouve un code";
-Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_FIND = "trouve";
-Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_COLOR = "de cette couleur";
-Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_DIST = "la distance";
-Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_ANGLE = "l'angle";
-Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_BOTH = "la distance et l'angle";
-Blockly.Msg.CODERBOT_SENSOR_FINDFACE_X = "abscisse";
-Blockly.Msg.CODERBOT_SENSOR_FINDFACE_Y = "ordonnée";
-Blockly.Msg.CODERBOT_SENSOR_FINDFACE_SIZE = "taille";
-Blockly.Msg.CODERBOT_SENSOR_FINDFACE_ALL = "x, y, taille (sous forme de liste)";
-Blockly.Msg.CODERBOT_SENSOR_FINDLOGO = "trouve le logo";
 */

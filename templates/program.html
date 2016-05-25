@@ -6,6 +6,7 @@
   <script type="text/javascript" src="/js/blockly/blocks_compressed.js"></script>
   <script type="text/javascript" src="/js/blockly/messages.js"></script>
   <script type="text/javascript" src="/js/blockly/{{ get_locale() }}.js"></script>
+  <script type="text/javascript" src="/js/blockly/bot_{{ get_locale() }}.js"></script>
   <script type="text/javascript" src="/js/blockly/javascript_compressed.js"></script>
   <script type="text/javascript" src="/js/blockly/python_compressed.js"></script>
   <!-- CoderBot customized blocks -->
@@ -15,7 +16,6 @@
   <script type="text/javascript" src="/js/blockly/blocks_adv.js"></script>
 {% endif %}
   <script type="text/javascript" src="/js/blockly/blocks_codeGenerator.js"></script>
-  <script type="text/javascript" src="/js/blockly/bot_{{ get_locale() }}.js"></script>
 {% endblock head %}
 
 <script type="text/javascript">
@@ -103,7 +103,7 @@
       });
 
       $("#btnSaveProg").on('vclick', function() {
-        if ($("#lblFilename").text() == "") {
+        if ($("#lblFilename").text() == "{% trans %}no name{% endtrans %}") {
           $("#dlgSaveasProg").popup("open");
         } else {
           xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -115,7 +115,7 @@
       });
 
       $("#btnNewProg").on('vclick', function() {
-        $("#lblFilename").html("");
+        $("#lblFilename").html("{% trans %}no name{% endtrans %}");
         Blockly.mainWorkspace.clear();
       });
 
@@ -169,7 +169,7 @@
       // Dynamically fill the list of programs before popup opening
       $("#btnLoadProg").on('vclick', function() {
         $("#frmLoadProg select").empty();
-        $.getJSON('/program', function(json) {
+        $.getJSON('/programs', function(json) {
           if (json.result == true) {
             $.each(json.files, function(i, file) {
               $("#frmLoadProg select").append("<option "+($("#lblFilename").text() == file ? "selected ":"")+"value='"+file+"'>"+file+"</option>");
@@ -201,7 +201,7 @@
         <button id="btnRunProg" data-icon="cb-run">{% trans %}Run{% endtrans %}</button>
         <button data-icon="cb-stop">{% trans %}Stop{% endtrans %}</button>
       </div>
-      <span id="lblFilename"></span>
+      <span id="lblFilename">{% trans %}no name{% endtrans %}</span>
     </div>
     {% include "blocks.xml" %}
     <div id="blocklyDiv"></div>

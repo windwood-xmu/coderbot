@@ -1,3 +1,4 @@
+import camera_sensors
 import camera
 import sensors
 import movements
@@ -33,9 +34,20 @@ class CoderBot(object):
         for i, definition in enumerate(definitions, start=2):
             self.streamers[definition] = self.camera.getGrabber(threads=4, size=resolutions[definition], port=i)
         self._init_complete = True
+
+        self.sensors = {}
+        for sensor, klass in camera_sensors.sensors.iteritems():
+            self.sensors[sensor] = klass(self.streamers['LD'], draw=self.streamers['SD'])
+        self.sensors['color'].setColor((51,153,153))
+        self.sensors['color']._start()
+        self.sensors['fps']._start()
+
     def shutdown(self):
         self._init_complete = False
         self.motors.stop()
+        for sensor in self.sensors.itervalues():
+            try: sensor._stop()
+            except AttributeError: pass
         self.camera.close()
 
     def run_demo(self, during=60):

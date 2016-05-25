@@ -86,6 +86,7 @@ def handle_template(filename):
     #    return render_template("preferences.html", config=Config())
     return render_template("%s.html" % filename, config=Config())
 
+
 # Path for configuration API
 @app.route("/config/<command>", methods=['GET', 'POST'])
 def handle_config(command):
@@ -110,6 +111,7 @@ def handle_config(command):
         return jsonify(result=True)
     # TODO: if command == 'reset': erase config file content
     abort(405) # Not allowed
+
 
 # Path for user's session API
 @app.route('/user/<command>', methods=['GET', 'POST'])
@@ -158,6 +160,7 @@ def handle_user(command):
         return jsonify(result=True)
     abort(405) # Not allowed
 
+
 # Paths for video streaming
 @app.route('/video')
 def handle_video():
@@ -188,6 +191,7 @@ def handle_video_stream(definition):
     try:
         return Response(streamer(), mimetype="multipart/x-mixed-replace; boundary=--BOUNDARYSTRING")
     except: pass
+
 
 # Paths for CoderBot API (Motors, Sound and Camera control)
 
@@ -239,6 +243,7 @@ def handle_bot_camera(command):
         getattr(app.bot.camera, command)(filename)
     return jsonify(result=True)
 
+
 # Path for system API control
 @app.route("/system/<command>", methods=['GET'])
 def handle_system(command):
@@ -248,6 +253,7 @@ def handle_system(command):
         os.system ('sudo service coderbot restart')
     else:
         os.system ("sudo %s" % command)
+
 
 # Path for DCIM API control
 @app.route("/camera/DCIM/<filename>")
@@ -266,16 +272,19 @@ def handle_photos(filename):
         return jsonify(result=True)
     return send_file(join(Config().get('record_path', RECORD_PATH), filename))
 
+
 # Path for program API control
-@app.route("/program")
+@app.route("/programs")
 def handle_programs():
     action = request.args.get('action')
+    #print action, "undefined"
     if action is None:
         return jsonify(result=True, files=Program.listdir())
     abort(501) # Not implemented
 @app.route("/program/<filename>", methods=['GET', 'POST'])
-def handle_program(filename):
+def handle_program(filename=""):
     action = request.form.get('action', request.args.get('action'))
+    #print action, filename
     if action is None and request.method == 'POST': abort(405) # Not allowed
     if not action in [None, 'save', 'save as', 'delete', 'exec', 'abort', 'status']: abort(400) # Bad request
     if action == 'save as':
@@ -293,8 +302,11 @@ def handle_program(filename):
         app.program.save()
         return jsonify(result=True)
     if action == 'exec':
-        if app.program is None: abort(410) # Gone
-        app.program.update(request.form.get('dom_code'), request.form.get('py_code'))
+        if app.program is None:
+            app.program = Program(filename, request.form.get('dom_code'), request.form.get('py_code'))
+            #abort(410) # Gone
+        else:
+            app.program.update(request.form.get('dom_code'), request.form.get('py_code'))
         if Config().get('program_autosave_on_run', False): app.program.save()
         return jsonify(result=app.program.start())
     if action == 'abort':
@@ -304,12 +316,13 @@ def handle_program(filename):
     if action == 'status':
         if app.program is None: abort(410) # Gone
         return jsonify(status=app.program.isRunning())
-    if action is None:
+    if action is None and request.method == 'GET':
         try: app.program = Program.load(filename)
         except OSError as e:
             if e.errno == errno.ENOENT: abort(404) # File not found
             else: raise
         return jsonify(app.program.get())
+
     abort(501) # Not implemented
 
 
@@ -332,5 +345,5 @@ if __name__ == '__main__':
         app.bot.streamers['SD'].addProcess(utils.cv.drawFaces)
         app.bot.streamers['SD'].addProcess(utils.cv.drawFPS)
 
-    run_server(demo)
+    run_server()
 

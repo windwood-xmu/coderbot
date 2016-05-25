@@ -2,6 +2,7 @@
 
 Blockly.HSV_SATURATION=0.65;
 Blockly.HSV_VALUE=0.85;
+Blockly.BlockSvg.START_HAT = true;
 
 var TOOLTIPS = {
   "FORWARD":  Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,
@@ -9,6 +10,18 @@ var TOOLTIPS = {
   "LEFT":     Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT,
   "RIGHT":    Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT
 };
+
+
+var Sensors = [
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_FPS,    "fps"],
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE, "square"],
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_CIRCLE, "circle"],
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_LIGHT,  "light"],
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_COLOR,  "color"],
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_MOTION, "motion"],
+  [Blockly.Msg.CODERBOT_SENSOR_TIP_FACE,   "face"]
+];
+
 
 // Advanced extension to Blockly's language.
 
@@ -278,6 +291,74 @@ Blockly.Blocks['coderbot_adv_stop'] = {
     });
   }
 };
+
+Blockly.Blocks['coderbot_sensor_detect'] = {
+  // Block to read sensor state.
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.CODERBOT_SENSOR_DETECT,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "NAME",
+          "options": Sensors
+        }
+      ],
+      "output": ["Boolean"],
+      "colour": 290,
+      "tooltip": Blockly.Msg.CODERBOT_SENSOR_DETECT_TOOLTIP,
+      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
+    });
+  }
+};
+
+Blockly.Blocks['coderbot_sensor_when'] = {
+  // Block to sensor edge event.
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.CODERBOT_SENSOR_WHEN,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "NAME",
+          "options": Sensors
+        }
+      ],
+      "message1": Blockly.Msg.CODERBOT_SENSOR_WHEN_DO,
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "DO"
+        }
+      ],
+      "colour": 290,
+      "tooltip": Blockly.Msg.CODERBOT_SENSOR_WHEN_TOOLTIP,
+      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
+    });
+  }
+};
+
+Blockly.Blocks['coderbot_sensor_wait'] = {
+  // Block to wait for sensor edge.
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.CODERBOT_SENSOR_WAIT,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "NAME",
+          "options": Sensors
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": 290,
+      "tooltip": Blockly.Msg.CODERBOT_SENSOR_WAIT_TOOLTIP,
+      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
+    });
+  }
+};
+
 
 Blockly.Blocks['coderbot_adv_pathAhead'] = {
   /**

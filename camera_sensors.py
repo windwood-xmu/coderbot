@@ -1,11 +1,23 @@
 import threading
 import camera
+import numpy as np
 import cv2
 from time import time, sleep
 from sensors import SensorInterface, ON, OFF, RISING_EDGE, FALLING_EDGE, EITHER_EDGE, INPUT
 
+
+def debug(self, frame):
+    if not hasattr(self, 'debug'): return False
+    debug = self.debug
+    if debug is not None:
+        frame.array = debug
+        return True
+    return False
+
+
+# TODO: Add blocks to get sensors informations like items or coordinates
 class CameraSensor(SensorInterface):
-    def __init__(self, stream, use=False):
+    def __init__(self, stream, use=False, draw=None):
         # stream: camera.ImageGrabber object
         # TODO: Verify the type of object stream for assertion
         self._stream = stream
@@ -17,22 +29,37 @@ class CameraSensor(SensorInterface):
         self._mode = INPUT
         self._callbacks = []
         self._launched = False
+        self._drawStream = draw
+        self.factor = 1
+        if draw is not None:
+            self.factor = draw._size[0]/stream._size[0]
+            #draw.addProcess(self._draw)
         if use:
-            self._init()
+            self._start()
 
     # start and stop camera sensor
-    def _init(self):
-        self._launched = True
-        self._terminated = False
-        self._thread.start()
-        self._stream.addProcess(self._process)
-    def _del(self):
-        try: self._stream.delProcess(self._process)
-        except ValueError: pass
-        self._terminated = True
-        self._thread.join()
+    def _start(self):
+        if not self._launched:
+            self._launched = True
+            self._terminated = False
+            self._thread.start()
+            self._stream.addProcess(self._process)
+            if self._drawStream is not None:
+                self._drawStream.addProcess(self._draw)
+    def _stop(self):
+        #if self._drawStream is not None:
+        #    self._drawStream.delProcess(self._draw)
+        #try: self._stream.delProcess(self._process)
+        #except ValueError: pass
+        if self._launched:
+            if self._drawStream is not None:
+                self._drawStream.delProcess(self._draw)
+            self._stream.delProcess(self._process)
+
+            self._terminated = True
+            self._thread.join()
+            self._launched = False
         self._state = False
-        self._launched = False
 
     def _run(self):
         while not self._terminated:
@@ -45,11 +72,13 @@ class CameraSensor(SensorInterface):
                 finally:
                     self._event.clear()
 
-    # Method to overwrite to cutomize CameraSensor object
+    # Methods to overwrite to cutomize CameraSensor object
     def _process(self, frame):
         pass
+    def _draw(self, frame):
+        pass
 
-    # Method to make state update easy
+    # Method to make state update and event call easy
     def _set(self, value):
         changed = value ^ self._state
         if changed:
@@ -69,13 +98,14 @@ class CameraSensor(SensorInterface):
 
     # TODO: Perhaps use another Lock to be thread safe with this 2 functions
     def addProcess(self, function, edge=RISING_EDGE):
-        if not self._launched: self._init()
+        if not self._launched: self._start()
         self._callbacks.append((edge, function))
     def delProcess(self, function, edge=RISING_EDGE):
         self._callbacks.remove((edge, function))
 
+    # TODO: Try to avoid the use of a subclass
     def wait(self, edge=RISING_EDGE, timeout=0):
-        if not self._launched: self._init()
+        if not self._launched: self._start()
         class _wait:
             def __init__(self, this):
                 start = time()
@@ -87,6 +117,67 @@ class CameraSensor(SensorInterface):
             def wait(self, sensor):
                 self.triggered = True
         return _wait(self).triggered
+
+############################################################################
+# Lot of CameraSensors
+
+class FPSSensor(CameraSensor):
+    FPS = 0
+    counter = 0
+    start = time()
+    #step  = time()
+    position = (0,0)
+
+    def _process(self, frame):
+        self.counter += 1
+        step = time()
+        if step-self.start > 1:
+            self.FPS = self.counter / (step - self.start)
+            self.start = step
+            self.counter = 0
+
+    def _draw(self, frame):
+        dp = self._stream.dropped
+        dd = self._drawStream.dropped
+        (tw,th), baseline = cv2.getTextSize("%.2f fps %d/%d" % (self.FPS, dp, dd), cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+        x, y = self.position
+        cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,0,0), -1)
+        cv2.putText(frame.array, "%.2f fps %d/%d" % (self.FPS, dp, dd), (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
+
+    def getFPS(self):
+        return self.FPS
+
+
+# TODO: Threshold value can be a config field
+class MotionSensor(CameraSensor):
+    _avg = None
+    motions = []
+
+    def _process(self, frame):
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        if self._avg is None:
+            self._avg = gray.astype('float')
+            return
+        cv2.accumulateWeighted(gray, self._avg, 0.5)
+        delta = cv2.absdiff(gray, cv2.convertScaleAbs(self._avg))
+        thresh = cv2.threshold(delta, 15, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.dilate(thresh, None, iterations=2)
+        (cnts, _) = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = [c for c in cnts if cv2.contourArea(c) >= 160]
+        self.motions = cnts
+        self._set(bool(len(cnts)))
+
+    def _draw(self, frame):
+        cnts = list(self.motions)
+        for c in cnts:
+            # Draw the detected contour
+            #cv2.drawContours(frame.array, [c*self.factor], -1, (255, 0, 0), 1)
+            (x,y,w,h) = cv2.boundingRect(c)
+            (x,y,w,h) = (x*self.factor,y*self.factor,w*self.factor,h*self.factor)
+            cv2.rectangle(frame.array, (x,y), (x+w,y+h), (0,255,0), 1)
+            (tw,th), baseline = cv2.getTextSize("motion", cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+            cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,255,0), -1)
+            cv2.putText(frame.array, "motion", (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
 
 
 class FaceSensor(CameraSensor):
@@ -103,9 +194,302 @@ class FaceSensor(CameraSensor):
         self.faces = faces
         self._set(bool(len(faces)))
 
+    def _draw(self, frame):
+        faces = list(self.faces * self.factor)
+        for (x,y,w,h) in faces:
+            cv2.rectangle(frame.array, (x,y), (x+w, y+h), (0,255,0), 1)
+            (tw,th), baseline = cv2.getTextSize("face", cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+            cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,255,0), -1)
+            cv2.putText(frame.array, "face", (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
+
     def getFaces(self):
         return list(self.faces)
 
+
+# TODO : Try it by day to work on
+class EdgeSensor(CameraSensor):
+    def _process(self, frame):
+        def autoCanny(image, sigma=0.33):
+            v = np.median(image)
+            # apply automatic Canny edge detection using the computed median
+            lower = int(max(0, (1.0 - sigma) * v))
+            upper = int(min(255, (1.0 + sigma) * v))
+            return cv2.Canny(image, lower, upper)
+
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (7,7), 0)
+        #thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
+        thresh = autoCanny(blurred)
+        cnts = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
+        for c in cnts:
+            cv2.drawContours(frame.array, [c], -1, (255,0,0))
+
+
+class SquareSensor(CameraSensor):
+    def _process(self, frame):
+        # convert the frame to grayscale, blur it, and detect edges
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (7, 7), 0)
+        edged = cv2.Canny(blurred, 50, 150)
+        # find contours in the edge map
+        (cnts, _) = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # loop over the contours
+        for c in cnts:
+            # approximate the contour
+            peri = cv2.arcLength(c, True)
+            approx = cv2.approxPolyDP(c, 0.01 * peri, True)
+
+            # ensure that the approximated contour is "roughly" rectangular
+            if len(approx) >= 4 and len(approx) <= 6:
+                # compute the bounding box of the approximated contour and
+                # use the bounding box to compute the aspect ratio
+                (x, y, w, h) = cv2.boundingRect(approx)
+                aspectRatio = w / float(h)
+
+                # compute the solidity of the original contour
+                area = cv2.contourArea(c)
+                hullArea = cv2.contourArea(cv2.convexHull(c))
+                solidity = area / float(hullArea)
+
+                # compute whether or not the width and height, solidity, and
+                # aspect ratio of the contour falls within appropriate bounds
+                keepDims = w > 25 and h > 25
+                keepSolidity = solidity > 0.9
+                keepAspectRatio = aspectRatio >= 0.8 and aspectRatio <= 1.2
+
+                # ensure that the contour passes all our tests
+                if keepDims and keepSolidity and keepAspectRatio:
+                    # draw an outline around the target and update the status
+                    # text
+                    cv2.drawContours(frame.array, [approx], -1, (0, 0, 255), 4)
+
+                    # compute the center of the contour region and draw the
+                    # crosshairs
+                    M = cv2.moments(approx)
+                    (cX, cY) = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+                    (startX, endX) = (int(cX - (w * 0.15)), int(cX + (w * 0.15)))
+                    (startY, endY) = (int(cY - (h * 0.15)), int(cY + (h * 0.15)))
+                    cv2.line(frame.array, (startX, cY), (endX, cY), (0, 0, 255), 3)
+                    cv2.line(frame.array, (cX, startY), (cX, endY), (0, 0, 255), 3)
+
+
+# TODO: Not working properly yet
+class CircleSensor(CameraSensor):
+    circles = []
+
+    def _process(self, frame):
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        circles = cv2.HoughCircles(gray, cv2.cv.CV_HOUGH_GRADIENT, 1.2, 100)
+        if circles is not None:
+            print circles
+            circles = np.round(circles[0, :]).astype('int')
+        else:
+            circles = []
+        self.circles = circles
+        self._set(bool(len(circles)))
+
+    def _draw(self, frame):
+        circles = list(self.circles * self.factor)
+        for (x,y,r) in circles:
+            cv2.circle(frame.array, (x,y), r, (0,0,255), 1)
+            cv2.rectangle(frame.array, (x-5,y-5), (x+5,y+5), (0,0,255), -1)
+
+
+# TODO: maxval can be a config field
+class LightSensor(CameraSensor):
+    light = None
+
+    def _process(self, frame):
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        (minval, maxval, minpos, maxpos) = cv2.minMaxLoc(gray)
+        if maxval > 240:
+            self.light = maxpos
+        else:
+            self.light = None
+        self._set(maxval > 240)
+        #self.circles = circles
+        #self._set(bool(len(circles)))
+
+    def _draw(self, frame):
+        light = self.light
+        if light is not None:
+            (x,y) = light
+            (x,y) = (x*self.factor, y*self.factor)
+            cv2.circle(frame.array, (x,y), 5, (0,255,0), 1)
+
+
+# TODO: Color sensitivity (Hue +/- sensitivity) can be a config field
+class ColorSensor(CameraSensor):
+    colors = []
+    color = None # (R,G,B) tuple
+    _lower = None
+    _upper = None
+    _split = False
+    _firstOnly = False
+
+    def setColor(self, color):
+        sensitivity = 5
+        h,s,v = cv2.cvtColor(np.uint8([[color]]), cv2.COLOR_RGB2HSV)[0,0]
+        if h < sensitivity or h > 180-sensitivity: self._split = True
+        else: self._split = False
+        self._lower = np.uint8(((180+h-sensitivity)%180, 50, 50))
+        self._upper = np.uint8(((h+sensitivity)%180, 255, 255))
+        self.color = color
+        #print (h,s,v), self._lower, self._upper
+
+    def _process(self, frame):
+        if self.color is not None:
+            hsv = cv2.cvtColor(frame.array, cv2.COLOR_BGR2HSV)
+            if self._split:
+                maskL = cv2.inRange(hsv, self._lower, np.uint8([0,255,255]))
+                maskU = cv2.inRange(hsv, np.uint8([0,50,50]), self._upper)
+                mask = maskL + maskU
+            else:
+                mask = cv2.inRange(hsv, self._lower, self._upper)
+            #kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11,11))
+            kernel = None
+            mask = cv2.erode(mask, kernel, iterations=2)
+            mask = cv2.dilate(mask, kernel, iterations=2)
+            mask = cv2.GaussianBlur(mask, (3,3), 0)
+            (cnts, _) = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
+
+            self.colors = cnts
+            if self._firstOnly:
+                if len(cnts) > 0:
+                    self.colors = [cnts[0]]
+            self._set(bool(len(cnts)))
+
+    def _draw(self, frame):
+        cnts = list(self.colors)
+        for c in cnts:
+            # Draw the detected contour
+            #cv2.drawContours(frame.array, [c*self.factor], -1, (255, 0, 0), 1)
+            # Draw the bounding rectangle of the countour
+            (x,y,w,h) = cv2.boundingRect(c*self.factor)
+            cv2.rectangle(frame.array, (x,y), (x+w,y+h), (0,255,0), 1)
+            (tw,th), baseline = cv2.getTextSize("color", cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+            cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,255,0), -1)
+            cv2.putText(frame.array, "color", (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
+
+
+class FlowSensor(CameraSensor):
+    _avg = None
+    flow = []
+    _mask = None
+    _previous = None
+    _p0 = None
+    _color = np.random.randint(0,255,(100,3))
+    _warmup = True
+    _lock = threading.Lock()
+
+    def _process(self, frame):
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        if self._avg is None:
+            self._avg = gray.astype('float')
+            return
+        cv2.accumulateWeighted(gray, self._avg, 0.5)
+        delta = cv2.absdiff(gray, cv2.convertScaleAbs(self._avg))
+        if self._warmup and cv2.countNonZero(delta) > 5000: return
+        self._warmup = False
+        if cv2.countNonZero(delta) < 5000: return
+        if self._previous is None: self._previous = delta
+        with self._lock:
+            if self._p0 is None:
+                self._p0 = cv2.goodFeaturesToTrack(delta, mask=None, maxCorners=100, qualityLevel=0.3, minDistance=7, blockSize=7)
+                return
+            p1, st, err = cv2.calcOpticalFlowPyrLK(self._previous, delta, self._p0, None, winSize=(15,15), maxLevel=2, criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+            if p1 is None:
+                self._mask = None
+                self._p0 = cv2.goodFeaturesToTrack(delta, mask=None, maxCorners=100, qualityLevel=0.3, minDistance=7, blockSize=7)
+                return
+
+            # Select good points
+            good_new = p1[st==1]
+            good_old = self._p0[st==1]
+
+            self.flow = zip(good_new,good_old)
+
+            self._previous = delta
+            self._p0 = good_new.reshape(-1,1,2)
+
+        self._set(bool(len(self.flow)))
+
+    def _draw(self, frame):
+        if debug(self, frame): return
+        if self._mask is None: self._mask = np.zeros_like(frame.array)
+        # draw the tracks
+        tracks = list(self.flow)
+        for i,(new,old) in enumerate(self.flow):
+            new, old = new*self.factor, old*self.factor
+            a,b = new.ravel()
+            c,d = old.ravel()
+            #print (a,b),(c,d),self._color[i]
+            cv2.line(self._mask, (a,b), (c,d), self._color[i].tolist(), 2)
+            cv2.circle(frame.array, (a,b), 5, self._color[i].tolist(), -1)
+        frame.array = cv2.add(frame.array,self._mask)
+
+
+
+# TODO: Not working yet
+class BarCodeSensor(CameraSensor):
+    barcode = None
+    debug = None
+
+    def _process(self, frame):
+        gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        # compute the Scharr gradient magnitude representation of the images
+        # in both the x and y direction
+        gradX = cv2.Sobel(gray, ddepth=-1, dx=1, dy=0, ksize=3)
+        gradY = cv2.Sobel(gray, ddepth=-1, dx=0, dy=1, ksize=3)
+        # subtract the y-gradient from the x-gradient
+        #gradX = abs(gradX)
+        #gradY = abs(gradY)
+
+        gradient = cv2.subtract(gradX, gradY)
+        gradient = cv2.convertScaleAbs(gradient)
+        self.debug = gradient
+        # blur and threshold the image
+        blurred = cv2.blur(gradient, (9, 9))
+        (_, thresh) = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY)
+        # construct a closing kernel and apply it to the thresholded image
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 7))
+        closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+        # perform a series of erosions and dilations
+        closed = cv2.erode(closed, None, iterations = 2)
+        closed = cv2.dilate(closed, None, iterations = 5)
+        # find the contours in the thresholded image, then sort the contours
+        # by their area, keeping only the largest one
+        (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = sorted(cnts, key = cv2.contourArea, reverse = True)
+        if len(cnts) > 0:
+            c = cnts[0]
+            # compute the rotated bounding box of the largest contour
+            rect = cv2.minAreaRect(c)
+            self.barcode = np.int0(cv2.cv.BoxPoints(rect))
+        else:
+            self.barcode = None
+
+    def _draw(self, frame):
+        if debug(self, frame): return
+        code = self.barcode
+        if code is not None:
+            cv2.drawContours(frame.array, [code], -1, (0, 0, 255), 1)
+
+
+# List of all working sensors
+sensors = {
+    'face'   : FaceSensor,
+    'motion' : MotionSensor,
+    'color'  : ColorSensor,
+    'light'  : LightSensor,
+    #'barcode': BarCodeSensor,
+    #'square' : SquareSensor,
+    #'circle' : CircleSensor,
+    #'edge'   : EdgeSensor,
+    'flow'   : FlowSensor,
+    'fps'    : FPSSensor
+}
 
 
 if __name__ == '__main__':
@@ -117,9 +501,9 @@ if __name__ == '__main__':
     LD = cam.getGrabber(threads=4, size=(160,120), port=2)
 
     # addProcess test
-    faceSensor = FaceSensor(LD)
+    faceSensor = FaceSensor(LD, draw=SD)
     faceSensor.addProcess(printFaces, EITHER_EDGE)
-    sleep(10)
+    sleep(2)
 
     # wait test
     print 'wait test'
@@ -128,6 +512,6 @@ if __name__ == '__main__':
     print 'returned'
 
     # stop cleanly all threads
-    faceSensor._del()
+    faceSensor._stop()
     cam.close()
 

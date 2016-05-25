@@ -155,14 +155,15 @@ class ImageGrabber(threading.Thread):
         with frame.lock:
             for p in processes:
                 p(frame)
+            self._frames.put(self.frame)
+            self.frame = frame
+
         # When all image processes are done, return frame to the pool
         #frame.truncate(0)
         #if self.previous_frame is not None: self._frames.put(self.previous_frame)
         #self.previous_frame = self.frame
         #if self.frame is not None: self._frames.put(self.frame)
         #self.frame = frame
-        self.frame = frame
-        self._frames.put(frame)
 
     def _getNextImageProcessor(self):
         while not self._terminated:
@@ -200,6 +201,8 @@ class Camera(object):
         self._camera = picamera.PiCamera()
         if resolution: self._camera.resolution = resolution
         if framerate: self._camera.framerate = framerate
+        #self._camera.awb_mode = 'incandescent'
+        #self._camera.exposure_mode = 'night'
         self._grabbers = []
         self._DCIMpath = ""
         self._recording = {}
