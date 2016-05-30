@@ -14,8 +14,8 @@ var TOOLTIPS = {
 
 var Sensors = [
   [Blockly.Msg.CODERBOT_SENSOR_TIP_FPS,    "fps"],
-  [Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE, "square"],
-  [Blockly.Msg.CODERBOT_SENSOR_TIP_CIRCLE, "circle"],
+  //[Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE, "square"],
+  //[Blockly.Msg.CODERBOT_SENSOR_TIP_CIRCLE, "circle"],
   [Blockly.Msg.CODERBOT_SENSOR_TIP_LIGHT,  "light"],
   [Blockly.Msg.CODERBOT_SENSOR_TIP_COLOR,  "color"],
   [Blockly.Msg.CODERBOT_SENSOR_TIP_MOTION, "motion"],
