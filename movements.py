@@ -79,6 +79,37 @@ class MotorsControl(MovementsControl):
         super(MotorsControl, self).stop()
 
 
+# TODO: sensibility can be a configurable parameter
+class ServosMotionControlled(ServosControl):
+    def __init__(self, sensor, *args):
+        super(ServosMotionControlled, self).__init__(*args)
+        self._sensor = sensor
+
+    def move(self, speed=100, elapse=None):
+        self._elapse = elapse
+        self._target = speed
+        self._delta = 0
+        self._sensor.addProcess(self._correct, 3)
+        self._start = time.time()
+        self.set(speed, speed)
+
+    def stop(self):
+        try: self._sensor.delProcess(self._correct, 3)
+        except ValueError: pass
+        super(ServosMotionControlled, self).stop()
+        self._sensor._stop()
+
+    def _correct(self, sensor):
+        sensitivity = 0.5
+        if self._elapse and self.start - time.time() >= self._elapse:
+            self.stop()
+            return
+        w = sensor._mean[0]
+        print 'correct', w*sensitivity
+        self._delta += w * sensitivity
+        self.set(min(max(self._target+self._delta,-100),100), min(max(self._target-self._delta,-100),100))
+
+
 if __name__ == '__main__':
     s = ServosControl(25, 4)
 

@@ -146,9 +146,11 @@ class ImageGrabber(threading.Thread):
     def addProcess(self, callback):
         with self._lock:
             self._analysisHooks.append(callback)
+            #print "-> %s:" % callback, self._analysisHooks
     def delProcess(self, callback):
         with self._lock:
             self._analysisHooks.remove(callback)
+            #print "<- %s:" % callback, self._analysisHooks
     def process(self, frame):
         with self._lock:
             processes = list(self._analysisHooks)

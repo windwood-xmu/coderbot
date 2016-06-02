@@ -45,13 +45,14 @@ TODO
 - [x] Upgrade to the latest blockly version
 - [ ] Write the block's python generator to be compatible with the new Coderbot object (work is started)
 - [ ] Write new blocks (like GPIO's sensor blocks, hear blocks, event driven blocks, etc...)
-- [ ] Simplify code generation when the admin configuration page is done by using decorated classes or subclasses for coderbot.motors calls (to render readable code for childs)
+- [ ] Simplify code generation by using decorated classes or subclasses for coderbot.motors calls (to render readable code for childs)
 - [x] Use private user configuration for basic blocks (for default parameters)
 - [ ] Rewrite the javascript code generator to use Blockly debugger
 
 **Program API**
 - [x] Rewrite cleanly the program API
 - [x] Integrate the run/abort program feature (execution is done in a secure environment)
+- [ ] Integrate a console log
 
 **Web based UI**
 - [x] Login available - only if a username.cfg file exists, no password is needed, only one user at a time for now
@@ -95,4 +96,10 @@ TODO
 - [ ] Audio hearing by using microphone
 - [ ] 3D mapping environment (not sure raspberry can do it alone with only one camera and moves)
 - [ ] Review all translation files
+
+
+**Changelog**
+- [x] Issue 53, stop camera sensors after program stopped
+- [ ] Issue 54, print block don't work. It wanted, but will be comming soon with more than only text messages
+
 

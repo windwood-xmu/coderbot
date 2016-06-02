@@ -133,6 +133,9 @@ class Program(object):
         finally:
             coderbot.camera.stop_recording()
             coderbot.motors.stop()
+            for sensor in coderbot.sensors.itervalues():
+                try: sensor._stop()
+                except AttributeError: pass
             self._running = False
             self._shutdown = False
 

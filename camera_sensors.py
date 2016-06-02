@@ -5,6 +5,7 @@ import cv2
 from time import time, sleep
 from sensors import SensorInterface, ON, OFF, RISING_EDGE, FALLING_EDGE, EITHER_EDGE, INPUT
 
+ALL_UPDATE = 3
 
 def debug(self, frame):
     if not hasattr(self, 'debug'): return False
@@ -15,22 +16,31 @@ def debug(self, frame):
     return False
 
 
-# TODO: Add blocks to get sensors informations like items or coordinates
+# TODO:
+#
+# Add blocks to get sensors informations like items or coordinates
+#
+# Utiliser __enter__ et __exit__ pour initialiser les capteurs (surtout utile pour les capteurs de camera)
+# remplace les methodes _start et _stop et permet d'avoir un compteur d'utilisation pour reellement arreter le thread du capteur ou non
+
 class CameraSensor(SensorInterface):
     def __init__(self, stream, use=False, draw=None):
+        self._mode = INPUT
+        self.__state = np.array(None)
+        #self._data = []
+
         # stream: camera.ImageGrabber object
         # TODO: Verify the type of object stream for assertion
         self._stream = stream
-        self._state = False
-        self._lock = threading.Lock()
-        self._event = threading.Event()
-        self._thread = threading.Thread(target=self._run)
-
-        self._mode = INPUT
-        self._callbacks = []
-        self._launched = False
         self._drawStream = draw
         self.factor = 1
+
+        self.__lock = threading.Lock()
+        self.__event = threading.Event()
+        self.__thread = threading.Thread(target=self._run)
+        self.__callbacks = []
+        self.__launched = False
+
         if draw is not None:
             self.factor = draw._size[0]/stream._size[0]
             #draw.addProcess(self._draw)
@@ -39,10 +49,10 @@ class CameraSensor(SensorInterface):
 
     # start and stop camera sensor
     def _start(self):
-        if not self._launched:
-            self._launched = True
-            self._terminated = False
-            self._thread.start()
+        if not self.__launched:
+            self.__launched = True
+            self.__terminated = False
+            self.__thread.start()
             self._stream.addProcess(self._process)
             if self._drawStream is not None:
                 self._drawStream.addProcess(self._draw)
@@ -51,26 +61,28 @@ class CameraSensor(SensorInterface):
         #    self._drawStream.delProcess(self._draw)
         #try: self._stream.delProcess(self._process)
         #except ValueError: pass
-        if self._launched:
+        if self.__launched:
             if self._drawStream is not None:
                 self._drawStream.delProcess(self._draw)
             self._stream.delProcess(self._process)
 
-            self._terminated = True
-            self._thread.join()
-            self._launched = False
-        self._state = False
+            self.__terminated = True
+            self.__thread.join()
+            # Because a thread cannot be relaunched after safely stopped
+            self.__thread = threading.Thread(target=self._run)
+            self.__launched = False
+        self.__state = np.array(None)
 
     def _run(self):
-        while not self._terminated:
-            if self._event.wait(0.2):
+        while not self.__terminated:
+            if self.__event.wait(0.2):
                 try:
-                    with self._lock:
+                    with self.__lock:
                         tick = int(time()*1000)
-                        for edge, cb in self._callbacks:
-                            if edge ^ self._state: cb(self)
+                        for edge, cb in self.__callbacks:
+                            if edge == ALL_UPDATE or edge ^ self.__state.any(): cb(self)
                 finally:
-                    self._event.clear()
+                    self.__event.clear()
 
     # Methods to overwrite to cutomize CameraSensor object
     def _process(self, frame):
@@ -80,14 +92,17 @@ class CameraSensor(SensorInterface):
 
     # Method to make state update and event call easy
     def _set(self, value):
-        changed = value ^ self._state
-        if changed:
-            with self._lock:
-                self._state = value
-                self._event.set()
+        value = np.asarray(value)
+        with self.__lock:
+            #print value.shape, self.__state.shape
+            if not np.array_equal(value, self.__state):
+                self.__state = value
+                self.__event.set()
 
     def read(self):
-        return self._state
+        with self.__lock:
+            if np.array_equal(self.__state, np.array(None)): return None
+            return self.__state.copy()
 
     def write(self, level):
         raise AttributeError('write not permitted on INPUT GPIO')
@@ -98,14 +113,14 @@ class CameraSensor(SensorInterface):
 
     # TODO: Perhaps use another Lock to be thread safe with this 2 functions
     def addProcess(self, function, edge=RISING_EDGE):
-        if not self._launched: self._start()
-        self._callbacks.append((edge, function))
+        if not self.__launched: self._start()
+        self.__callbacks.append((edge, function))
     def delProcess(self, function, edge=RISING_EDGE):
-        self._callbacks.remove((edge, function))
+        self.__callbacks.remove((edge, function))
 
     # TODO: Try to avoid the use of a subclass
     def wait(self, edge=RISING_EDGE, timeout=0):
-        if not self._launched: self._start()
+        if not self.__launched: self._start()
         class _wait:
             def __init__(self, this):
                 start = time()
@@ -122,36 +137,34 @@ class CameraSensor(SensorInterface):
 # Lot of CameraSensors
 
 class FPSSensor(CameraSensor):
-    FPS = 0
     counter = 0
     start = time()
-    #step  = time()
     position = (0,0)
 
     def _process(self, frame):
         self.counter += 1
         step = time()
         if step-self.start > 1:
-            self.FPS = self.counter / (step - self.start)
+            self._set(self.counter / (step - self.start))
             self.start = step
             self.counter = 0
 
     def _draw(self, frame):
-        dp = self._stream.dropped
-        dd = self._drawStream.dropped
-        (tw,th), baseline = cv2.getTextSize("%.2f fps %d/%d" % (self.FPS, dp, dd), cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+        FPS = self.read()
+        if FPS is None: return
+        #dp = self._stream.dropped
+        #dd = self._drawStream.dropped
+        #(tw,th), baseline = cv2.getTextSize("%.2f fps %d|%d" % (FPS, dp, dd), cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+        (tw,th), baseline = cv2.getTextSize("%.2f fps" % FPS, cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
         x, y = self.position
         cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,0,0), -1)
-        cv2.putText(frame.array, "%.2f fps %d/%d" % (self.FPS, dp, dd), (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
-
-    def getFPS(self):
-        return self.FPS
+        #cv2.putText(frame.array, "%.2f fps %d|%d" % (FPS, dp, dd), (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
+        cv2.putText(frame.array, "%.2f fps" % FPS, (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
 
 
 # TODO: Threshold value can be a config field
 class MotionSensor(CameraSensor):
     _avg = None
-    motions = []
 
     def _process(self, frame):
         gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
@@ -163,17 +176,13 @@ class MotionSensor(CameraSensor):
         thresh = cv2.threshold(delta, 15, 255, cv2.THRESH_BINARY)[1]
         thresh = cv2.dilate(thresh, None, iterations=2)
         (cnts, _) = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cnts = [c for c in cnts if cv2.contourArea(c) >= 160]
-        self.motions = cnts
-        self._set(bool(len(cnts)))
+        cnts = [cv2.boundingRect(c) for c in cnts if cv2.contourArea(c) >= 160]
+        self._set(cnts)
 
     def _draw(self, frame):
-        cnts = list(self.motions)
-        for c in cnts:
-            # Draw the detected contour
-            #cv2.drawContours(frame.array, [c*self.factor], -1, (255, 0, 0), 1)
-            (x,y,w,h) = cv2.boundingRect(c)
-            (x,y,w,h) = (x*self.factor,y*self.factor,w*self.factor,h*self.factor)
+        try: cnts = self.read()*self.factor
+        except TypeError: return
+        for (x,y,w,h) in cnts:
             cv2.rectangle(frame.array, (x,y), (x+w,y+h), (0,255,0), 1)
             (tw,th), baseline = cv2.getTextSize("motion", cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
             cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,255,0), -1)
@@ -181,29 +190,22 @@ class MotionSensor(CameraSensor):
 
 
 class FaceSensor(CameraSensor):
-    faces = []
-
     def _process(self, frame):
         # Attach cascadeClassifier to each frame because it's not thread safe (and there's a thread by frame processing)
         if not hasattr(frame, 'cascade'): frame.cascade = cv2.CascadeClassifier('haarcascade_frontalface.xml')
 
         gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
         faces = frame.cascade.detectMultiScale(gray)
-        # TODO: Probably not thread safe
-        # self.faces is used in other threads by program's blocks
-        self.faces = faces
-        self._set(bool(len(faces)))
+        self._set(faces)
 
     def _draw(self, frame):
-        faces = list(self.faces * self.factor)
+        try: faces = self.read()*self.factor
+        except TypeError: return
         for (x,y,w,h) in faces:
             cv2.rectangle(frame.array, (x,y), (x+w, y+h), (0,255,0), 1)
             (tw,th), baseline = cv2.getTextSize("face", cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
             cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,255,0), -1)
             cv2.putText(frame.array, "face", (x,y+th), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255,255,255))
-
-    def getFaces(self):
-        return list(self.faces)
 
 
 # TODO : Try it by day to work on
@@ -297,35 +299,26 @@ class CircleSensor(CameraSensor):
 
 # TODO: maxval can be a config field
 class LightSensor(CameraSensor):
-    light = None
-
     def _process(self, frame):
         gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
         (minval, maxval, minpos, maxpos) = cv2.minMaxLoc(gray)
         if maxval > 240:
-            self.light = maxpos
+            self._set(maxpos)
         else:
-            self.light = None
-        self._set(maxval > 240)
-        #self.circles = circles
-        #self._set(bool(len(circles)))
+            self._set(None)
 
     def _draw(self, frame):
-        light = self.light
-        if light is not None:
-            (x,y) = light
-            (x,y) = (x*self.factor, y*self.factor)
-            cv2.circle(frame.array, (x,y), 5, (0,255,0), 1)
+        try: (x,y) = self.read() * self.factor
+        except TypeError: return
+        cv2.circle(frame.array, (x,y), 5, (0,255,0), 1)
 
 
 # TODO: Color sensitivity (Hue +/- sensitivity) can be a config field
 class ColorSensor(CameraSensor):
-    colors = []
     color = None # (R,G,B) tuple
     _lower = None
     _upper = None
     _split = False
-    _firstOnly = False
 
     def setColor(self, color):
         sensitivity = 5
@@ -353,20 +346,14 @@ class ColorSensor(CameraSensor):
             mask = cv2.GaussianBlur(mask, (3,3), 0)
             (cnts, _) = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
-
-            self.colors = cnts
-            if self._firstOnly:
-                if len(cnts) > 0:
-                    self.colors = [cnts[0]]
-            self._set(bool(len(cnts)))
+            cnts = map(cv2.boundingRect, cnts)
+            self._set(cnts)
 
     def _draw(self, frame):
-        cnts = list(self.colors)
-        for c in cnts:
-            # Draw the detected contour
-            #cv2.drawContours(frame.array, [c*self.factor], -1, (255, 0, 0), 1)
+        try: cnts = self.read()*self.factor
+        except TypeError: return
+        for (x,y,w,h) in cnts:
             # Draw the bounding rectangle of the countour
-            (x,y,w,h) = cv2.boundingRect(c*self.factor)
             cv2.rectangle(frame.array, (x,y), (x+w,y+h), (0,255,0), 1)
             (tw,th), baseline = cv2.getTextSize("color", cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
             cv2.rectangle(frame.array, (x,y), (x+tw, y+th+baseline), (0,255,0), -1)
@@ -375,7 +362,7 @@ class ColorSensor(CameraSensor):
 
 class FlowSensor(CameraSensor):
     _avg = None
-    flow = []
+    #flow = []
     _mask = None
     _previous = None
     _p0 = None
@@ -408,26 +395,67 @@ class FlowSensor(CameraSensor):
             good_new = p1[st==1]
             good_old = self._p0[st==1]
 
-            self.flow = zip(good_new,good_old)
+            self._set(zip(good_new,good_old))
 
             self._previous = delta
-            self._p0 = good_new.reshape(-1,1,2)
+            if len(p1) < 5:
+                #self._mask = None
+                self._p0 = cv2.goodFeaturesToTrack(delta, mask=None, maxCorners=100, qualityLevel=0.3, minDistance=7, blockSize=7)
+            else:
+                self._p0 = good_new.reshape(-1,1,2)
 
-        self._set(bool(len(self.flow)))
+        #self._set(bool(len(self.flow)))
 
     def _draw(self, frame):
-        if debug(self, frame): return
+        #if debug(self, frame): return
         if self._mask is None: self._mask = np.zeros_like(frame.array)
         # draw the tracks
-        tracks = list(self.flow)
-        for i,(new,old) in enumerate(self.flow):
-            new, old = new*self.factor, old*self.factor
+        try: vects = self.read()*self.factor
+        except TypeError: return
+        for i,(new,old) in enumerate(vects):
             a,b = new.ravel()
             c,d = old.ravel()
-            #print (a,b),(c,d),self._color[i]
-            cv2.line(self._mask, (a,b), (c,d), self._color[i].tolist(), 2)
-            cv2.circle(frame.array, (a,b), 5, self._color[i].tolist(), -1)
+            cv2.line(self._mask, (a,b), (c,d), self._color[i].tolist(), 1)
+            cv2.circle(frame.array, (a,b), 3, self._color[i].tolist(), -1)
         frame.array = cv2.add(frame.array,self._mask)
+
+
+class DenseFlowSensor(CameraSensor):
+    _prvs = None
+    _hsv = None
+
+    def _process(self, frame):
+        if self._hsv is None:
+            self._hsv = np.zeros_like(frame.array)
+            self._hsv[...,1] = 255
+
+        next = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+        #next = cv2.GaussianBlur(next, (3,3), 0)
+        if self._prvs is None:
+            self._prvs = next
+            return
+
+        flow = cv2.calcOpticalFlowFarneback(self._prvs,next, 0.5, 3, 15, 3, 5, 1.2, 0)
+        self._set(flow)
+
+        self._prvs = next
+
+    def _draw(self, frame):
+        try: flow = self.read()*self.factor*10
+        except TypeError: return
+        (w,h,_,_) = cv2.mean(flow)
+        (w,h) = (int(w),int(h))
+        (y,x,_) = frame.array.shape
+        (x,y) = (x/2, y/2)
+        cv2.line(frame.array, (x,y), (x+w, y+h), (255,0,0), 1)
+        return
+
+        # Another way to display the flow
+        mag, ang = cv2.cartToPolar(flow[...,0], flow[...,1])
+        self._hsv[...,0] = ang[...,0]*180/np.pi/2
+        self._hsv[...,2] = cv2.normalize(mag,None,0,255,cv2.NORM_MINMAX)
+        #self._hsv[...,2] = cv2.normalize(mag,None,255,cv2.NORM_INF)
+        frame.array = cv2.cvtColor(self._hsv,cv2.COLOR_HSV2BGR)
 
 
 
@@ -487,7 +515,7 @@ sensors = {
     #'square' : SquareSensor,
     #'circle' : CircleSensor,
     #'edge'   : EdgeSensor,
-    'flow'   : FlowSensor,
+    'flow'   : DenseFlowSensor,
     'fps'    : FPSSensor
 }
 

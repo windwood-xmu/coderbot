@@ -12,15 +12,6 @@ class CoderBot(object):
     def __init__(self):
         # Avoid reinitialisation in case of multiple call
         if hasattr(self, '_init_complete') and self._init_complete: return
-        if Config().get('use_servos', True):
-            self.motors = movements.ServosControl(Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4))
-        else:
-            self.motors = movements.MotorsControl(Config().get('pin_enable_motor', 22),
-                Config().get('pin_motor_left_forward', 25), Config().get('pin_motor_left_backward', 24),
-                Config().get('pin_motor_right_forward', 4), Config().get('pin_motor_right_backward', 17))
-            self.motors.freq(Config().get('PWM_frequency', 100))
-        self.sound = sound.Sound()
-        if Config().get('useMbrola', False): self.sound.useMbrola()
 
         # Splitter ports are for :
         # 0 - Capture full size images (default resolution)
@@ -39,8 +30,20 @@ class CoderBot(object):
         for sensor, klass in camera_sensors.sensors.iteritems():
             self.sensors[sensor] = klass(self.streamers['LD'], draw=self.streamers['SD'])
         self.sensors['color'].setColor((51,153,153))
-        #self.sensors['color']._start()
+        self.sensors['color'].setColor((162,161,105))
+        self.sensors['flow']._start()
         self.sensors['fps']._start()
+
+        if Config().get('use_servos', True):
+            #self.motors = movements.ServosControl(Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4))
+            self.motors = movements.ServosMotionControlled(self.sensors['flow'], Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4))
+        else:
+            self.motors = movements.MotorsControl(Config().get('pin_enable_motor', 22),
+                Config().get('pin_motor_left_forward', 25), Config().get('pin_motor_left_backward', 24),
+                Config().get('pin_motor_right_forward', 4), Config().get('pin_motor_right_backward', 17))
+            self.motors.freq(Config().get('PWM_frequency', 100))
+        self.sound = sound.Sound()
+        if Config().get('useMbrola', False): self.sound.useMbrola()
 
     def shutdown(self):
         self._init_complete = False

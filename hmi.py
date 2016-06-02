@@ -206,12 +206,17 @@ def handle_bot_motors(movement):
     if movement == 'stop':
         app.bot.motors.stop()
     elif movement == 'set':
-        speed_left = request.args.get('speed_left', Config().get('default_move_speed', 100))
-        speed_right = request.args.get('speed_right', Config().get('default_move_speed', 100))
+        speed_left = request.args.get('speed_left', Config().get('default_speed_move', 100))
+        speed_right = request.args.get('speed_right', Config().get('default_speed_move', 100))
         elapse = request.args.get('elapse')
         app.bot.motors.set(speed_left, speed_right, elapse)
-    elif movement in ['move', 'turn', 'forward', 'backward', 'right', 'left']:
-        speed = request.args.get('speed', Config().get('default_move_speed', 100))
+    elif movement in ['move', 'forward', 'backward']:
+        speed = request.args.get('speed', Config().get('default_speed_move', 100))
+        elapse = request.args.get('elapse')
+        cmd = getattr(app.bot.motors, movement)
+        cmd(speed, elapse)
+    elif movement in ['turn', 'right', 'left']:
+        speed = request.args.get('speed', Config().get('default_speed_turn', 100))
         elapse = request.args.get('elapse')
         cmd = getattr(app.bot.motors, movement)
         cmd(speed, elapse)

@@ -22,6 +22,8 @@ OUTPUT = pigpio.OUTPUT
 # Faire des blocks d'acces pour initialiser et utiliser des capteurs additionnels
 #  - set <variableName> to [init <Input|Output|PWM|Servo> on pin <0>: return object]
 #    voir wyliodrin (try without create account, and start a new project)
+#
+# Utiliser __enter__ et __exit__ pour initialiser les capteurs (surtout utile pour les capteurs de camera)
 
 @Singleton
 class PIGPIO(object):
