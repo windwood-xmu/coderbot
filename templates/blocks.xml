@@ -281,6 +281,7 @@
   </category>
   <category name="{% trans %}Sensor{% endtrans %}" colour="290">
     <block type="coderbot_sensor_detect"></block>
+    <block type="coderbot_sensor_get"></block>
     <block type="coderbot_sensor_when"></block>
     <block type="coderbot_sensor_wait"></block>
     <!--block type="coderbot_adv_pathAhead"></block>

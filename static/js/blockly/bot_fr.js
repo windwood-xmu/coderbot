@@ -34,6 +34,7 @@ Blockly.Msg.CODERBOT_SENSOR_DETECT = "%1 trouvé ?";
 Blockly.Msg.CODERBOT_SENSOR_WHEN = "quand %1 détecté, avec : sensor";
 Blockly.Msg.CODERBOT_SENSOR_WHEN_DO = "faire %1";
 Blockly.Msg.CODERBOT_SENSOR_WAIT = "attendre un %1";
+Blockly.Msg.CODERBOT_SENSOR_GET = "%1";
 
 /* Tooltips texts */
 Blockly.Msg.CODERBOT_MOVE_TOOLTIP = "déplace le robot %1";
@@ -58,6 +59,7 @@ Blockly.Msg.CODERBOT_SLEEP_TOOLTIP = "arrête le déroulement du programme tempo
 Blockly.Msg.CODERBOT_SENSOR_DETECT_TOOLTIP = "Récupère la valeur du capteur";
 Blockly.Msg.CODERBOT_SENSOR_WHEN_TOOLTIP = "Déclenche des actions lors du déclenchement d'un capteur";
 Blockly.Msg.CODERBOT_SENSOR_WAIT_TOOLTIP = "Attend que le capteur se déclenche avant de passer à la suite";
+Blockly.Msg.CODERBOT_SENSOR_GET_TOOLTIP = "Récupère la valeur du capteur";
 
 Blockly.Msg.CODERBOT_SENSOR_TIP_FPS = "fps";
 Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE = "carré";

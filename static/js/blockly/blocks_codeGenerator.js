@@ -13,7 +13,7 @@ Blockly.Python['text_print'] = function(block) {
   // Print statement.
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
     Blockly.Python.ORDER_NONE) || '\'\'';
-  return 'get_cam().set_text(' + argument0 + ')\n';
+  return "coderbot.streamers['SD'].annotate(" + argument0 + ")\n";
 };
 
 Blockly.Python['coderbot_repeat'] = function(block) {
@@ -137,7 +137,7 @@ Blockly.Python['coderbot_sensor_when'] = function(block) {
   var branch = Blockly.Python.statementToCode(block, 'DO');
   branch = Blockly.Python.addLoopTrap(branch, block.id) || Blockly.Python.PASS;
   var funcName = Blockly.Python.variableDB_.getDistinctName('when_'+name, Blockly.Variables.NAME_TYPE);
-  var code = "def "+funcName+"():\n"+branch+"coderbot.sensors['"+name+"'].addProcess("+funcName+")";
+  var code = "def "+funcName+"(sensor):\n"+branch+"coderbot.sensors['"+name+"'].addProcess("+funcName+")";
   code = Blockly.Python.scrub_(block, code);
   Blockly.Python.definitions_[funcName] = code;
   return null;
@@ -146,8 +146,16 @@ Blockly.Python['coderbot_sensor_when'] = function(block) {
 Blockly.Python['coderbot_sensor_wait'] = function(block) {
   // Boolean values true and false.
   var name = block.getFieldValue('NAME');
-  var code = "coderbot.sensors['"+name+"'].wait()";
+  var code = "coderbot.sensors['"+name+"'].wait()\n";
   return code;
+};
+
+Blockly.Python['coderbot_sensor_get'] = function(block) {
+  var name = block.getFieldValue('NAME');
+  var code = "coderbot.sensors['"+name+"'].get()";
+  // TODO: Perhaps do this in a separate and dedicated block like a 'with' block
+  Blockly.Python.definitions_[name] = "coderbot.sensors['"+name+"']._start()";
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 

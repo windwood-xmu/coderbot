@@ -1,9 +1,8 @@
-import time, sys
+import time
 import threading
 import picamera
 import picamera.array
 import cv2
-from utils.POO import SingletonDecorator as Singleton
 from os.path import join as pathJoin
 
 RECORD_PATH = 'DCIM'
@@ -111,6 +110,7 @@ class ImageGrabber(threading.Thread):
 
         self.counter = 0
         self.dropped = 0
+        self.__annotate = []
 
         self._lock = threading.Lock()
         self._analysisHooks = []
@@ -197,6 +197,22 @@ class ImageGrabber(threading.Thread):
         while self.threads:
             self.threads.pop().shutdown()
 
+    def annotate(self, text, color=None, size=None):
+        if self.__annotate:
+            p = self.__annotate.pop()
+            self.delProcess(p)
+        if size is None: size = 0.5
+        if color is None: color = (255,255,255)
+        def drawText(frame):
+            (tw,th), baseline = cv2.getTextSize("%s" % text, cv2.FONT_HERSHEY_SIMPLEX, size, 1)
+            y,x,_ = frame.array.shape
+            cv2.putText(frame.array, "%s" % text, (int((x-tw)/2), th+baseline), cv2.FONT_HERSHEY_SIMPLEX, size, color)
+        self.__annotate.append(drawText)
+        self.addProcess(drawText)
+
+
+
+
 class Camera(object):
     ImageGrabberClass = ImageGrabber
     def __init__(self, resolution=None, framerate=None):
@@ -247,6 +263,8 @@ class Camera(object):
 
 
 if __name__ == '__main__':
+    import cv2
+
     hog = cv2.HOGDescriptor()
     hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 

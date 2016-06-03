@@ -77,10 +77,11 @@ class CameraSensor(SensorInterface):
         while not self.__terminated:
             if self.__event.wait(0.2):
                 try:
-                    with self.__lock:
-                        tick = int(time()*1000)
-                        for edge, cb in self.__callbacks:
-                            if edge == ALL_UPDATE or edge ^ self.__state.any(): cb(self)
+                    tick = int(time()*1000)
+                    for edge, cb in self.__callbacks:
+                        with self.__lock:
+                            state = self.__state.any()
+                        if edge == ALL_UPDATE or edge ^ state: cb(self)
                 finally:
                     self.__event.clear()
 
@@ -98,12 +99,15 @@ class CameraSensor(SensorInterface):
             if not np.array_equal(value, self.__state):
                 self.__state = value
                 self.__event.set()
-
-    def read(self):
+    def get(self):
         with self.__lock:
             if np.array_equal(self.__state, np.array(None)): return None
             return self.__state.copy()
 
+    def read(self):
+        with self.__lock:
+            if np.array_equal(self.__state, np.array(None)): return False
+            return self.__state.any()
     def write(self, level):
         raise AttributeError('write not permitted on INPUT GPIO')
     def set(self):   self.write(ON)
@@ -150,7 +154,7 @@ class FPSSensor(CameraSensor):
             self.counter = 0
 
     def _draw(self, frame):
-        FPS = self.read()
+        FPS = self.get()
         if FPS is None: return
         #dp = self._stream.dropped
         #dd = self._drawStream.dropped
@@ -180,7 +184,7 @@ class MotionSensor(CameraSensor):
         self._set(cnts)
 
     def _draw(self, frame):
-        try: cnts = self.read()*self.factor
+        try: cnts = self.get()*self.factor
         except TypeError: return
         for (x,y,w,h) in cnts:
             cv2.rectangle(frame.array, (x,y), (x+w,y+h), (0,255,0), 1)
@@ -199,7 +203,7 @@ class FaceSensor(CameraSensor):
         self._set(faces)
 
     def _draw(self, frame):
-        try: faces = self.read()*self.factor
+        try: faces = self.get()*self.factor
         except TypeError: return
         for (x,y,w,h) in faces:
             cv2.rectangle(frame.array, (x,y), (x+w, y+h), (0,255,0), 1)
@@ -308,7 +312,7 @@ class LightSensor(CameraSensor):
             self._set(None)
 
     def _draw(self, frame):
-        try: (x,y) = self.read() * self.factor
+        try: (x,y) = self.get() * self.factor
         except TypeError: return
         cv2.circle(frame.array, (x,y), 5, (0,255,0), 1)
 
@@ -350,7 +354,7 @@ class ColorSensor(CameraSensor):
             self._set(cnts)
 
     def _draw(self, frame):
-        try: cnts = self.read()*self.factor
+        try: cnts = self.get()*self.factor
         except TypeError: return
         for (x,y,w,h) in cnts:
             # Draw the bounding rectangle of the countour
@@ -410,7 +414,7 @@ class FlowSensor(CameraSensor):
         #if debug(self, frame): return
         if self._mask is None: self._mask = np.zeros_like(frame.array)
         # draw the tracks
-        try: vects = self.read()*self.factor
+        try: vects = self.get()*self.factor
         except TypeError: return
         for i,(new,old) in enumerate(vects):
             a,b = new.ravel()
@@ -436,14 +440,16 @@ class DenseFlowSensor(CameraSensor):
             return
 
         flow = cv2.calcOpticalFlowFarneback(self._prvs,next, 0.5, 3, 15, 3, 5, 1.2, 0)
-        self._set(flow)
+        mean = cv2.mean(flow)        
+        self._set(mean)
 
         self._prvs = next
 
     def _draw(self, frame):
-        try: flow = self.read()*self.factor*10
+        #try: flow = self.get()*self.factor*10
+        try: (w,h,_,_) = self.get()*self.factor*10
         except TypeError: return
-        (w,h,_,_) = cv2.mean(flow)
+        #(w,h,_,_) = cv2.mean(flow)
         (w,h) = (int(w),int(h))
         (y,x,_) = frame.array.shape
         (x,y) = (x/2, y/2)
@@ -456,7 +462,6 @@ class DenseFlowSensor(CameraSensor):
         self._hsv[...,2] = cv2.normalize(mag,None,0,255,cv2.NORM_MINMAX)
         #self._hsv[...,2] = cv2.normalize(mag,None,255,cv2.NORM_INF)
         frame.array = cv2.cvtColor(self._hsv,cv2.COLOR_HSV2BGR)
-
 
 
 # TODO: Not working yet

@@ -31,7 +31,7 @@ class CoderBot(object):
             self.sensors[sensor] = klass(self.streamers['LD'], draw=self.streamers['SD'])
         self.sensors['color'].setColor((51,153,153))
         self.sensors['color'].setColor((162,161,105))
-        self.sensors['flow']._start()
+        self.sensors['light']._start()
         self.sensors['fps']._start()
 
         if Config().get('use_servos', True):

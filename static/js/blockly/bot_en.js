@@ -33,6 +33,7 @@ Blockly.Msg.CODERBOT_SENSOR_DETECT = "%1 found ?";
 Blockly.Msg.CODERBOT_SENSOR_WHEN = "when %1 found, with : sensor";
 Blockly.Msg.CODERBOT_SENSOR_WHEN_DO = "do %1";
 Blockly.Msg.CODERBOT_SENSOR_WAIT = "wait for %1";
+Blockly.Msg.CODERBOT_SENSOR_GET = "%1";
 
 /* Tooltips texts */
 Blockly.Msg.CODERBOT_MOVE_TOOLTIP = "move the bot %1";
@@ -57,6 +58,7 @@ Blockly.Msg.CODERBOT_SLEEP_TOOLTIP = "stop the program for a while";
 Blockly.Msg.CODERBOT_SENSOR_DETECT_TOOLTIP = "get the sensor value (0 or 1)";
 Blockly.Msg.CODERBOT_SENSOR_WHEN_TOOLTIP = "launch some commands when sensor's value change";
 Blockly.Msg.CODERBOT_SENSOR_WAIT_TOOLTIP = "wait sensor's value to change";
+Blockly.Msg.CODERBOT_SENSOR_GET_TOOLTIP = "Get the sensor's value";
 
 Blockly.Msg.CODERBOT_SENSOR_TIP_FPS = "fps";
 Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE = "square";

@@ -359,6 +359,26 @@ Blockly.Blocks['coderbot_sensor_wait'] = {
   }
 };
 
+Blockly.Blocks['coderbot_sensor_get'] = {
+  // Block to read sensor value.
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.CODERBOT_SENSOR_GET,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "NAME",
+          "options": Sensors
+        }
+      ],
+      "output": null,
+      "colour": 290,
+      "tooltip": Blockly.Msg.CODERBOT_SENSOR_GET_TOOLTIP,
+      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
+    });
+  }
+};
+
 
 Blockly.Blocks['coderbot_adv_pathAhead'] = {
   /**

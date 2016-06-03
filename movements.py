@@ -104,8 +104,8 @@ class ServosMotionControlled(ServosControl):
         if self._elapse and self.start - time.time() >= self._elapse:
             self.stop()
             return
-        w = sensor._mean[0]
-        print 'correct', w*sensitivity
+        w = sensor.read()[0]
+        #print 'correct', w*sensitivity
         self._delta += w * sensitivity
         self.set(min(max(self._target+self._delta,-100),100), min(max(self._target-self._delta,-100),100))
 
