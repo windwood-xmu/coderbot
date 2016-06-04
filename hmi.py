@@ -3,7 +3,7 @@ import utils.cv
 from config import MultifileConfig as Config
 from program import Program
 from coderbot import CoderBot
-import Image
+from PIL import Image
 import StringIO
 from re import findall
 import errno
