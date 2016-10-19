@@ -379,142 +379,22 @@ Blockly.Blocks['coderbot_sensor_get'] = {
   }
 };
 
-
-Blockly.Blocks['coderbot_adv_pathAhead'] = {
-  /**
-   * Block for pathAhead function.
-   * @this Blockly.Block
-   */
+Blockly.Blocks['coderbot_sensor_setcolor'] = {
+  // Block to set sensor parameters.
   init: function() {
     this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD,
-      "output": "Number", // Is it not a boolean ?
-      "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD_TOOLTIP,
-      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['coderbot_adv_findLine'] = {
-  /**
-   * Block for pathAhead function.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_FINDLINE,
-      "output": "Number", // Is it not a boolean ?
-      "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_FINDLINE_TOOLTIP,
-      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['coderbot_adv_findSignal'] = {
-  /**
-   * Block for findSignal function.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL,
-      "output": "Number", // Is it not a boolean ?
-      "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL_TOOLTIP,
-      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['coderbot_adv_findFace'] = {
-  /**
-   * Block for findSignal function.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_FINDFACE,
+      "message0": Blockly.Msg.CODERBOT_SENSOR_SETCOLOR,
       "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "RETVAL",
-          "options": [
-            [Blockly.Msg.CODERBOT_SENSOR_FINDFACE_TIP_X, "X"],
-            [Blockly.Msg.CODERBOT_SENSOR_FINDFACE_TIP_Y, "Y"],
-            [Blockly.Msg.CODERBOT_SENSOR_FINDFACE_TIP_SIZE, "SIZE"],
-            [Blockly.Msg.CODERBOT_SENSOR_FINDFACE_TIP_ALL, "ALL"]
-          ]
-        }
-      ],
-      "output": ["Number", "Array"],
-      "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_FINDFACE_TOOLTIP,
-      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['coderbot_adv_findCode'] = {
-  /**
-   * Block for findSignal function.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_FINDCODE,
-      "output": "Number", // Is it not a boolean ?
-      "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_FINDCODE_TOOLTIP,
-      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['coderbot_adv_findColor'] = {
-  /**
-   * Block for findSignal function.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR,
-      "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "RETVAL",
-          "options": [
-            [Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TIP_DIST, "DIST"],
-            [Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TIP_ANGLE, "ANGLE"],
-            [Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TIP_BOTH, "BOTH"]
-          ]
-        },
         {
           "type": "input_value",
           "name": "COLOR",
           "check": "Colour"
         }
       ],
-      "output": ["Number", "Array"],
+      "previousStatement": null,
+      "nextStatement": null,
       "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_TOOLTIP,
-      "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['coderbot_adv_findLogo'] = {
-  /**
-   * Block for findLogo function.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CODERBOT_SENSOR_FINDLOGO,
-      "output": "Number", // Is it not a boolean ?
-      "colour": 290,
-      "tooltip": Blockly.Msg.CODERBOT_SENSOR_FINDLOGO_TOOLTIP,
+      "tooltip": Blockly.Msg.CODERBOT_SENSOR_SETCOLOR_TOOLTIP,
       "helpUrl": Blockly.Msg.CODERBOT_SENSOR_HELPURL
     });
   }

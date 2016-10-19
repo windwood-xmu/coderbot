@@ -9,6 +9,8 @@
   {% block script %}
 
     {% if session.username == "admin" %}
+      // *************** Admin functions only ***************
+
       $(function(){
         // Helper function to fill listview of users
         function loadUserList () {
@@ -82,17 +84,28 @@
         });
 
       });
+
     {% endif %}
 
+    // *************** Users functions ***************
 
     $(function(){
+      // Automatic facilities
+
+      $("#use_camera_assisted_moves").change(function() {
+        if ($(this).val() == "true") {
+          $("#camera_assisted_configuration").show();
+        } else {
+          $("#camera_assisted_configuration").hide();
+        }
+      });
+
       // Advanced parameters accessibility
       {% if config.get('advanced_user', False) == False and session.username != "admin" %}
         $(".advanced").hide();
       {% endif %}
       {% if session.username != "admin" %}
         $("#advanced_user").change(function(e) {
-          console.log($("#advanced_user").val());
           if ($("#advanced_user").val() == "true") { $(".advanced").show(); }
           else                                     { $(".advanced").hide(); }
         });
@@ -299,7 +312,7 @@
                 <option value="true"{% if config.get('use_servos', True) == True %} selected{% endif %}>{% trans %}Yes{% endtrans %}</option>
               </select>
             </div>
-            <div id="servos_configuration">
+            <div id="servos_configuration"{% if config.get('use_servos', True) == False %} style="display: none;"{% endif %}>
               <div class="ui-field-contain">
                 <label for="pin_servo_left">{% trans %}PIN for left servo{% endtrans %}</label>
                 <input id="pin_servo_left" name="pin_servo_left" pattern="[0-9]*" value="{{ config.get('pin_servo_left', 25) }}" placeholder="{% trans %}PIN for left servo{% endtrans %}">
@@ -309,7 +322,7 @@
                 <input id="pin_servo_right" name="pin_servo_right" pattern="[0-9]*" value="{{ config.get('pin_servo_right', 4) }}" placeholder="{% trans %}PIN for right servo{% endtrans %}">
               </div>
             </div>
-            <div id="motors_configuration" style="display: none;">
+            <div id="motors_configuration"{% if config.get('use_servos', True) == True %} style="display: none;"{% endif %}>
               <div class="ui-field-contain">
                 <label for="PWM_frequency">{% trans %}PWM frequency{% endtrans %}</label>
                 <input id="PWM_frequency" name="PWM_frequency" pattern="[0-9]*" value="{{ config.get('PWM_frequency', 100) }}" placeholder="{% trans %}PWM frequency{% endtrans %}">
@@ -570,8 +583,17 @@
         <ul data-role="listview" data-inset="false">
           <li>
             <div class="ui-field-contain">
-              <label>{% trans %}Camera assisted moves{% endtrans %}</label>
-              <input disabled="true" type="checkbox" data-role="flipswitch">
+              <label for="use_camera_assisted_moves">{% trans %}Camera assisted moves{% endtrans %}</label>
+              <select id="use_camera_assisted_moves" name="use_camera_assisted_moves" data-role="flipswitch">
+                <option value="false"{% if config.get('use_camera_assisted_moves', True) == False %} selected{% endif %}>{% trans %}No{% endtrans %}</option>
+                <option value="true"{% if config.get('use_camera_assisted_moves', True) == True %} selected{% endif %}>{% trans %}Yes{% endtrans %}</option>
+              </select>
+            </div>
+            <div id="camera_assisted_configuration"{% if config.get('use_camera_assisted_moves', True) == False %} style="display: none;"{% endif %}>
+              <div class="ui-field-contain">
+                <label for="camera_assisted_sensibility">{% trans %}Sensibility{% endtrans %}</label>
+                <input id="camera_assisted_sensibility" name="camera_assisted_sensibility" min="0" max="1" step="0.1" value="{{ config.get('camera_assisted_sensibility', 0.5) }}" type="range" data-highlight="true">
+              </div>
             </div>
           </li>
           <li data-role="list-divider">{% trans %}Simple move blocks parameters{% endtrans %}</li>

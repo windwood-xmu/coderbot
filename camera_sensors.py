@@ -18,10 +18,9 @@ def debug(self, frame):
 
 # TODO:
 #
-# Add blocks to get sensors informations like items or coordinates
-#
 # Utiliser __enter__ et __exit__ pour initialiser les capteurs (surtout utile pour les capteurs de camera)
 # remplace les methodes _start et _stop et permet d'avoir un compteur d'utilisation pour reellement arreter le thread du capteur ou non
+# Peut etre ajouter un block 'with <x> sensor' pour permettre une initialisation fine des capteurs aux programmeurs
 
 class CameraSensor(SensorInterface):
     def __init__(self, stream, use=False, draw=None):
@@ -48,6 +47,7 @@ class CameraSensor(SensorInterface):
             self._start()
 
     # start and stop camera sensor
+    # This methods could be public
     def _start(self):
         if not self.__launched:
             self.__launched = True
@@ -301,7 +301,7 @@ class CircleSensor(CameraSensor):
             cv2.rectangle(frame.array, (x-5,y-5), (x+5,y+5), (0,0,255), -1)
 
 
-# TODO: maxval can be a config field
+# TODO: maxval can be a config field (threshold)
 class LightSensor(CameraSensor):
     def _process(self, frame):
         gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
@@ -325,6 +325,7 @@ class ColorSensor(CameraSensor):
     _split = False
 
     def setColor(self, color):
+        if isinstance(color, (str, unicode)): color = (int(color[1:3],16),int(color[3:5],16),int(color[5:7],16))
         sensitivity = 5
         h,s,v = cv2.cvtColor(np.uint8([[color]]), cv2.COLOR_RGB2HSV)[0,0]
         if h < sensitivity or h > 180-sensitivity: self._split = True
@@ -356,6 +357,7 @@ class ColorSensor(CameraSensor):
     def _draw(self, frame):
         try: cnts = self.get()*self.factor
         except TypeError: return
+        print cnts
         for (x,y,w,h) in cnts:
             # Draw the bounding rectangle of the countour
             cv2.rectangle(frame.array, (x,y), (x+w,y+h), (0,255,0), 1)

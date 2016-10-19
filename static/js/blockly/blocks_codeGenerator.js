@@ -158,53 +158,14 @@ Blockly.Python['coderbot_sensor_get'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
-
-Blockly.Python['coderbot_adv_pathAhead'] = function(block) {
-  // Boolean values true and false.
-  var code = 'get_cam().path_ahead()';
-  return [code, Blockly.Python.ORDER_ATOMIC];
+Blockly.Python['coderbot_sensor_setcolor'] = function(block) {
+  // Set color statement
+  var color = Blockly.Python.valueToCode(block, 'COLOR',
+    Blockly.Python.ORDER_NONE) || '(0,0,0)';
+  return "coderbot.sensors['color'].setColor(" + color + ")\n";
 };
 
-Blockly.Python['coderbot_adv_findLine'] = function(block) {
-  // Boolean values true and false.
-  var code = 'get_cam().find_line()';
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
 
-Blockly.Python['coderbot_adv_findSignal'] = function(block) {
-  // Boolean values true and false.
-  var code = 'get_cam().find_signal()';
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
-
-Blockly.Python['coderbot_adv_findFace'] = function(block) {
-  // Boolean values true and false.
-  var retval = block.getFieldValue('RETVAL');
-  var ret_code = {'X': '[0]', 'Y': '[1]', 'SIZE': '[2]', 'ALL': ''}[retval];
-  var code = 'coderbot.sensors["faces"].read()';
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
-
-Blockly.Python['coderbot_adv_findCode'] = function(block) {
-  // Boolean values true and false.
-  var code = 'get_cam().find_code()';
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
-
-Blockly.Python['coderbot_adv_findColor'] = function(block) {
-  // Boolean values true and false.
-  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE);
-  var retval = block.getFieldValue('RETVAL');
-  var ret_code = {'DIST': '[0]', 'ANGLE': '[1]', 'BOTH': ''}[retval];
-  var code = 'get_cam().find_color(' + color + ')' + ret_code;
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
-
-Blockly.Python['coderbot_adv_findLogo'] = function(block) {
-  // Boolean values true and false.
-  var code = 'get_cam().find_logo()';
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
 
 /****************************************************/
 /*               Javascript Generator               */

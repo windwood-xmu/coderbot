@@ -282,14 +282,14 @@ def handle_photos(filename):
 @app.route("/programs")
 def handle_programs():
     action = request.args.get('action')
-    #print action, "undefined"
+    #print action, "undefined", app.program
     if action is None:
         return jsonify(result=True, files=Program.listdir())
     abort(501) # Not implemented
 @app.route("/program/<filename>", methods=['GET', 'POST'])
 def handle_program(filename=""):
     action = request.form.get('action', request.args.get('action'))
-    #print action, filename
+    #print action, filename, app.program
     if action is None and request.method == 'POST': abort(405) # Not allowed
     if not action in [None, 'save', 'save as', 'delete', 'exec', 'abort', 'status']: abort(400) # Bad request
     if action == 'save as':
@@ -315,7 +315,9 @@ def handle_program(filename=""):
         if Config().get('program_autosave_on_run', False): app.program.save()
         return jsonify(result=app.program.start())
     if action == 'abort':
-        if app.program is None: abort(410) # Gone
+        if app.program is None:
+            print 'filename:', filename, ', program:', app.program
+            abort(410) # Gone
         app.program.stop()
         return jsonify(result=True)
     if action == 'status':

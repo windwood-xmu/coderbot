@@ -127,8 +127,7 @@ class Program(object):
           }
         if Config().get('program_video_rec', False):
             coderbot.camera.start_recording()
-        try:
-            exec(self._code, glbs)
+        try: exec(self._code, glbs)
         except: raise
         finally:
             coderbot.camera.stop_recording()

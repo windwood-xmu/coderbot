@@ -134,9 +134,10 @@
               .data('refresh_status_interval', setInterval(function() {
                 $.ajax({
                   dataType: "json",
-                  url: "/program/"+$("#lblFilename").text(),
+                  url: "/program/"+encodeURIComponent($("#lblFilename").text()),
                   global: false,
                   data: {action: 'status'},
+                  cache: false,
                   success: function(json) {
                     if (json.status) {
                       $("#lblStatus").html("CoderBot {%trans%}is running{%endtrans%}").parent().removeClass('ui-bar-b').addClass('ui-bar-a');
@@ -158,11 +159,22 @@
       });
 
       $("#btnStopProg").on('vclick', function() {
-        $.getJSON("/program/"+$("#lblFilename").text(), {action: 'abort'}, function(json) {
-          $("#dlgRunProg").popup("close");
-          clearInterval($("#dlgRunProg").data('refresh_status_interval'));
-          $("#lblStatus").html("CoderBot {%trans%}is running{%endtrans%}").parent().removeClass('ui-bar-b').addClass('ui-bar-a');
-          $("#btnStopProg").html('{%trans%}Stop{%endtrans%}');
+        $.ajax({
+          dataType: 'json',
+          url: "/program/"+encodeURIComponent($("#lblFilename").text()),
+          data: {action: 'abort'},
+          cache: false,
+          success: function(json) {
+            $("#dlgRunProg").popup("close");
+            clearInterval($("#dlgRunProg").data('refresh_status_interval'));
+            //$("#lblStatus").html("CoderBot {%trans%}is running{%endtrans%}").parent().removeClass('ui-bar-b').addClass('ui-bar-a');
+            //$("#btnStopProg").html('{%trans%}Stop{%endtrans%}');
+          },
+          error: function(event, jqh, request, error) {
+            notify(error);
+            $("#dlgRunProg").popup("close");
+            clearInterval($("#dlgRunProg").data('refresh_status_interval'));
+          }
         });
       });
 

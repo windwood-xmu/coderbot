@@ -33,6 +33,7 @@ Classes:
 
 **MovementsControl (superclass)**
 - provides high level motor control functions, both "DC" and "continuous servo" type
+- provides high level camera assisted motor control functions by passing a dense flow camera sensor only
 
 **Sound**
 - provides speech synthesis
@@ -89,6 +90,7 @@ TODO
   - [ ] path detection
   - [ ] signal detection
   - [ ] drawing feature on streamed images (to use the print block)
+- [ ] Use sensors at demand only (avoid to close all sensors at program's end)
 
 **Other features (optionnaly)**
 - [ ] All TODOs in the code will be treated

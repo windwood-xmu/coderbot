@@ -34,6 +34,7 @@ Blockly.Msg.CODERBOT_SENSOR_WHEN = "quando %1 trovato, con : sensor";
 Blockly.Msg.CODERBOT_SENSOR_WHEN_DO = "fare %1";
 Blockly.Msg.CODERBOT_SENSOR_WAIT = "aspettare %1";
 Blockly.Msg.CODERBOT_SENSOR_GET = "%1";
+Blockly.Msg.CODERBOT_SENSOR_SETCOLOR = "colore cercato %1";
 
 /* Tooltips texts */
 Blockly.Msg.CODERBOT_MOVE_TOOLTIP = "move the bot %1";
@@ -59,6 +60,7 @@ Blockly.Msg.CODERBOT_SENSOR_DETECT_TOOLTIP = "get the sensor value (0 or 1)";
 Blockly.Msg.CODERBOT_SENSOR_WHEN_TOOLTIP = "launch some commands when sensor's value change";
 Blockly.Msg.CODERBOT_SENSOR_WAIT_TOOLTIP = "wait sensor's value to change";
 Blockly.Msg.CODERBOT_SENSOR_GET_TOOLTIP = "Ottenere il valore del sensore";
+Blockly.Msg.CODERBOT_SENSOR_SETCOLOR_TOOLTIP = "Impostare il sensore di 'colore' sulla ricerca del colore";
 
 Blockly.Msg.CODERBOT_SENSOR_TIP_FPS = "fps";
 Blockly.Msg.CODERBOT_SENSOR_TIP_SQUARE = "piazza";

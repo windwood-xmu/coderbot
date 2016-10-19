@@ -11,8 +11,10 @@ from config import MultifileConfig as Config
 class CoderBot(object):
     def __init__(self):
         # Avoid reinitialisation in case of multiple call
+        # Theorically impossible due to the Singleton decorator
         if hasattr(self, '_init_complete') and self._init_complete: return
 
+        # Camera Configuration
         # Splitter ports are for :
         # 0 - Capture full size images (default resolution)
         # 1 - Recording full size video (without opencv processing drawn)
@@ -24,26 +26,42 @@ class CoderBot(object):
         definitions = [r for r in resolutions.keys() if r <> 'default']
         for i, definition in enumerate(definitions, start=2):
             self.streamers[definition] = self.camera.getGrabber(threads=4, size=resolutions[definition], port=i)
-        self._init_complete = True
 
+        # Camera's Sensors Configuration
         self.sensors = {}
         for sensor, klass in camera_sensors.sensors.iteritems():
             self.sensors[sensor] = klass(self.streamers['LD'], draw=self.streamers['SD'])
         self.sensors['color'].setColor((51,153,153))
         self.sensors['color'].setColor((162,161,105))
-        self.sensors['light']._start()
+        #self.sensors['light']._start()
         self.sensors['fps']._start()
 
+        # Motors Configuration
         if Config().get('use_servos', True):
-            #self.motors = movements.ServosControl(Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4))
-            self.motors = movements.ServosMotionControlled(self.sensors['flow'], Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4))
+            if Config().get('use_camera_assisted_moves', True):
+                self.motors = movements.ServosMotionControlled(self.sensors['flow'],
+                    Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4),
+                    Config().get('camera_assisted_sensibility', 0.5))
+            else:
+                self.motors = movements.ServosControl(Config().get('pin_servo_left', 25), Config().get('pin_servo_right', 4))
         else:
-            self.motors = movements.MotorsControl(Config().get('pin_enable_motor', 22),
-                Config().get('pin_motor_left_forward', 25), Config().get('pin_motor_left_backward', 24),
-                Config().get('pin_motor_right_forward', 4), Config().get('pin_motor_right_backward', 17))
+            if Config().get('use_camera_assisted_moves', True):
+                self.motors = movements.MotorsMotionControlled(self.sensors['flow'], Config().get('pin_enable_motor', 22),
+                    Config().get('pin_motor_left_forward', 25), Config().get('pin_motor_left_backward', 24),
+                    Config().get('pin_motor_right_forward', 4), Config().get('pin_motor_right_backward', 17),
+                    Config().get('camera_assisted_sensibility', 0.5))
+            else:
+                self.motors = movements.MotorsControl(Config().get('pin_enable_motor', 22),
+                    Config().get('pin_motor_left_forward', 25), Config().get('pin_motor_left_backward', 24),
+                    Config().get('pin_motor_right_forward', 4), Config().get('pin_motor_right_backward', 17))
             self.motors.freq(Config().get('PWM_frequency', 100))
+
+        # Sound Configuration
         self.sound = sound.Sound()
         if Config().get('useMbrola', False): self.sound.useMbrola()
+
+        # Initialisation of superclass is complete
+        self._init_complete = True
 
     def shutdown(self):
         self._init_complete = False
