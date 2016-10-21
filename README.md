@@ -77,6 +77,7 @@ TODO
     - [x] User can choose advanced or easy mode for configuration and save the choice
     - [x] Path to store pictures and videos recorded by the camera
   - [ ] Reset the configuration to the default (by deleting the configuration file content, for now: echo > path_to_user_profil/user.cfg)
+- [ ] Allow web UI to be multi user (actually, it's limited to only one user at a time to control the bot) -> need to make config class thread safe
 
 **Sensor features**
 - [x] Write classes to be called back by image processors:

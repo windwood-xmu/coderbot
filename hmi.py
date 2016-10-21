@@ -72,6 +72,12 @@ def handle_home():
     return redirect('/control.html')
 @app.route('/<filename>.html')
 def handle_template(filename):
+    # Session is loaded but not the user's config file
+    if len(Config()._configs) == 2 and 'username' in session and session['username'] != 'admin':
+        from os.path import isfile, join, splitext
+        filename = join(Config().get('config_path', CONFIG_PATH), "%s.cfg" % session['username'].lower())
+        if isfile(filename): Config().load(filename)
+
     if filename == 'gallery':
         from os import listdir
         from os.path import isfile, join, splitext
@@ -117,7 +123,8 @@ def handle_config(command):
 @app.route('/user/<command>', methods=['GET', 'POST'])
 def handle_user(command):
     if command == 'login':
-        from os.path import isfile
+        print Config()._configs
+        if len(Config()._configs) > 2: abort(403) # Forbidden (too many users like FTP)
         from os.path import isfile, join, splitext
         username = request.form.get('username', request.args.get('username', ''))
         filename = join(Config().get('config_path', CONFIG_PATH), "%s.cfg" % username.lower())
